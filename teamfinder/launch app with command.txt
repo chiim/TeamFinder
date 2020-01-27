@@ -1,0 +1,13 @@
+docker run -v C:\Users\"Kim Berg"\Desktop\highschoolYear2\advancedWebdevelopment\project\Teamfinder\webApplication\src:/webapplication -p 8080:8080 web-application:latest
+
+    volumes: "./webApplication/src:/webApplication"
+
+docker-compose up --build -V
+
+
+To see docker files:
+
+docker ps (När docker-compose kör)
+
+docker exec -it fileNameInDocker bash
+
