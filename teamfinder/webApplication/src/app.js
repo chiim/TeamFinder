@@ -2,6 +2,10 @@ const express = require('express')
 const expressHandlebars = require('express-handlebars')
 
 const groupRouter = require('./pl/groupRouter')
+const accountRouter = require('./pl/account-router')
+const groupMemberRouter = require('./pl/groupMember-router')
+const messageRouter = require('./pl/message-router')
+
 
 const app = express()
 
@@ -9,6 +13,8 @@ app.set("views", "src/pl/views")
 
 app.use("/groups", groupRouter)
 app.use("/accounts", accountRouter)
+app.use("/groupMembers", groupMemberRouter)
+app.use("/messages", messageRouter)
 
 app.engine("hbs", expressHandlebars({
   defaultLayout: "main.hbs"
@@ -21,16 +27,5 @@ app.get('/', function(request, response){
   response.render("home.hbs")
 })
 
-app.get('/login', function(request, response){
-  response.render("login.hbs")
-})
-
-app.post('/login', function(request, response){
-  response.redirect("/")
-})
-
-app.get('/register', function(request, response) {
-  response.render("register.hbs")
-})
 
 app.listen(8080)
