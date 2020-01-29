@@ -5,20 +5,22 @@
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
-    <link rel="stylesheet" type="text/css" href="/../css/main.css">
+    <link rel="stylesheet" href="/layout.css">
 </head>
 <body>
     <header class="navbar">
-        <div class="column col-3">
-            <h1>Teamfinder</h1>
+        <div class="column col-3 mainLeft">
+            <a href="/"><h3>Teamfinder</h3></a>
         </div>
-        <div class="column col-3">
-            <a href="/" class="btn btn-link home navButton">Home</a>
-            <a href="/about" class="btn btn-link navButton">Groupfinder</a>
-            <a href="/portfolio" class="btn btn-link navButton">Active Groups</a>
+        <div class="column col-6 mainCenter">            
+            <a href="/groupfinder" class="btn btn-link navButton">Groupfinder</a>
+            <a href="/activeGroups" class="btn btn-link navButton">Active Groups</a>
+            <a href="/" class="btn btn-link home navButton">Create Group</a>
+
         </div>
-        <div class="column col-3">
+        <div class="column col-3 mainRight">
             <a href="/login" class="btn btn-link">Login</a>
+            <a href="/register" class="btn btn-link">Register</a> <!-- isLoggedIn changes Register to Account-->
         </div>
     </header>
 

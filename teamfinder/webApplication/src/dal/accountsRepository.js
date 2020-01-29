@@ -9,7 +9,7 @@ const db = mySql.createConnection({
 
 db.connect(function(error){
 
-  var createTable = `CREATE TABLE accounts (
+  var createTable = `CREATE TABLE IF NOT EXISTS accounts (
       accountId INT AUTO_INCREMENT PRIMARY KEY, 
       name VARCHAR(50), 
       email VARCHAR(50),

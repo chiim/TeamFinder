@@ -1,0 +1,36 @@
+html{
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.container{
+    height: 90%;
+}
+
+.columns{
+    height: 100%
+}
+
+.left{
+    background-color: whitesmoke;
+    height: 100%;
+    width: 33%;
+}
+
+.middle{
+    background-color: lightgrey;
+    height: 100%;
+    width: 33%;
+}
+
+.right{
+    background-color: grey;
+    height: 100%;
+    width: 33%;
+}
