@@ -1,0 +1,16 @@
+
+
+
+
+<form action="/Login" method="POST">
+    <div class="form-group">
+        <label class="form-label" for="name-field">Name</label>
+        <input class="form-input" type="text" pattern="[A-Za-z]+" minlength="3" maxlength="15" id="input-example-1"
+            placeholder="Name" name="namn">
+        <label class="form-label" for="password-field">Password</label>
+        <input class="form-input" type="password" id="input-example-1" placeholder="pw" , name="pw">
+
+    </div>
+    {{!-- <input type="hidden" name="_csrf" value='{{csrfToken}}'> --}}
+    <button type="submit" value="Login" class="btn btn-primary">Login</button>
+</form>
