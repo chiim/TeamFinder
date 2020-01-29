@@ -1,13 +1,13 @@
 const express = require('express')
-
+const expressHandlebars = require('express-handlebars')
 const router = express.Router()
 
-router.get('/', function(request, response){
-    response.render('groupFinder.hbs')
+router.get('/finder', function(request, response){
+    response.render('group-finder.hbs')
 })
 
-router.get('/activeGroups.hbs', function(request, response){
-    
+router.get('/active', function(request, response){
+    response.render('group-active.hbs')
 })
 
 

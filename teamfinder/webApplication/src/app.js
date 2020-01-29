@@ -1,7 +1,7 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
 
-const groupRouter = require('./pl/groupRouter')
+const groupRouter = require('./pl/group-router')
 const accountRouter = require('./pl/account-router')
 const groupMemberRouter = require('./pl/groupMember-router')
 const messageRouter = require('./pl/message-router')

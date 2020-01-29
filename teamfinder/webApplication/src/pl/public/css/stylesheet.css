@@ -1,36 +1,35 @@
-html{
-    height: 100%;
-    margin: 0;
-}
-
 body{
+    height: 100%;
     width: 100%;
-    height: 100%;
-    margin: 0;
+}
+main{
+    height: 85%;
 }
 
-.container{
-    height: 90%;
-}
 
-.columns{
-    height: 100%
-}
-
-.left{
-    background-color: whitesmoke;
-    height: 100%;
-    width: 33%;
-}
-
-.middle{
+header{
+    height: 10%;
     background-color: lightgrey;
-    height: 100%;
-    width: 33%;
 }
 
-.right{
+.mainCenterHeader{
+    text-align: center;
+}
+
+.mainRightHeader{
+    text-align: right;
+}
+
+
+
+.mainLeft{
     background-color: grey;
-    height: 100%;
-    width: 33%;
+}
+
+.mainCenter{
+    background-color: oldlace;
+}
+
+.mainRight{
+    background-color: grey;
 }
