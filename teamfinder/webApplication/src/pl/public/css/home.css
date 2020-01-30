@@ -1,0 +1,8 @@
+.container{
+    background-image: url("/heroImage.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
+    min-height: 80vh;
+}

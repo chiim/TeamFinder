@@ -7,42 +7,54 @@
 </head>
 
 <body>
-    <form>
-        <div class="form-group">
-            <label for="selectImage">Select Image</label>
-            <select class="form-control" id="test">
-                <option>Volleyball</option>
-                <option>Padel</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="groupName">*Group Name</label>
-            <input type="text" class="form-control" placeholder="Group Name">
-        </div>
-        <div class="form-group">
-            <label for="numbeOfMembers">*Max number of members</label>
-            <input type="text" class="form-control" placeholder="4">
-        </div>
-        <div class="form-group">
-            <label for="groupName">*City</label>
-            <input type="text" class="form-control" placeholder="New York">
-        </div>
-        <div class="form-group">
-            <label for="groupName">Age restriction</label>
-            <input type="text" class="form-control" placeholder="Group Name">
-        </div>
-        <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
+    <div class="container">
+        <div class="centerText">
+            <h1>Create a group!</h1>
+            <p>Fields marked with a * are optional</p>
+        </div>  
+        <form>
+            <div class="form-group">
+                <label for="selectImage">Select Image</label>
+                <select class="form-control" id="test">
+                    <option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
+                    <option>Volleyball</option>
+                    <option>Padel</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="groupName">*Group Name</label>
+                <input type="text" class="form-control" placeholder="Group Name">
+            </div>
+            <div class="form-group">
+                <label for="numbeOfMembers">*Max number of members</label>
+                <input type="text" class="form-control" placeholder="4">
+            </div>
+            <div class="form-group">
+                <label for="groupName">*City</label>
+                <input type="text" class="form-control" placeholder="New York">
+            </div>
+            <div class="form-row">
+                <label for="groupName">Age restriction:</label>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="0">
+                </div>
+                _
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="100">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="selectGender">Gender restriction</label>
+                <select class="form-control" id="test">
+                    <option>Any</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+            <button type="submit" class="btn btn-primary">Create Group</button>
+        </form>
+    </div>
 </body>
 
 </html>
