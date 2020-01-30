@@ -1,12 +1,30 @@
 body{
     height: 100%;
     width: 100%;
+    background-color: #52545c;
 }
 
 header{
     height: 10%;
-    background-color: lightgrey;
+    background-color: #343a40;
 }
+
+a{
+    color: whitesmoke;
+}
+
+a:hover{
+    color: whitesmoke;
+}
+
+.btn-link{
+    color: whitesmoke;
+}
+
+.btn-link:hover{
+    color: whitesmoke;
+}
+
 .mainCenterHeader{
     text-align: center;
 }
@@ -28,5 +46,6 @@ header{
 }
 
 .footer{
-    background-color: grey;
+    background-color: #343a40;
+    color: whitesmoke;
 }

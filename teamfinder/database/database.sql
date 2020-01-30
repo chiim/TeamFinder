@@ -10,6 +10,7 @@ CREATE TABLE `Accounts` (
     `Gender` VARCHAR(10),
     PRIMARY KEY (`AccountId`)
 );
+
 CREATE TABLE `Groups` (
     `GroupId` INT NOT NULL AUTO_INCREMENT,
     `Name` VARCHAR(30),
@@ -23,6 +24,10 @@ CREATE TABLE `Groups` (
     `AuthorId` INT,
     PRIMARY KEY (`GroupId`)
 );
+
+-- ``: Endast för reserverade ord
+-- '': Används när man ska skriva in values
+-- Inga citat tecken om det inte är ett reserverat ord av SQL.
 
 CREATE TABLE `Messages` (
     `MessageId` INT NOT NULL AUTO_INCREMENT,
@@ -43,5 +48,4 @@ CREATE TABLE `GroupMembers` (
     FOREIGN KEY (`GroupId`) REFERENCES Groups(`GroupId`)
 );
 
--- INSERT INTO `Accounts` VALUES (`test`, `abc`, `20`, `12345`, `Jkpg`, `male`)
-
+INSERT INTO `Accounts` (`Name`, `Email`, `Age`, `PhoneNr`, `City`, `Gender`) VALUES ('nylagd', 'abc', '20', '12345', 'Jkpg', 'male');
