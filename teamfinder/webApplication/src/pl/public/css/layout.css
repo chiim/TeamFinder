@@ -1,6 +1,11 @@
+html{
+    margin: 0;
+}
+
 body{
     height: 100%;
     width: 100%;
+    margin: 0;
     background-color: #52545c;
 }
 
@@ -37,10 +42,6 @@ a:hover{
     height: 5%;
 }
 
-.cpText{
-    color: white;
-}
-
 .mainBottom{
     height: 5%;
 }
@@ -48,4 +49,8 @@ a:hover{
 .footer{
     background-color: #343a40;
     color: whitesmoke;
+}
+
+footer p{
+    margin: 0;
 }

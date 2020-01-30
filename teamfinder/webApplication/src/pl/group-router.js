@@ -10,5 +10,9 @@ router.get('/active', function(request, response){
     response.render('group-active.hbs')
 })
 
+router.get('/create', function(request, response){
+    response.render('group-create.hbs')
+})
+
 
 module.exports = router
