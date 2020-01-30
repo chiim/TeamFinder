@@ -1,5 +1,7 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
+
+const groupManager = require('../bll/group-manager')
 const router = express.Router()
 
 router.get('/finder', function(request, response){
@@ -12,6 +14,12 @@ router.get('/active', function(request, response){
 
 router.get('/create', function(request, response){
     response.render('group-create.hbs')
+})
+
+router.post('/create', function(request, response){
+
+    
+
 })
 
 
