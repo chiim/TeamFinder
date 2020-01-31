@@ -1,16 +1,33 @@
 const mySql = require('mysql')
+const db = require('./dbConnection')
 
-const db = mySql.createConnection({
-    host: 'database',
-    user: 'root',
-    password: 'user',
-    database: 'database'
-})
 
-db.connect(function(error){
 
-    var createTable = `CREATE TABLE IF NOT EXISTS groups(
-        groupId INT AUTO_INCREMENT PRIMARY KEY,
-    )`
 
-})
+
+exports.createGroup = function(groupCredentials, callback){
+
+    const query = "INSERT INTO Groups (`name`, nrOfMembers, memberSlots, city, maxAge, minAge, skillLevel, allowedGender, publishingDate, authorId) VALUES ?"
+    const values = [
+        groupCredentials.groupName,
+        groupCredentials.sport,
+        groupCredentials.memberSlots,
+        groupCredentials.city,
+        groupCredentials.minAge,
+        groupCredentials.maxAge,
+        groupCredentials.skillLevel,
+        groupCredentials.allowedGender
+    ]
+    db.query(query, values, function(error, result){
+        if(error){
+            const databaseError = ["Something went wrong inserting data. Contact admin."]
+            callback(databaseError, null)
+        }
+        else{
+            callback(null, result)
+        }
+    })
+
+}
+
+

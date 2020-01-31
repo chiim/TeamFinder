@@ -7,42 +7,85 @@
 </head>
 
 <body>
-    <form>
-        <div class="form-group">
-            <label for="selectImage">Select Image</label>
-            <select class="form-control" id="test">
-                <option>Volleyball</option>
-                <option>Padel</option>
-            </select>
+    <div class="container">
+        <div class="centerText">
+            <h1>Create a group!</h1>
+            <p>Fields marked with a * are mandatory</p>
+        </div>  
+        {{#if errors.length}}
+        <div class="errorHandler">
+            <p>Testing</p>
+            <ul>
+            {{#each errors}}
+                <li>{{this}}</li>
+            {{/each}}
+            </ul>
         </div>
-        <div class="form-group">
-            <label for="groupName">*Group Name</label>
-            <input type="text" class="form-control" placeholder="Group Name">
-        </div>
-        <div class="form-group">
-            <label for="numbeOfMembers">*Max number of members</label>
-            <input type="text" class="form-control" placeholder="4">
-        </div>
-        <div class="form-group">
-            <label for="groupName">*City</label>
-            <input type="text" class="form-control" placeholder="New York">
-        </div>
-        <div class="form-group">
-            <label for="groupName">Age restriction</label>
-            <input type="text" class="form-control" placeholder="Group Name">
-        </div>
-        <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
+        {{/if}}
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+        <form method="POST">
+            
+            <div class="form-group">
+                <label for="groupName">*Group Name</label>
+                <input type="text" class="form-control" name="groupName" placeholder="Group Name">
+            </div>
+            <div class="form-group">
+                <label for="selectImage">Select Image</label>
+                <select class="form-control" name="image">
+                    <option>Volleyball</option>
+                    <option>PadelArena</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="selectSport">*Select Sport</label>
+                <select class="form-control" name="sport">
+                    <option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
+                    <option>Volleyball</option>
+                    <option>Padel</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="maxNumberOfMembers">*Max number of members</label>
+                <input type="text" class="form-control" name="memberSlots" placeholder="4">
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" name="city" placeholder="New York">
+            </div>
+            <div class="form-row">
+                <label for="ageRestriction">Age restriction:</label>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="0" name="minAge">
+                </div>
+                _
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="100" name="maxAge">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="selectSport">*Skill level</label>
+                <select class="form-control" name="skillLevel">
+                    <option>Select a skill level</option> <!-- Validate that this is not selected when submitting. -->
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Semi-pro</option>
+                    <option>Pro</option>
+                    <option>Expert</option>
+                    <option>Master</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="selectGender">Gender restriction</label>
+                <select class="form-control" name="allowedGender">
+                    <option>Any</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+
+            <input type="submit" class="btn btn-primary" value="Create Group">
+        </form>
+    </div>
 </body>
 
 </html>
