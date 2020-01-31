@@ -69,6 +69,7 @@ router.get('/:id', function(request, response){
 	const accountId = request.params.id
 	
 	accountManager.getAccountById(accountId, function(errors, account){
+        console.log("blev i callback")
         console.log(errors, account)
         const model = {
 			errors,
