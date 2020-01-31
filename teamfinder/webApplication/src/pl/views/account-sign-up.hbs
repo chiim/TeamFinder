@@ -1,48 +1,48 @@
-
-<h1>Sign-Up</h1>
-
-<form>
-
-  <div class="form-group">
-    <label for="exampleInputPassword1">First name</label>
-    <input class="form-control" id="firstName">
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputPassword1">Last Name</label>
-    <input class="form-control" id="lastName">
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
+<div class="container py-4">
 
 
-  <div class="form-group">
-    <label for="exampleInputPassword1">Last Name</label>
-    <input class="form-control" id="lastName">
-  </div>
+  <h1>Sign-Up</h1>
 
-  <div class="form-group">
-    <label for="exampleInputPassword1">Age</label>
-    <input class="form-control" id="age">
-  </div>
+  <form method="POST">
 
-  <div class="form-group">
-    <label for="exampleInputPassword1">City</label>
-    <input class="form-control" id="city">
-  </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">First name</label>
+      <input type="text" class="form-control" name="firstName">
+    </div>
 
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">Gender</label>
-    <select class="form-control" id="gender">
-      <option value="female">Female</option>
-      <option value="male">Male</option>
-      <option value="other">Other</option>      
-    </select>
-  </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Last Name</label>
+      <input type="text" class="form-control" name="lastName">
+    </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" class="form-control" name="email" aria-describedby="emailHelp">
+      <small name="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control" name="password">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputPassword1">Age</label>
+      <input type="text" class="form-control" name="age">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputPassword1">City</label>
+      <input type="text" class="form-control" name="city">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputPassword1">gender</label>
+      <input type="text" class="form-control" name="gender">
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+</div>

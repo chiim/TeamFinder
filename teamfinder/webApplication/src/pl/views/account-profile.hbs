@@ -1,3 +1,40 @@
+<div class="container py-4">
 
-<h1>Profile</h1>
+    <h1>Profile</h1>
 
+    {{#if errors.length}}
+        <p>Oh no, something went wrong:</p>
+        <ul>
+            {{#each errors}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    {{else}}
+
+
+        <div class="row">
+
+            <div class="col-sm">
+                <p>{{account.firstName}}</p>
+                <p>email</p>
+                <p>age</p>
+                <p>phone nr</p>
+                <p>city</p>
+                <p>gender</p>
+
+            </div>
+
+            <div class="col-sm">
+
+                <p>Medlem i grupper</p>
+                <p>Meddelande skickade</p>
+                <p>favorit sport</p>
+
+            </div>
+
+        </div>
+
+        <a class="btn btn-primary" href="/accounts/edit">edit profile</a>
+
+    {{/if}}
+</div>

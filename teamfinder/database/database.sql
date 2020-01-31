@@ -2,10 +2,11 @@ USE `database`;
 
 CREATE TABLE `Accounts` (
     `AccountId` INT NOT NULL AUTO_INCREMENT,
-    `Name` VARCHAR(50) NOT NULL,
+    `FirstName` VARCHAR(50) NOT NULL,
+    `LastName` VARCHAR(50) NOT NULL,
     `Email` VARCHAR(50) NOT NULL,
+    `Password` VARCHAR(30) NOT NULL,
     `Age` VARCHAR(3) NOT NULL,
-    `PhoneNr` VARCHAR(15) NOT NULL,
     `City` VARCHAR(30) NOT NULL,
     `Gender` VARCHAR(10) NOT NULL,
     PRIMARY KEY (`AccountId`)
@@ -52,4 +53,4 @@ CREATE TABLE `GroupMembers` (
     FOREIGN KEY (`GroupId`) REFERENCES Groups(`GroupId`)
 );
 
-INSERT INTO `Accounts` (`Name`, `Email`, `Age`, `PhoneNr`, `City`, `Gender`) VALUES ('nylagd', 'abc', '20', '12345', 'Jkpg', 'male');
+INSERT INTO `Accounts` (`FirstName`, `LastName`, `Email`, `Password`, `Age`, `City`, `Gender`) VALUES ('Knugen', 'Axelsson', 'email', '123', '28', 'Jkpg', 'male');

@@ -6,21 +6,22 @@ body{
     height: 100%;
     width: 100%;
     margin: 0;
+    background-color: #343a40;
+}
+
+.container{
     background-color: #52545c;
+    color: whitesmoke;
 }
 
 main{
     height: 85%;
 }
 
-.container{
-    background-color: #343a40;
-    color: whitesmoke;
-}
 
 header{
     height: 10%;
-    background-color: #343a40;
+    background-color: #52545c;
 }
 
 a{
@@ -56,7 +57,7 @@ a:hover{
 }
 
 .footer{
-    background-color: #343a40;
+    background-color: #52545c;
     color: whitesmoke;
 }
 
