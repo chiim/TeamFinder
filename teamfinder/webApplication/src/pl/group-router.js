@@ -17,9 +17,48 @@ router.get('/create', function(request, response){
 })
 
 router.post('/create', function(request, response){
+    console.log("testiiing")
+    const groupName = request.body.groupName
+    const sport = request.body.sport
+    const memberSlots = request.body.memberSlots
+    const city = request.body.city
+    const minAge = request.body.minAge
+    const maxAge = request.body.maxAge
+    const skillLevel = request.body.skillLevel
+    const allowedGender = request.body.allowedGender
 
+    const groupCredentials = {
+        groupName, 
+        sport, 
+        memberSlots,
+        city,
+        minAge,
+        maxAge,
+        skillLevel,
+        allowedGender
+    }
     
+    groupManager.createGroup(groupCredentials, function(errors, result){
+        console.log(errors, result)
+        if(errors.length > 0){
+            const model = {
+                errors
+            }
+            response.render("/create.hbs", model)
+        }
+        else{
+            response.redirect("/" + result.insertId)
+        }
+    })
+})
 
+router.get("/:id", function(request, response){
+    
+    //const id = request.body.params
+
+
+
+    response.render("/")
 })
 
 
