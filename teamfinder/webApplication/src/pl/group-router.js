@@ -5,11 +5,26 @@ const groupManager = require('../bll/group-manager')
 const router = express.Router()
 
 router.get('/finder', function(request, response){
-    response.render('group-finder.hbs')
+
+    groupManager.getAllGroups(function(error, groups){
+        
+        const model = {
+            groups
+        }
+        response.render('group-finder.hbs', model)
+    })
+
+
 })
 
 router.get('/active', function(request, response){
-    response.render('group-active.hbs')
+    groupManager.getAllGroups(function(error, groups){
+        
+        const model = {
+            groups
+        }
+        response.render('group-active.hbs', model)
+    })
 })
 
 router.get('/create', function(request, response){
@@ -55,13 +70,16 @@ router.post('/create', function(request, response){
             response.redirect("/groups/" + result.insertId)
         }
     })
+
+    //TODO:
+    //get accountId
+    //get groupId
+    // * db.joinGroup(accountId, groupId, function(errors, result))
 })
 
 router.get("/:id", function(request, response){
-    console.log("test")
-    //const id = request.body.params
-
-
+    
+    const id = request.body.params
 
     response.render("group-specific.hbs")
 })

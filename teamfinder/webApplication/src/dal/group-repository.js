@@ -1,26 +1,12 @@
 const mySql = require('mysql')
 const db = require('./dbConnection')
 
-
-
-
-
 exports.createGroup = function(groupCredentials, callback){
     const today = new Date()
     date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
     console.log(date)
     const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MaxAge, MinAge, SkillLevel, AllowedGender, PublishingDate, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    /*groupCredentials.groupName+ ',' +
-    groupCredentials.image + ',' +
-    groupCredentials.sport + ',' + 
-    groupCredentials.nrOfMembers + ',' + 
-    groupCredentials.memberSlots + ',' +
-    groupCredentials.city + ',' +
-    groupCredentials.minAge + ',' +
-    groupCredentials.maxAge + ',' +
-    groupCredentials.skillLevel + ',' +
-    groupCredentials.allowedGender + ',' +
-    date + ", 1')"*/
+
     const values = [
         groupCredentials.groupName,
         groupCredentials.image,
@@ -51,4 +37,15 @@ exports.createGroup = function(groupCredentials, callback){
 
 }
 
-
+exports.getAllGroups = function(callback){
+    const query = "SELECT * FROM Groups"
+    db.query(query, function(error, result){
+        if(error){
+            const databaseError = ["Something went wrong fetching groups. Contact admin."]
+            callback(error, null)
+        }
+        else{
+            callback(null, result)
+        }
+    })
+}

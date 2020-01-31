@@ -86,3 +86,10 @@ exports.createGroup = function (groupCredentials, callback) {
     }
 
 }
+
+exports.getAllGroups = function(callback){
+
+    groupRepository.getAllGroups(callback)
+
+}
+
