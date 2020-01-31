@@ -25,7 +25,7 @@ function validation(groupCredentials) {
         validationErrors.push("Only characters a-z allowed.")
     }
 
-    if (groupCredentials.sport == "Select a Sport") {
+    if (groupCredentials.sport == "Select a sport") {
         validationErrors.push("Need to choose a sport.")
     }
 
@@ -39,18 +39,18 @@ function validation(groupCredentials) {
         validationErrors.push("Can't be more than 20 members per group.")
     }
 
-    if (!groupCredentials.match(lettersOnly)) {
+    if (!groupCredentials.city.match(lettersOnly)) {
         validationErrors.push("That's not a city.")
     }
-    if (groupCredentials.length == empty) {
+    if (groupCredentials.city.length == empty) {
         validationErrors.push("Must enter a city.")
     }
-    if (groupCredentials.length > maxCityLength) {
+    if (groupCredentials.city.length > maxCityLength) {
         validationErrors.push("This city contains too many signs. Try again.")
     }
 
     if (groupCredentials.minAge.length > empty || groupCredentials.maxAge.length > empty) {
-        if (!groupCredentials.minAge.match(lettersOnly) || !groupCredentials.maxAge.match(lettersOnly)) {
+        if (!groupCredentials.minAge.match(numbersOnly) || !groupCredentials.maxAge.match(numbersOnly)) {
             validationErrors.push("Age restriction: Only letters allowed.")
         }
         if (parseInt(groupCredentials.minAge) > maxAllowedAge || parseInt(groupCredentials.minAge) > maxAllowedAge) {
@@ -59,9 +59,14 @@ function validation(groupCredentials) {
         if (parseInt(groupCredentials.minAge < minAllowedAge) || parseInt(groupCredentials.maxAge) < minAllowedAge) {
             validationErrors.push("Age restriction: This person is too young to play. Should be at least 6 years old.")
         }
+
+    }
+    else{
+        groupCredentials.minAge = null
+        groupCredentials.maxAge = null
     }
 
-    if(groupCredentials.skillLevel == "Choose skillLevel"){
+    if(groupCredentials.skillLevel == "Select a skill level"){
         validationErrors.push("Choose what skill level you're at!")
     }
 
@@ -81,3 +86,10 @@ exports.createGroup = function (groupCredentials, callback) {
     }
 
 }
+
+exports.getAllGroups = function(callback){
+
+    groupRepository.getAllGroups(callback)
+
+}
+
