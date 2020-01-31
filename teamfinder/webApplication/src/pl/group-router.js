@@ -31,6 +31,10 @@ router.get('/create', function(request, response){
     response.render('group-create.hbs')
 })
 
+router.get('/specific', function(request, response){
+    response.render('group-specific.hbs')
+})
+
 router.post('/create', function(request, response){
     console.log("testiiing")
     const groupName = request.body.groupName
