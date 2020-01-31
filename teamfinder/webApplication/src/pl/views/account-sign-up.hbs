@@ -3,39 +3,43 @@
 
   <h1>Sign-Up</h1>
 
-  <form>
+  <form method="POST">
 
     <div class="form-group">
       <label for="exampleInputPassword1">First name</label>
-      <input class="form-control" id="firstName">
+      <input type="text" class="form-control" name="firstName">
     </div>
 
     <div class="form-group">
       <label for="exampleInputPassword1">Last Name</label>
-      <input class="form-control" id="lastName">
+      <input type="text" class="form-control" name="lastName">
     </div>
 
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      <input type="email" class="form-control" name="email" aria-describedby="emailHelp">
+      <small name="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control" name="password">
     </div>
 
     <div class="form-group">
       <label for="exampleInputPassword1">Age</label>
-      <input class="form-control" id="age">
-    </div>
-
-    <div class="form-group">
-      <label for="exampleInputPassword1">Phone number</label>
-      <input class="form-control" id="phoneNr">
+      <input type="text" class="form-control" name="age">
     </div>
 
     <div class="form-group">
       <label for="exampleInputPassword1">City</label>
-      <input class="form-control" id="city">
+      <input type="text" class="form-control" name="city">
     </div>
 
+    <div class="form-group">
+      <label for="exampleInputPassword1">gender</label>
+      <input type="text" class="form-control" name="gender">
+    </div>
 
 
     <button type="submit" class="btn btn-primary">Submit</button>
