@@ -4,6 +4,10 @@ const expressHandlebars = require('express-handlebars')
 const groupManager = require('../bll/group-manager')
 const router = express.Router()
 
+router.get('/', function(request, response){
+    response.redirect('/') // User isn't supposed to be here. Therefore they are redirected.
+})
+
 router.get('/finder', function(request, response){
 
     groupManager.getAllGroups(function(error, groups){
@@ -81,7 +85,22 @@ router.get("/:id", function(request, response){
     
     const id = request.body.params
 
-    response.render("group-specific.hbs")
+    groupManager.findGroupById(id, function(error, group){
+
+    if(error){
+        const model = {
+            error
+        }
+        response.render('group-active.hbs', model)
+    }
+    else{
+        const model = {
+            group
+        }
+        response.render("group-specific.hbs", model)
+    }
+})
+
 })
 
 

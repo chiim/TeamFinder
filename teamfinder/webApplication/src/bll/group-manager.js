@@ -93,3 +93,8 @@ exports.getAllGroups = function(callback){
 
 }
 
+exports.findGroupById = function(id, callback){
+
+    groupRepository.findGroupById(id, callback)
+
+}
