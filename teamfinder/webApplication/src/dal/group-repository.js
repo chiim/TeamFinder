@@ -49,3 +49,21 @@ exports.getAllGroups = function(callback){
         }
     })
 }
+
+exports.findGroupById = function(id, callback){
+
+    const query = "SELECT * FROM Groups WHERE GroupId = ? LIMIT 1"
+    const values = [id]
+    db.query(query, values, function(error, result){
+        if(error){
+            console.log("Error")
+            const databaseError = ["Something went wrong fetching the group."]
+            callback(databaseError, null)
+        }
+        else{
+            console.log(result[0])
+            callback(null, result[0])
+        }
+    })    
+
+}

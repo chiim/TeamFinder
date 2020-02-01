@@ -8,32 +8,29 @@
 </head>
 
 <div class="container py-4">
-
-    <h1>Specific group name</h1>
-
     <div>
-        <h1>groupname</h1>
+        <h1>Group Name: {{group.Name}}</h1>
 
-    <div class="row">
+        <div class="row">
 
-<div class="col-sm">
-    <p>Sport</p>
-    <p>City</p>
-    <p>Members xx-xx</p>
-    <p>Date</p>
-    
+            <div class="col-sm">
+                <p>Sport: {{group.Sport}}</p>
+                <p>City: {{group.City}}</p>
+                <p>Members: {{group.NrOfMembers}} / {{group.MemberSlots}}</p>
+                <p>Group Created: {{group.PublishingDate}}</p>
 
-    </div>
 
-    <div class="col-sm">
+            </div>
 
-        <p>allowed gender</p>
-        <p>Age xx-xx</p>
-        <p>skill level? short text?</p>
+            <div class="col-sm">
 
-    </div>
+                <p>Allowed Gender: {{group.AllowedGender}}</p>
+                <p>Age Restriction: {{group.MinAge}} - {{group.MaxAge}}</p>
+                <p>Skill Level: {{group.SkillLevel}}</p>
 
-    </div>
+            </div>
+
+        </div>
 
         <a class="btn btn-primary" href="">edit group (not existing)</a>
     </div>
@@ -74,9 +71,8 @@
             <div>
                 <p>message here</p>
             </div>
-            </div>
         </div>
-
     </div>
+</div>
 
 </div>
