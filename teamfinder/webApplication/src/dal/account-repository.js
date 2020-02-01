@@ -48,7 +48,7 @@ exports.getAccountById = function(accountId, callback){
         }
         else{
             console.log("inga dbErrors")
-            callback(null, account)
+            callback(null, account[0])//ful lösning?
         }
 
     })
