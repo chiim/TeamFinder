@@ -61,8 +61,8 @@ exports.findGroupById = function(id, callback){
             callback(databaseError, null)
         }
         else{
-            console.log(result)
-            callback(null, result)
+            console.log(result[0])
+            callback(null, result[0])
         }
     })    
 

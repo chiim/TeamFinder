@@ -8,26 +8,25 @@
 </head>
 
 <div class="container py-4">
-    {{#each group}}
     <div>
-        <h1>Group Name: {{this.Name}}</h1>
+        <h1>Group Name: {{group.Name}}</h1>
 
         <div class="row">
 
             <div class="col-sm">
-                <p>Sport: {{this.Sport}}</p>
-                <p>City: {{this.City}}</p>
-                <p>Members: {{this.NrOfMembers}} / {{this.MemberSlots}}</p>
-                <p>Group Created: {{this.PublishingDate}}</p>
+                <p>Sport: {{group.Sport}}</p>
+                <p>City: {{group.City}}</p>
+                <p>Members: {{group.NrOfMembers}} / {{group.MemberSlots}}</p>
+                <p>Group Created: {{group.PublishingDate}}</p>
 
 
             </div>
 
             <div class="col-sm">
 
-                <p>Allowed Gender: {{this.AllowedGender}}</p>
-                <p>Age Restriction: {{this.MinAge}} - {{this.MaxAge}}</p>
-                <p>Skill Level: {{this.SkillLevel}}</p>
+                <p>Allowed Gender: {{group.AllowedGender}}</p>
+                <p>Age Restriction: {{group.MinAge}} - {{group.MaxAge}}</p>
+                <p>Skill Level: {{group.SkillLevel}}</p>
 
             </div>
 
@@ -74,7 +73,6 @@
             </div>
         </div>
     </div>
-    {{/each}}
 </div>
 
 </div>
