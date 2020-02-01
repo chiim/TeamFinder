@@ -23,7 +23,7 @@ router.get('/finder', function(request, response){
 
 router.get('/active', function(request, response){
     groupManager.getAllGroups(function(error, groups){
-        
+
         const model = {
             groups
         }
@@ -33,10 +33,6 @@ router.get('/active', function(request, response){
 
 router.get('/create', function(request, response){
     response.render('group-create.hbs')
-})
-
-router.get('/specific', function(request, response){
-    response.render('group-specific.hbs')
 })
 
 router.post('/create', function(request, response){
@@ -87,7 +83,7 @@ router.post('/create', function(request, response){
 
 router.get("/:id", function(request, response){
     
-    const id = request.body.params
+    const id = request.params.id
 
     groupManager.findGroupById(id, function(error, group){
 
@@ -98,6 +94,7 @@ router.get("/:id", function(request, response){
         response.render('group-active.hbs', model)
     }
     else{
+        console.log("group: ", group)
         const model = {
             group
         }
