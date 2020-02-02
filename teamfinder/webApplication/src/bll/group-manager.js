@@ -97,7 +97,7 @@ exports.getActiveGroups = function(id, callback){
     groupRepository.getActiveGroups(id, callback)
 }
 
-exports.findGroupById = function(id, callback){
+exports.getGroupById = function(id, callback){
 
     groupRepository.getGroupById(id, callback)
 

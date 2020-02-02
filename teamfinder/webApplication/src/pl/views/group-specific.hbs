@@ -16,7 +16,8 @@
                 <p>Sport: {{group.Sport}}</p>
                 <p>City: {{group.City}}</p>
                 <p>Members: {{group.NrOfMembers}} / {{group.MemberSlots}}</p>
-                <p>Group Created: {{group.PublishingDate}}</p>
+                <small>Group Created: {{group.PublishingDate}}</small>
+                
 
 
             </div>
@@ -35,21 +36,21 @@
     </div>
 
     <div>
-        <form>
+
+
+        <form method="POST" action="/messages/create">
             <div class="form-row">
-
                 <div class="col-6 my-1">
-
-                    <textarea class="form-control" id="textarea" rows="1"
+                    <textarea class="form-control" id="textarea" rows="1" name="text"
                         placeholder="Required example textarea"></textarea>
                 </div>
                 <div class="col-2 my-1">
+                    <input type="hidden" name="groupId" value='{{group.GroupId}}'>
                     <button type="submit" class="btn btn-primary">send message</button>
                 </div>
-
-
             </div>
         </form>
+
     </div>
 
     <div>

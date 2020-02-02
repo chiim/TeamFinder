@@ -87,6 +87,7 @@ router.post('/create', function (request, response) {
 router.get("/:id", function (request, response) {
 
     const id = request.params.id
+    console.log("id:" + id)
 
     groupManager.getGroupById(id, function (error, group) {
 

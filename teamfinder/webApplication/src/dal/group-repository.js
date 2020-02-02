@@ -2,10 +2,12 @@ const mySql = require('mysql')
 const db = require('./dbConnection')
 
 exports.createGroup = function(groupCredentials, callback){
-    const today = new Date()
-    date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-    console.log(date)
-    const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MinAge, MaxAge, SkillLevel, AllowedGender, PublishingDate, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    //const today = new Date()
+    //date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
+
+    const authorId = '1' //här ska ett dynamiskt id hämtas med rätt skapare id
+
+    const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MaxAge, MinAge, SkillLevel, AllowedGender, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
     const values = [
         groupCredentials.groupName,
@@ -18,8 +20,7 @@ exports.createGroup = function(groupCredentials, callback){
         groupCredentials.maxAge,
         groupCredentials.skillLevel,
         groupCredentials.allowedGender,
-        date,
-        '1'
+        authorId
     ]
 
     console.log(values)
@@ -42,7 +43,7 @@ exports.getAllGroups = function(callback){
     db.query(query, function(error, result){
         if(error){
             const databaseError = ["Something went wrong fetching groups. Contact admin."]
-            callback(error, null)
+            callback(databaseError, null)
         }
         else{
             callback(null, result)
@@ -66,7 +67,8 @@ exports.getGroupById = function(id, callback){
             callback(databaseError, null)
         }
         else{
-            console.log(result[0])
+            console.log("gruppen som hämtats:" + result[0])
+            
             callback(null, result[0])
         }
     })    
