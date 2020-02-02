@@ -4,14 +4,14 @@ const expressHandlebars = require('express-handlebars')
 const groupManager = require('../bll/group-manager')
 const router = express.Router()
 
-router.get('/', function(request, response){
+router.get('/', function (request, response) {
     response.redirect('/') // User isn't supposed to be here. Therefore they are redirected.
 })
 
-router.get('/finder', function(request, response){
+router.get('/finder', function (request, response) {
 
-    groupManager.getAllGroups(function(error, groups){
-        
+    groupManager.getAllGroups(function (error, groups) {
+
         const model = {
             groups
         }
@@ -21,8 +21,11 @@ router.get('/finder', function(request, response){
 
 })
 
-router.get('/active', function(request, response){
-    groupManager.getAllGroups(function(error, groups){
+router.get('/active', function (request, response) {
+
+
+
+    groupManager.getAllGroups(function (error, groups) {
 
         const model = {
             groups
@@ -31,11 +34,11 @@ router.get('/active', function(request, response){
     })
 })
 
-router.get('/create', function(request, response){
+router.get('/create', function (request, response) {
     response.render('group-create.hbs')
 })
 
-router.post('/create', function(request, response){
+router.post('/create', function (request, response) {
     console.log("testiiing")
     const groupName = request.body.groupName
     const image = request.body.image
@@ -47,12 +50,12 @@ router.post('/create', function(request, response){
     const maxAge = request.body.maxAge
     const skillLevel = request.body.skillLevel
     const allowedGender = request.body.allowedGender
-    
+
 
     const groupCredentials = {
-        groupName, 
+        groupName,
         image,
-        sport, 
+        sport,
         nrOfMembers,
         memberSlots,
         city,
@@ -61,16 +64,16 @@ router.post('/create', function(request, response){
         skillLevel,
         allowedGender
     }
-    
-    groupManager.createGroup(groupCredentials, function(errors, result){
+
+    groupManager.createGroup(groupCredentials, function (errors, result) {
         console.log(errors, result)
-        if(errors != null){
+        if (errors != null) {
             const model = {
                 errors
             }
             response.render("group-create.hbs", model)
         }
-        else{
+        else {
             response.redirect("/groups/" + result.insertId)
         }
     })
@@ -81,26 +84,37 @@ router.post('/create', function(request, response){
     // * db.joinGroup(accountId, groupId, function(errors, result))
 })
 
-router.get("/:id", function(request, response){
-    
+router.get("/:id", function (request, response) {
+
     const id = request.params.id
 
-    groupManager.findGroupById(id, function(error, group){
+    groupManager.getGroupById(id, function (error, group) {
 
-    if(error){
-        const model = {
-            error
+        if (error) {
+            const model = {
+                error
+            }
+            response.render('group-active.hbs', model)
         }
-        response.render('group-active.hbs', model)
-    }
-    else{
-        console.log("group: ", group)
-        const model = {
-            group
+        else {
+            messageManager.getMessagesByGroupId(id, function (error, messages) {
+                if (error) {
+                    const model = {
+                        error
+                    }
+                    response.render("group-specific.hbs", model)
+                }
+                else {
+                    console.log("group: ", group)
+                    const model = {
+                        group,
+                        messages
+                    }
+                    response.render("group-specific.hbs", model)
+                }
+            })
         }
-        response.render("group-specific.hbs", model)
-    }
-})
+    })
 
 })
 

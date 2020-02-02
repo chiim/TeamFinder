@@ -5,7 +5,7 @@ exports.createGroup = function(groupCredentials, callback){
     const today = new Date()
     date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
     console.log(date)
-    const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MaxAge, MinAge, SkillLevel, AllowedGender, PublishingDate, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MinAge, MaxAge, SkillLevel, AllowedGender, PublishingDate, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
     const values = [
         groupCredentials.groupName,
@@ -50,7 +50,12 @@ exports.getAllGroups = function(callback){
     })
 }
 
-exports.findGroupById = function(id, callback){
+exports.getActiveGroups = function(id, callback){
+    
+
+}
+
+exports.getGroupById = function(id, callback){
 
     const query = "SELECT * FROM Groups WHERE GroupId = ? LIMIT 1"
     const values = [id]
