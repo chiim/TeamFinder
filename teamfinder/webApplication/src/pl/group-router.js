@@ -29,15 +29,31 @@ router.get('/active', function (request, response) {
 
     })*/
     const accountId = 1 // Hard coded account until we have a login to fetch accountId from db.
-    groupManager.getActiveGroups(accountId, function(error, groups){
+    groupManager.getActiveGroups(accountId, function(error, groupIds){
+
         if(error){
             const model = {
                 error
             }
-            response.render('group-active.hbs', model)
+             response.render('group-active.hbs', model)
         }
 
         else{
+
+            const groups = []
+            for(var i = 0; i < groupIds.length; i++){
+                groupManager.getGroupById(groupIds[i].GroupId, function(error, group){
+                    if(error){
+                        const model = {
+                            error
+                        }
+                        response.render('group-active.hbs', model)
+                    }
+                    else{
+                        groups.push(group)
+                    }
+                })
+            }
             const model = {
                 groups
             }
@@ -54,7 +70,7 @@ router.post('/create', function (request, response) {
     const groupName = request.body.groupName
     const image = request.body.image
     const sport = request.body.sport
-    const nrOfMembers = 0
+    const nrOfMembers = 1
     const memberSlots = request.body.memberSlots
     const city = request.body.city
     const minAge = request.body.minAge

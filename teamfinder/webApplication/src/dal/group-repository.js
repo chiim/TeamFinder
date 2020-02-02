@@ -51,7 +51,7 @@ exports.getAllGroups = function(callback){
 }
 
 exports.getActiveGroups = function(accountId, callback){
-    const query = "SELECT * FROM GroupMembers WHERE AccountId = ?"
+    const query = "SELECT GroupId FROM GroupMembers WHERE AccountId = ?"
     const values = [accountId]
 
     db.query(query, values, function(error, result){
