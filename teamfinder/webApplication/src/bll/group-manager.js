@@ -93,8 +93,8 @@ exports.getAllGroups = function(callback){
 
 }
 
-exports.getActiveGroups = function(id, callback){
-    groupRepository.getActiveGroups(id, callback)
+exports.getActiveGroups = function(accountId, callback){
+    groupRepository.getActiveGroups(accountId, callback)
 }
 
 exports.getGroupById = function(id, callback){
