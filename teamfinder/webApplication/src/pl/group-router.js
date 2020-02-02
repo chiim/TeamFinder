@@ -84,10 +84,12 @@ router.post('/create', function(request, response){
 router.get("/:id", function(request, response){
     
     const id = request.params.id
+    console.log("id:" + id)
 
-    groupManager.findGroupById(id, function(error, group){
+    groupManager.getGroupById(id, function(error, group){
 
     if(error){
+        console.log("error efter getGroupById")
         const model = {
             error
         }
