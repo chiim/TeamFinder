@@ -22,8 +22,15 @@
         </div>
 
         <div class="col-3 mainRightHeader">
-            <a href="/accounts/login" class="btn btn-link">Login</a>
-            <a href="/accounts/sign-up" class="btn btn-link">Sign-up</a> <!-- isLoggedIn changes Register to Account-->
+            {{#if accountId}}
+                <a href="/accounts/logout" class="btn btn-link">logout</a>
+                <a href="/accounts/{{accountId}}" class="btn btn-link">Profile</a>
+                
+            {{else}}
+                <a href="/accounts/login" class="btn btn-link">Login</a>
+                <a href="/accounts/sign-up" class="btn btn-link">Sign-up</a> <!-- isLoggedIn changes Register to Account-->
+            {{/if}}  
+                
         </div>
     </header>
     <main class="py-5">

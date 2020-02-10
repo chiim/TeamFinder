@@ -35,6 +35,11 @@
         </div>
 
         <a class="btn btn-primary" href="/accounts/edit">edit profile</a>
+        <form action="/accounts/delete" method="POST">
+            <button class="btn btn-primary" type="submit">delete profile</button>
+        </form>
+        {{!-- <a class="btn btn-primary" href="/accounts/delete">delete profile</a> --}}
+
 
     {{/if}}
 </div>
