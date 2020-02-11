@@ -59,7 +59,6 @@ exports.getActiveGroups = function(accountId, callback){
             const databaseError = ["Something went wrong fetching active groups."]
             callback(databaseError, null)
         }
-
         else{
             callback(null, result)
         }

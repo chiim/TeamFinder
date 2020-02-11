@@ -30,7 +30,6 @@ exports.createAccount = function(account, callback){
 }
 
 exports.getAccountById = function(accountId, callback){
-
     const query = "Select * FROM Accounts WHERE AccountId = ? LIMIT 1"
     const values = [accountId]
 
@@ -41,7 +40,6 @@ exports.getAccountById = function(accountId, callback){
             callback(databaseError, null)
         }
         else{
-            console.log("inga dbErrors")
             callback(null, account[0])//ful lösning?
         }
 

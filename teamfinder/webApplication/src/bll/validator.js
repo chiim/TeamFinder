@@ -75,18 +75,17 @@ exports.validateGroup = function (groupCredentials) {
 
 exports.validateRequirements = function(account, group){
     const validationErrors = []
-    
     if(group.nrOfMembers >= group.MemberSlots){
         validationErrors.push("This group is full.")
     }
     
     if(group.MinAge){
-        if(account.age < group.MinAge){
+        if(parseInt(account.Age) < parseInt(group.MinAge)){
             validationErrors.push("You're too young to join this group.")
         } 
     }
     if(group.MaxAge){
-        if(account.age > group.MaxAge){
+        if(parseInt(account.Age) > parseInt(group.MaxAge)){
             validationErrors.push("You're too old to join this group.")
         }
     }
@@ -99,7 +98,6 @@ exports.validateRequirements = function(account, group){
     if(group.City != account.City){
         validationErrors.push("You need to be in the same city as the group.")
     }
-
     return validationErrors
 
 }
