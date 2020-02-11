@@ -26,7 +26,12 @@
                     <td>Gender: {{this.AllowedGender}}</td>
 
                     <td>{{this.NrOfMembers}}/{{this.MemberSlots}} Members</td>
-                    <td><button class="btn btn-link btn-primary"><a href="/specificGroup">Join Group</a></button></td>
+                    <td>
+                        <form method="POST">
+                            <input type="hidden" name="groupId" value="{{this.GroupId}}">
+                            <button class="btn btn-link btn-primary">Join Group</button>
+                        </form>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
