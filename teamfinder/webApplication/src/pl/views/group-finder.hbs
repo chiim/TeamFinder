@@ -29,7 +29,11 @@
                     <td>
                         <form method="POST">
                             <input type="hidden" name="groupId" value="{{this.GroupId}}">
-                            <button class="btn btn-link btn-primary">Join Group</button>
+                            {{#if ../accountId}}
+                                <button class="btn btn-link btn-primary">Join Group</button>
+                            {{else}}
+                                <button class="btn btn-link btn-primary" disabled>Login to join a group</button>
+                            {{/if}}
                         </form>
                     </td>
                 </tr>

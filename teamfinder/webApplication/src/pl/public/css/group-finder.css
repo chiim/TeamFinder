@@ -9,3 +9,6 @@
     color: whitesmoke;
 }
 
+.btn-link:disabled{
+    color: orange;
+}

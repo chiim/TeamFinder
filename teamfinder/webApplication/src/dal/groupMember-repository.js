@@ -3,7 +3,6 @@ const db = require('./dbConnection')
 exports.createGroupMemberLink = function (accountId, groupId, callback) {
     const query = "INSERT INTO GroupMembers (AccountId, GroupId) VALUES (?, ?)"
     const values = [accountId, groupId]
-    console.log("Kolla länkning accountId: ". accountId)
     db.query(query, values, function (error, result) {
         if (error) {
             const databaseError = "Error linking account to group."

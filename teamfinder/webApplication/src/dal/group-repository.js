@@ -22,12 +22,9 @@ exports.createGroup = function(groupCredentials, callback){
         authorId
     ]
 
-    console.log(values)
-
     db.query(query, values, function(error, result){
         if(error){
             const databaseError = ["Something went wrong inserting data. Contact admin."]
-            console.log(error)
             callback(databaseError, null)
         }
         else{
@@ -85,7 +82,6 @@ exports.getGroupById = function(id, callback){
     const values = [id]
     db.query(query, values, function(error, result){
         if(error){
-            console.log("Error")
             const databaseError = ["Something went wrong fetching the group."]
             callback(databaseError, null)
         }

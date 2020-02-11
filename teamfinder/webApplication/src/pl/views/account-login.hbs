@@ -1,7 +1,14 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/login.css">
+</head>
+
 <div class="container py-4">
 
     <h1>Login</h1>
 
+    {{#if printErrorMessage}}
+    <h4 class="errorText">{{printErrorMessage}}</h4>
+    {{/if}}
     
     <form method="POST">
         <div class="form-group">

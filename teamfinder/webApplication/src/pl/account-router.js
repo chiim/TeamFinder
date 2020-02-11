@@ -5,11 +5,22 @@ const accountManager = require('../bll/account-manager')
 const router = express.Router()
 
 router.get('/login', function (request, response) {
-    response.render("account-login.hbs")
+
+    const error = request.query.error
+    if(error){
+        const printErrorMessage = "You must login before accessing that page."
+        const model = {
+            printErrorMessage
+        }
+        response.render("account-login.hbs", model)
+    }
+    else{
+        response.render("account-login.hbs")
+    }
+
 })
 
 router.post('/login', function (request, response) {
-
     const email = request.body.email
     const password = request.body.password
 

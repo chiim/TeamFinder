@@ -52,6 +52,7 @@ router.get('/finder', function (request, response) {
                         const model = {
                             groups
                         }
+                        console.log("model: ", model)
                         response.render('group-finder.hbs', model)
                     }
                 })
@@ -108,85 +109,87 @@ router.post('/finder', function (request, response) {
 
 router.get('/active', function (request, response) {
 
-    /*accountManager.getAccountById(loginId, function(error, account){
-
-    })*/
-    const accountId = request.session.accountId // Hard coded account until we have a login to fetch accountId from db.
-    groupManager.getActiveGroups(accountId, function (error, groupIds) {
-        console.log(groupIds)
-        var databaseErrors = []
-        if (error) {
-            const model = {
-                error
+    const accountId = request.session.accountId
+    if (accountId) {
+        groupManager.getActiveGroups(accountId, function (error, groupIds) {
+            var databaseErrors = []
+            if (error) {
+                const model = {
+                    error
+                }
+                response.render('group-active.hbs', model)
             }
-            response.render('group-active.hbs', model)
-        }
-        else {
-            if (groupIds.length > 0) {
-                var checkMemberCountErrors = []
-                try { // KOLLA OM DETTA FUNKAR MED PETER!
-                    for (var i = 0; i < groupIds.length; i++) {
-                        console.log("REEEEEE")
-                        groupMemberManager.getNrOfMembersInGroup(groupIds[i].GroupId, function (error) {
-                            if (error) {
-                                console.log("Fel i updateNrOfMembersInGroup")
-                                throw (error)
-                            }
-                        })
-                    }
-                }
-                catch (error) {
-                    checkMemberCountErrors.push(error)
-                }
-                if (checkMemberCountErrors.length > 0) {
-                    const model = {
-                        checkMemberCountErrors
-                    }
-                    response.render('group-active.hbs', model)
-                }
-                else {
-                    const activeGroups = []
+            else {
+                if (groupIds.length > 0) {
+                    var checkMemberCountErrors = []
                     try {
                         for (var i = 0; i < groupIds.length; i++) {
-                            console.log("test", groupIds.length)
-                            groupManager.getGroupById(groupIds[i].GroupId, function (error, group) {
-                                console.log("grupp", group)
+                            groupMemberManager.getNrOfMembersInGroup(groupIds[i].GroupId, function (error) {
                                 if (error) {
                                     throw (error)
-                                }
-                                else {
-                                    activeGroups.push(group)
-                                    if (activeGroups.length == groupIds.length) {
-                                        const model = {
-                                            activeGroups
-                                        }
-                                        response.render('group-active.hbs', model)
-                                    }
                                 }
                             })
                         }
                     }
                     catch (error) {
-                        databaseErrors.push(error)
+                        checkMemberCountErrors.push(error)
                     }
-                    console.log("databaseErrors: ", databaseErrors.length)
-                    if (databaseErrors.length > 0) {
+                    if (checkMemberCountErrors.length > 0) {
                         const model = {
-                            databaseErrors
+                            checkMemberCountErrors
                         }
                         response.render('group-active.hbs', model)
                     }
+                    else {
+                        const activeGroups = []
+                        try {
+                            for (var i = 0; i < groupIds.length; i++) {
+                                groupManager.getGroupById(groupIds[i].GroupId, function (error, group) {
+                                    if (error) {
+                                        throw (error)
+                                    }
+                                    else {
+                                        activeGroups.push(group)
+                                        if (activeGroups.length == groupIds.length) {
+                                            const model = {
+                                                activeGroups
+                                            }
+                                            response.render('group-active.hbs', model)
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        catch (error) {
+                            databaseErrors.push(error)
+                        }
+                        if (databaseErrors.length > 0) {
+                            const model = {
+                                databaseErrors
+                            }
+                            response.render('group-active.hbs', model)
+                        }
+                    }
+                }
+                else {
+                    response.render('group-active.hbs')
                 }
             }
-            else{
-                response.render('group-active.hbs')
-            }
-        }
-    })
+        })
+    }
+    else{
+        response.redirect('/accounts/login/?error=true')
+    }
 })
 
 router.get('/create', function (request, response) {
-    response.render('group-create.hbs')
+    const accountId = request.session.accountId
+    if (accountId) {
+        response.render('group-create.hbs')
+    }
+    else{
+        response.redirect('/accounts/login/?error=true')
+    }
 })
 
 router.post('/create', function (request, response) {
@@ -216,7 +219,6 @@ router.post('/create', function (request, response) {
 
     groupManager.createGroup(groupCredentials, function (error, groupId) {
         if (error) {
-            console.log(error)
             const model = {
                 error
             }
@@ -249,7 +251,6 @@ router.get("/:id", function (request, response) {
             const model = {
                 error
             }
-            console.log("FÖRSTA STÄLLET")
             response.render('group-active.hbs', model)
         }
 
@@ -260,7 +261,6 @@ router.get("/:id", function (request, response) {
                     const model = {
                         error
                     }
-                    console.log("ANDRA STÄLLET")
                     response.render('group-active.hbs', model)
                 }
                 else {
