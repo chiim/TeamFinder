@@ -5,7 +5,6 @@ const session = require('express-session')
 
 const groupRouter = require('./pl/group-router')
 const accountRouter = require('./pl/account-router')
-const groupMemberRouter = require('./pl/groupMember-router')
 const messageRouter = require('./pl/message-router')
 
 const app = express()
@@ -54,7 +53,6 @@ app.use(function (request, response, next) {
 
 app.use("/groups", groupRouter)
 app.use("/accounts", accountRouter)
-app.use("/groupMembers", groupMemberRouter)
 app.use("/messages", messageRouter)
 
 app.engine("hbs", expressHandlebars({

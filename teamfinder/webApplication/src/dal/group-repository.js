@@ -1,4 +1,3 @@
-const mySql = require('mysql')
 const db = require('./dbConnection')
 
 exports.createGroup = function(groupCredentials, callback){
@@ -32,7 +31,7 @@ exports.createGroup = function(groupCredentials, callback){
             callback(databaseError, null)
         }
         else{
-            callback(null, result)
+            callback(null, result.insertId)
         }
     })
 
@@ -51,6 +50,36 @@ exports.getAllGroups = function(callback){
     })
 }
 
+exports.getActiveGroups = function(accountId, callback){
+    const query = "SELECT GroupId FROM GroupMembers WHERE AccountId = ?"
+    const values = [accountId]
+
+    db.query(query, values, function(error, result){
+        if(error){
+            const databaseError = ["Something went wrong fetching active groups."]
+            callback(databaseError, null)
+        }
+
+        else{
+            callback(null, result)
+        }
+    })
+
+}
+
+exports.getAllGroupIds = function(callback){
+    const query = "SELECT GroupId FROM Groups"
+    db.query(query, function(error, result){
+        if(error){
+            const databaseError = ["Something went wrong fetching a group"]
+        callback(databaseError, null)
+        }
+        else{
+            callback(null, result)
+        }
+    })
+}
+
 exports.getGroupById = function(id, callback){
 
     const query = "SELECT * FROM Groups WHERE GroupId = ? LIMIT 1"
@@ -61,11 +90,10 @@ exports.getGroupById = function(id, callback){
             const databaseError = ["Something went wrong fetching the group."]
             callback(databaseError, null)
         }
-        else{
-            console.log("gruppen som hämtats:" + result[0])
-            
+        else{            
             callback(null, result[0])
         }
     })    
 
 }
+
