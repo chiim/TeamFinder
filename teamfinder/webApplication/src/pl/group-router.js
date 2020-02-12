@@ -3,6 +3,7 @@ const expressHandlebars = require('express-handlebars')
 const groupManager = require('../bll/group-manager')
 const groupMemberManager = require('../bll/groupMember-manager')
 const validator = require('../bll/validator')
+const middleware = require('../pl/middleware-router')
 
 const accountManager = require('../bll/account-manager')
 const router = express.Router()
@@ -114,10 +115,10 @@ router.post('/finder', function (request, response) {
     })
 })
 
-router.get('/active', function (request, response) {
+router.get('/active', middleware.isAuthorized, function (request, response) {
 
     const accountId = request.session.accountId
-    if (accountId) {
+    
         groupManager.getActiveGroups(accountId, function (error, groupIds) {
             var databaseErrors = []
             if (error) {
@@ -190,34 +191,27 @@ router.get('/active', function (request, response) {
                 }
             }
         })
-    }
-    else{
-        response.redirect('/accounts/login/?error=true')
-    }
+   
 })
+
 
 router.post('/active', function(request, response){
-    const accountId = request.session.accountId
+    
     const groupId = request.body.groupId
-    if(accountId){
-        response.redirect('/groups/' + groupId)
-    }
-    else{
-        response.redirect('/accounts/login/?error=true')
-    }
+    
+    response.redirect('/groups/' + groupId)
+    
+    
 })
 
-router.get('/create', function (request, response) {
-    const accountId = request.session.accountId
-    if (accountId) {
-        const model = {
-            csrfToken: request.csrfToken()
-        }
-        response.render('group-create.hbs', model)
+router.get('/create', middleware.isAuthorized, function (request, response) {
+    
+    
+    const model = {
+        csrfToken: request.csrfToken()
     }
-    else{
-        response.redirect('/accounts/login/?error=true')
-    }
+    response.render('group-create.hbs', model)
+    
 })
 
 router.post('/create', function (request, response) {
@@ -272,6 +266,7 @@ router.post('/create', function (request, response) {
     })
 })
 
+//ska ha en middleware för ifdall man är medlem i gruppen
 router.get("/:id", function (request, response) {
 
     const id = request.params.id

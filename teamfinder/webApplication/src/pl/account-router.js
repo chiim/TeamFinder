@@ -1,13 +1,19 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
 const accountManager = require('../bll/account-manager')
+const middleware = require('../pl/middleware-router')
+
+//var login = middleware.isAuthorized o kalla på login istället
 
 const router = express.Router()
 
+
+
+
 router.get('/login', function (request, response) {
 
-    const error = request.query.error
-    if(error){
+    const authorized = request.query.unAuthorized
+    if(!authorized){
         const printErrorMessage = "You must login before accessing that page."
         const model = {
             printErrorMessage,
@@ -104,8 +110,8 @@ router.post('/sign-up', function (request, response) {
 })
 
 
-
-router.get('/edit', function (request, response) {
+//här får bara ägaren ändra kontot..
+router.get('/edit', middleware.isAuthorized, function (request, response) {
     
 	const accountId = request.session.accountId
 	
@@ -156,7 +162,9 @@ router.post('/edit', function(request, response){
 
 })
 
-router.get('/:id', function(request, response){
+
+
+router.get('/:id', middleware.isAuthorized, function(request, response){
     
 	const accountId = request.params.id
 	
@@ -175,7 +183,7 @@ router.get('/:id', function(request, response){
             csrfToken: request.csrfToken()
 		}
 		response.render("account-profile.hbs", model)
-	})    
+	})
     
 })
 
@@ -187,15 +195,12 @@ router.post('/editId', function(request, response){
 
 router.post('/delete', function(request, response){
 
-    console.log("kom in i post /delete")
 
     const accountId = request.session.accountId
 
-    console.log(accountId)
 
     accountManager.deleteAccount(accountId, function(error){
 
-        console.log("i callbacken")
         if(error){
             // MAN HAMNAR HÄR. TODO: Foreign constraints fail. Ta bort accountId från alla andra tables först.
             model = {
