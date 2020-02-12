@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/group-active.css">
@@ -20,7 +21,12 @@
                         <td>City: {{this.City}}</td>
                         <td>Gender: {{this.AllowedGender}}</td>
                         <td>{{this.NrOfMembers}}/{{this.MemberSlots}} Members</td>
-                        <td><button class="btn btn-link btn-primary"><a href="/groups/{{this.GroupId}}">View Group</a></button>
+                        <td>
+                            <form method="post">
+                                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+                                <button class="btn btn-link btn-primary" name="groupId" value="{{this.GroupId}}">View
+                                    Group</button>
+                            </form>
                         </td>
                     </tr>
                     {{/each}}
@@ -29,4 +35,5 @@
         </div>
     </div>
 </body>
+
 </html>

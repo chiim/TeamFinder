@@ -29,6 +29,7 @@
                     <td>
                         <form method="POST">
                             <input type="hidden" name="groupId" value="{{this.GroupId}}">
+                            <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                             {{#if ../accountId}}
                                 <button class="btn btn-link btn-primary">Join Group</button>
                             {{else}}
