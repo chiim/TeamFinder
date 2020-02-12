@@ -2,6 +2,9 @@ const express = require('express')
 const expressHandlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const cookieParser = require('cookie-parser')
+const csrf = require('csurf')
+
 
 const groupRouter = require('./pl/group-router')
 const accountRouter = require('./pl/account-router')
@@ -11,6 +14,12 @@ const app = express()
 
 app.use(bodyParser.urlencoded({
   extended: false
+}))
+
+app.use(cookieParser())
+
+app.use(csrf({
+    cookie: true
 }))
 
 app.use(session({
@@ -63,15 +72,6 @@ app.use(express.static(__dirname + "/pl/public/css"))
 app.use(express.static(__dirname + "/pl/public/images"))
 
 app.get('/', function(request, response){
-
-  /*const accountId = request.session.accountId
-
-  console.log("account id som är inloggat :" + accountId)
-
-  const model = {
-    accountId
-  }*/
-
   response.render("home.hbs")
 })
 

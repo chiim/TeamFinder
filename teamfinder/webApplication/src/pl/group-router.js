@@ -16,7 +16,8 @@ router.get('/finder', function (request, response) {
     groupManager.getAllGroupIds(function (error, groupIds) {
         if (error) {
             const model = {
-                error
+                error,
+                csrfToken: request.csrfToken()
             }
             response.render('group-finder.hbs', model)
         }
@@ -36,7 +37,8 @@ router.get('/finder', function (request, response) {
             }
             if (databaseErrors.length > 0) {
                 const model = {
-                    databaseErrors
+                    databaseErrors,
+                    csrfToken: request.csrfToken()
                 }
                 response.render('group-finder.hbs', model)
             }
@@ -44,15 +46,16 @@ router.get('/finder', function (request, response) {
                 groupManager.getAllGroups(function (error, groups) {
                     if (error) {
                         const model = {
-                            error
+                            error,
+                            csrfToken: request.csrfToken()
                         }
                         response.render('group-finder.hbs', model)
                     }
                     else {
                         const model = {
-                            groups
+                            groups,
+                            csrfToken: request.csrfToken()
                         }
-                        console.log("model: ", model)
                         response.render('group-finder.hbs', model)
                     }
                 })
@@ -68,7 +71,8 @@ router.post('/finder', function (request, response) {
     groupManager.getGroupById(groupId, function (error, group) {
         if (error) {
             const model = {
-                error
+                error,
+                csrfToken: request.csrfToken()
             }
             response.render('group-finder.hbs', model)
         }
@@ -76,7 +80,8 @@ router.post('/finder', function (request, response) {
             accountManager.getAccountById(accountId, function (error, account) {
                 if (error) {
                     const model = {
-                        error
+                        error,
+                        csrfToken: request.csrfToken()
                     }
                     response.render('group-finder.hbs', model)
                 }
@@ -84,7 +89,8 @@ router.post('/finder', function (request, response) {
                     const validationErrors = validator.validateRequirements(account, group)
                     if (validationErrors.length > 0) {
                         const model = {
-                            validationErrors
+                            validationErrors,
+                            csrfToken: request.csrfToken()
                         }
                         response.render('group-finder.hbs', model)
                     }
@@ -92,7 +98,8 @@ router.post('/finder', function (request, response) {
                         groupMemberManager.createGroupMemberLink(accountId, groupId, function (error) {
                             if (error) {
                                 const model = {
-                                    error
+                                    error,
+                                    csrfToken: request.csrfToken()
                                 }
                                 response.render('group-finder.hbs', model)
                             }
@@ -115,7 +122,8 @@ router.get('/active', function (request, response) {
             var databaseErrors = []
             if (error) {
                 const model = {
-                    error
+                    error,
+                    csrfToken: request.csrfToken()
                 }
                 response.render('group-active.hbs', model)
             }
@@ -136,7 +144,8 @@ router.get('/active', function (request, response) {
                     }
                     if (checkMemberCountErrors.length > 0) {
                         const model = {
-                            checkMemberCountErrors
+                            checkMemberCountErrors,
+                            csrfToken: request.csrfToken()
                         }
                         response.render('group-active.hbs', model)
                     }
@@ -152,7 +161,8 @@ router.get('/active', function (request, response) {
                                         activeGroups.push(group)
                                         if (activeGroups.length == groupIds.length) {
                                             const model = {
-                                                activeGroups
+                                                activeGroups,
+                                                csrfToken: request.csrfToken()
                                             }
                                             response.render('group-active.hbs', model)
                                         }
@@ -165,14 +175,18 @@ router.get('/active', function (request, response) {
                         }
                         if (databaseErrors.length > 0) {
                             const model = {
-                                databaseErrors
+                                databaseErrors,
+                                csrfToken: request.csrfToken()
                             }
                             response.render('group-active.hbs', model)
                         }
                     }
                 }
                 else {
-                    response.render('group-active.hbs')
+                    const model = {
+                        csrfToken: request.csrfToken()
+                    }
+                    response.render('group-active.hbs', model)
                 }
             }
         })
@@ -182,10 +196,24 @@ router.get('/active', function (request, response) {
     }
 })
 
+router.post('/active', function(request, response){
+    const accountId = request.session.accountId
+    const groupId = request.body.groupId
+    if(accountId){
+        response.redirect('/groups/' + groupId)
+    }
+    else{
+        response.redirect('/accounts/login/?error=true')
+    }
+})
+
 router.get('/create', function (request, response) {
     const accountId = request.session.accountId
     if (accountId) {
-        response.render('group-create.hbs')
+        const model = {
+            csrfToken: request.csrfToken()
+        }
+        response.render('group-create.hbs', model)
     }
     else{
         response.redirect('/accounts/login/?error=true')
@@ -220,7 +248,8 @@ router.post('/create', function (request, response) {
     groupManager.createGroup(groupCredentials, function (error, groupId) {
         if (error) {
             const model = {
-                error
+                error,
+                csrfToken: request.csrfToken()
             }
             response.render("group-create.hbs", model)
         }
@@ -230,7 +259,8 @@ router.post('/create', function (request, response) {
             groupMemberManager.createGroupMemberLink(accountId, groupId, function (error) {
                 if (error) {
                     const model = {
-                        error
+                        error,
+                        csrfToken: request.csrfToken()
                     }
                     response.render('group-create.hbs', model)
                 }
@@ -249,7 +279,8 @@ router.get("/:id", function (request, response) {
     groupMemberManager.getNrOfMembersInGroup(id, function (error) {
         if (error) {
             const model = {
-                error
+                error,
+                csrfToken: request.csrfToken()
             }
             response.render('group-active.hbs', model)
         }
@@ -259,7 +290,8 @@ router.get("/:id", function (request, response) {
 
                 if (error) {
                     const model = {
-                        error
+                        error,
+                        csrfToken: request.csrfToken()
                     }
                     response.render('group-active.hbs', model)
                 }
@@ -273,8 +305,8 @@ router.get("/:id", function (request, response) {
                         }
                         else {*/
                     const model = {
-                        group//,
-                        //messages
+                        group,
+                        csrfToken: request.csrfToken()
                     }
                     response.render("group-specific.hbs", model)
                     //}
@@ -282,11 +314,12 @@ router.get("/:id", function (request, response) {
                 }
             })
         }
-
     })
+})
 
-
-
+router.post('/:id', function(request, response){ // ADD MIDDLEWARE FOR VALIDATING ACCOUNT IN GROUP
+    const id = request.params.id
+    response.redirect('/groups/' + id + '/edit')
 })
 
 

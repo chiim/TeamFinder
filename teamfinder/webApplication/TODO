@@ -1,0 +1,23 @@
+validate user accessing specific group e.g. /groups/2
+
+update group
+
+delete group
+
+fix delete profile. Delete foreign constraints first.
+
+kick member from group
+
+admin account to access all groups
+
+update messages
+
+delete messages
+
+middleware function for checking if user exists in group - Used in specific group post & message posts in group
+
+Make it so users can see each others profiles
+
+clean up design
+
+part 6

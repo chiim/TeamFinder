@@ -10,12 +10,16 @@ router.get('/login', function (request, response) {
     if(error){
         const printErrorMessage = "You must login before accessing that page."
         const model = {
-            printErrorMessage
+            printErrorMessage,
+            csrfToken: request.csrfToken()
         }
         response.render("account-login.hbs", model)
     }
     else{
-        response.render("account-login.hbs")
+        const model = {
+            csrfToken: request.csrfToken()
+        }
+        response.render("account-login.hbs", model)
     }
 
 })
@@ -35,7 +39,8 @@ router.post('/login', function (request, response) {
             const model = {
                 email,
                 password,
-                error
+                error,
+                csrfToken: request.csrfToken()
             }
             response.render('account-login.hbs', model)
         }
@@ -55,7 +60,10 @@ router.get('/Logout', function (request, response) {
 
 
 router.get('/sign-up', function (request, response) {
-    response.render("account-sign-up.hbs")
+    const model = {
+        csrfToken: request.csrfToken()
+    }
+    response.render("account-sign-up.hbs", model)
 })
 
 router.post('/sign-up', function (request, response) {
@@ -82,7 +90,8 @@ router.post('/sign-up', function (request, response) {
         if (error) {                     
             model = {
                 error,
-                account
+                account,
+                csrfToken: request.csrfToken()
             }
             response.render("account-sign-up.hbs", model)
         }
@@ -96,7 +105,7 @@ router.post('/sign-up', function (request, response) {
 
 
 
-router.get('/edit/', function (request, response) {
+router.get('/edit', function (request, response) {
     
 	const accountId = request.session.accountId
 	
@@ -132,9 +141,9 @@ router.post('/edit', function(request, response){
     } 
     accountManager.updateAccount(account, function(errors){
 
-        if(error){
+        if(errors){
             const model = {
-                error
+                errors
             }
             response.redirect("accounts/edit/" + accountId )
         }
@@ -151,14 +160,28 @@ router.get('/:id', function(request, response){
 	
 	accountManager.getAccountById(accountId, function(errors, account){
 
+        if(errors){
+            const model = {
+                errors,
+                csrfToken: request.csrfToken()
+            }
+            response.render('account-profile.hbs', model)
+        }
+
         const model = {
-			errors,
-			account
+            account,
+            csrfToken: request.csrfToken()
 		}
 		response.render("account-profile.hbs", model)
 	})    
     
 })
+
+router.post('/editId', function(request, response){
+    console.log("HALLÅÅÅÅ???")
+    response.redirect('/accounts/edit')
+})
+
 
 router.post('/delete', function(request, response){
 
@@ -172,12 +195,15 @@ router.post('/delete', function(request, response){
 
         console.log("i callbacken")
         if(error){
+            // MAN HAMNAR HÄR. TODO: Foreign constraints fail. Ta bort accountId från alla andra tables först.
             model = {
-                error
+                error,
+                csrfToken: request.csrfToken()
             }
             response.render("account-profile.hbs", model)
         }
         else{
+            console.log("Kommer man hit?")
             response.redirect("/logout")
         }
     })
