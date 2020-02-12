@@ -81,8 +81,6 @@ exports.loginAccount = function(credentials, callback){
         credentials.password
     ]
 
-    console.log(values)
-
     db.query(query, values, function(error, account){
 
         if(error){
@@ -109,13 +107,11 @@ exports.deleteAccount = function(accountId, callback){
     db.query(query, values, function(error) {
 
         if(error){
-            console.log(error)
             const databaseError = "error when deleting account"
             callback(databaseError)
 
         }
         else{
-            console.log("inga db errors när man deletar account")
             callback(null)
         }
     })

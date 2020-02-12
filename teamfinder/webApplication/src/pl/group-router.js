@@ -3,6 +3,7 @@ const expressHandlebars = require('express-handlebars')
 const groupManager = require('../bll/group-manager')
 const groupMemberManager = require('../bll/groupMember-manager')
 const validator = require('../bll/validator')
+const middleware = require('../pl/middleware-router')
 
 const accountManager = require('../bll/account-manager')
 const router = express.Router()
@@ -52,7 +53,6 @@ router.get('/finder', function (request, response) {
                         const model = {
                             groups
                         }
-                        console.log("model: ", model)
                         response.render('group-finder.hbs', model)
                     }
                 })
@@ -107,10 +107,10 @@ router.post('/finder', function (request, response) {
     })
 })
 
-router.get('/active', function (request, response) {
+router.get('/active', middleware.isAuthorized, function (request, response) {
 
     const accountId = request.session.accountId
-    if (accountId) {
+    
         groupManager.getActiveGroups(accountId, function (error, groupIds) {
             var databaseErrors = []
             if (error) {
@@ -176,20 +176,11 @@ router.get('/active', function (request, response) {
                 }
             }
         })
-    }
-    else{
-        response.redirect('/accounts/login/?error=true')
-    }
+   
 })
 
-router.get('/create', function (request, response) {
-    const accountId = request.session.accountId
-    if (accountId) {
-        response.render('group-create.hbs')
-    }
-    else{
-        response.redirect('/accounts/login/?error=true')
-    }
+router.get('/create', middleware.isAuthorized, function (request, response) {
+    response.render('group-create.hbs')
 })
 
 router.post('/create', function (request, response) {
@@ -242,6 +233,7 @@ router.post('/create', function (request, response) {
     })
 })
 
+//ska ha en middleware för ifdall man är medlem i gruppen
 router.get("/:id", function (request, response) {
 
     const id = request.params.id

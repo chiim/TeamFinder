@@ -28,29 +28,6 @@ app.use(function (request, response, next) {
 })
 
 
-app.use(function (request, response, next) {
-
-
-  if (request.session.isLoggedIn == null){
-    
-    arrayOfPaths = [
-      '/',
-      '/groups/finder',//blocka denna posten
-      '/account/login',
-      '/account/sign-up',
-    ]
-
-    for(var i = 0; i < arrayOfPaths.length; i++){
-      if(request.path){ 
-
-      }
-    }
-  }
-
-  next()
-
-})
-
 app.use("/groups", groupRouter)
 app.use("/accounts", accountRouter)
 app.use("/messages", messageRouter)

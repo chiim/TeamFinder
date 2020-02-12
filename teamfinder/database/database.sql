@@ -25,9 +25,10 @@ CREATE TABLE `Groups` (
     `MaxAge` VARCHAR(3),
     `SkillLevel` VARCHAR(15) NOT NULL,
     `AllowedGender` VARCHAR(10),
-    `AuthorId` INT NOT NULL,
+    `AuthorId` INT NOT NULL,    
     `PublishingDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,    
     PRIMARY KEY (`GroupId`),
+    FOREIGN KEY (`AuthorId`) REFERENCES Accounts(`AccountId`),
     UNIQUE(Name)
 );
 
