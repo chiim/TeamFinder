@@ -113,7 +113,8 @@ router.get('/edit', function (request, response) {
 
         const model = {
 			errors,
-			account
+            account,
+            csrfToken: request.csrfToken()
 		}
 		response.render("account-edit.hbs", model)
 	})   
@@ -143,9 +144,10 @@ router.post('/edit', function(request, response){
 
         if(errors){
             const model = {
-                errors
+                errors,
+                csrfToken: request.csrfToken()
             }
-            response.redirect("accounts/edit/" + accountId )
+            response.render("account-edit.hbs", model)
         }
         else{
             response.redirect("/accounts/" + accountId )
