@@ -194,33 +194,24 @@ router.get('/active', middleware.isAuthorized, function (request, response) {
    
 })
 
-<<<<<<< HEAD
-router.get('/create', middleware.isAuthorized, function (request, response) {
-    response.render('group-create.hbs')
-=======
+
 router.post('/active', function(request, response){
-    const accountId = request.session.accountId
+    
     const groupId = request.body.groupId
-    if(accountId){
-        response.redirect('/groups/' + groupId)
-    }
-    else{
-        response.redirect('/accounts/login/?error=true')
-    }
+    
+    response.redirect('/groups/' + groupId)
+    
+    
 })
 
-router.get('/create', function (request, response) {
-    const accountId = request.session.accountId
-    if (accountId) {
-        const model = {
-            csrfToken: request.csrfToken()
-        }
-        response.render('group-create.hbs', model)
+router.get('/create', middleware.isAuthorized, function (request, response) {
+    
+    
+    const model = {
+        csrfToken: request.csrfToken()
     }
-    else{
-        response.redirect('/accounts/login/?error=true')
-    }
->>>>>>> 6959d44802c34e7dc769d159c89bfbf29488826d
+    response.render('group-create.hbs', model)
+    
 })
 
 router.post('/create', function (request, response) {
