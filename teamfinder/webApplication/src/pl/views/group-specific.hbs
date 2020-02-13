@@ -11,33 +11,25 @@
     <div>
         <h1>Group Name: {{group.Name}}</h1>
         <div class="row">
-
             <div class="col-sm">
                 <p>Sport: {{group.Sport}}</p>
                 <p>City: {{group.City}}</p>
                 <p>Members: {{group.NrOfMembers}} / {{group.MemberSlots}}</p>
                 <small>Group Created: {{group.PublishingDate}}</small>
-                
-
-
             </div>
-
             <div class="col-sm">
-
                 <p>Allowed Gender: {{group.AllowedGender}}</p>
                 <p>Age Restriction: {{group.MinAge}} - {{group.MaxAge}}</p>
                 <p>Skill Level: {{group.SkillLevel}}</p>
-
             </div>
-
         </div>
-
-        <a class="btn btn-primary" href="">edit group (not existing)</a>
+        <form method="post">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button class="btn btn-primary" type="submit">edit group (/groups/id/edit)</button>
+        </form>
     </div>
 
     <div>
-
-
         <form method="POST" action="/messages/create">
             <div class="form-row">
                 <div class="col-6 my-1">
@@ -46,11 +38,11 @@
                 </div>
                 <div class="col-2 my-1">
                     <input type="hidden" name="groupId" value='{{group.GroupId}}'>
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <button type="submit" class="btn btn-primary">send message</button>
                 </div>
             </div>
         </form>
-
     </div>
 
     <div>
@@ -58,12 +50,10 @@
             <h4>name here</h4>
             <p>message here</p>
         </div>
-
         <div class="message-text">
             <h4>name here</h4>
             <p>message here</p>
         </div>
-
         <div class="message-text">
             <div class="col...">
                 <h4>name here</h4>
@@ -73,6 +63,4 @@
             </div>
         </div>
     </div>
-</div>
-
 </div>

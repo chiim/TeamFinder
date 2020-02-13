@@ -1,47 +1,49 @@
 <div class="container py-4">
 
-<h1>Edit profile</h1>
+  <h1>Edit profile</h1>
 
-<form method="POST" action="/accounts/edit">
+  <form method="POST" action="/accounts/edit">
 
-  <div class="form-group">
-    <label for="exampleInputPassword1">First name</label>
-    <input class="form-control" id="firstName" value="{{account.FirstName}}">
-  </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">First name</label>
+      <input class="form-control" id="firstName" value="{{account.FirstName}}">
+    </div>
 
-  <div class="form-group">
-    <label for="exampleInputPassword1">Last Name</label>
-    <input class="form-control" id="lastName" value="{{account.LastName}}">
-  </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Last Name</label>
+      <input class="form-control" id="lastName" value="{{account.LastName}}">
+    </div>
 
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{account.Email}}">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        value="{{account.Email}}">
+      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
 
-  <div class="form-group">
-    <label for="exampleInputPassword1">Age</label>
-    <input class="form-control" id="age" value="{{account.Age}}">
-  </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Age</label>
+      <input class="form-control" id="age" value="{{account.Age}}">
+    </div>
 
-  <div class="form-group">
-    <label for="exampleInputPassword1">City</label>
-    <input class="form-control" id="city" value="{{account.City}}">
-  </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">City</label>
+      <input class="form-control" id="city" value="{{account.City}}">
+    </div>
 
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">Gender</label>
-    <select class="form-control" id="gender" value="{{account.Gender}}">
-      <option value="female">Female</option>
-      <option value="male">Male</option>
-      <option value="other">Other</option>      
-    </select>
-  </div>
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Gender</label>
+      <select class="form-control" id="gender" value="{{account.Gender}}">
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
 
 
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
-  <button type="submit" class="btn btn-primary">Confirm Edit</button>
-</form>
+    <button type="submit" class="btn btn-primary">Confirm Edit</button>
+  </form>
 
 </div>

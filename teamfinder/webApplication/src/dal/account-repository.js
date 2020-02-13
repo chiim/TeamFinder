@@ -99,11 +99,14 @@ exports.loginAccount = function(credentials, callback){
 
 exports.deleteAccount = function(accountId, callback){
 
+
+    //LÖS DET AXEL. TACK :)
+
     const query = "DELETE FROM Accounts WHERE AccountId = ?"
     const values = [
         accountId
     ]
-
+    console.log(accountId)
     db.query(query, values, function(error) {
 
         if(error){

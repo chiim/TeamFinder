@@ -3,42 +3,49 @@
     <h1>Profile</h1>
 
     {{#if errors.length}}
-        <p>Oh no, something went wrong:</p>
-        <ul>
-            {{#each errors}}
-                <li>{{this}}</li>
-            {{/each}}
-        </ul>
+    <p>Oh no, something went wrong:</p>
+    <ul>
+        {{#each errors}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
     {{else}}
 
 
-        <div class="row">
+    <div class="row">
 
-            <div class="col-sm">
-                <p>{{account.FirstName}}</p>
-                <p>{{account.LastName}}</p>
-                <p>{{account.Email}}</p>
-                <p>{{account.Age}}</p>
-                <p>{{account.Gender}}</p>
-                <p>{{account.City}}</p>
-
-            </div>
-
-            <div class="col-sm">
-
-                <p>Medlem i grupper</p>
-                <p>Meddelande skickade</p>
-                <p>favorit sport</p>
-
-            </div>
+        <div class="col-sm">
+            <p>{{account.FirstName}}</p>
+            <p>{{account.LastName}}</p>
+            <p>{{account.Email}}</p>
+            <p>{{account.Age}}</p>
+            <p>{{account.Gender}}</p>
+            <p>{{account.City}}</p>
 
         </div>
 
-        <a class="btn btn-primary" href="/accounts/edit">edit profile</a>
-        <form action="/accounts/delete" method="POST">
-            <button class="btn btn-primary" type="submit">delete profile</button>
-        </form>
-        {{!-- <a class="btn btn-primary" href="/accounts/delete">delete profile</a> --}}
+        <div class="col-sm">
+
+            <p>Medlem i grupper</p>
+            <p>Meddelande skickade</p>
+            <p>favorit sport</p>
+
+        </div>
+
+    </div>
+
+    <form action="/accounts/editId" method="post">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button class="btn btn-primary" type="submit">edit profile</button>
+    </form>
+
+    <form action="/accounts/delete" method="post">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button class="btn btn-primary" type="submit">delete profile</button>
+    </form>
+
+
+    {{!-- <a class="btn btn-primary" href="/accounts/delete">delete profile</a> --}}
 
 
     {{/if}}
