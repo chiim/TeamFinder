@@ -4,7 +4,8 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const csrf = require('csurf')
-
+//const redis = require('redis')
+//const redisStore = require('connect-redis')(session)
 
 const groupRouter = require('./pl/group-router')
 const accountRouter = require('./pl/account-router')
@@ -26,7 +27,12 @@ app.use(session({
   saveUninitialized: false,
   resave: false, 
   secret: 'sadjkfasblowihnmdhu',
-  accountId: null
+  accountId: null,
+  /*store: new redisStore({
+      host: '192.168.99.100', // Your current docker IP (?)
+      port: 6379,
+      client: redis,
+  })*/
 }))
 
 app.set("views", "src/pl/views")

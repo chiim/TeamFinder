@@ -13,7 +13,7 @@ const router = express.Router()
 router.get('/login', function (request, response) {
 
     const authorized = request.query.authorized
-    if(authorized == "false"){
+    if (authorized == "false") {
         const printErrorMessage = "You must login before accessing that page."
         const model = {
             printErrorMessage,
@@ -21,7 +21,7 @@ router.get('/login', function (request, response) {
         }
         response.render("account-login.hbs", model)
     }
-    else{
+    else {
         const model = {
             csrfToken: request.csrfToken()
         }
@@ -39,9 +39,9 @@ router.post('/login', function (request, response) {
         password
     }
 
-    accountManager.loginAccount(credentials, function(error, account){
+    accountManager.loginAccount(credentials, function (error, account) {
 
-        if(error){
+        if (error) {
             const model = {
                 email,
                 password,
@@ -50,10 +50,12 @@ router.post('/login', function (request, response) {
             }
             response.render('account-login.hbs', model)
         }
-        else{
-            request.session.accountId = account.AccountId
+        else {
+            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
+            //request.sessionID = sessionId
+            request.session.accountId = account.AccountId // Remove when the other things are fixed.
             response.redirect('/')
-            
+            //}) 
         }
     })
 })
@@ -61,7 +63,9 @@ router.post('/login', function (request, response) {
 
 router.get('/Logout', function (request, response) {
     request.session.accountId = null
+    //request.session.destroy({ // Use when database works
     response.redirect("/")
+        //})
 })
 
 
@@ -79,7 +83,7 @@ router.post('/sign-up', function (request, response) {
     const email = request.body.email
     const password = request.body.password
     const age = request.body.age
-    const city = request.body.city    
+    const city = request.body.city
     const gender = request.body.gender
     account = {
         firstName,
@@ -87,13 +91,13 @@ router.post('/sign-up', function (request, response) {
         email,
         password,
         age,
-        city,        
+        city,
         gender
     }
 
     accountManager.createAccount(account, function (error) {
-        
-        if (error) {                     
+
+        if (error) {
             model = {
                 error,
                 account,
@@ -102,7 +106,10 @@ router.post('/sign-up', function (request, response) {
             response.render("account-sign-up.hbs", model)
         }
         else {
-            response.redirect("/")
+            //const sessionId = request.sessionID
+            //sessionManager.insertSessionId(account.accountId, sessionId, function(error){
+                response.redirect("/")
+            //})
         }
 
     })
@@ -112,28 +119,28 @@ router.post('/sign-up', function (request, response) {
 
 //här får bara ägaren ändra kontot..
 router.get('/edit', middleware.isAuthorized, function (request, response) {
-    
-	const accountId = request.session.accountId
-	
-	accountManager.getAccountById(accountId, function(errors, account){
+
+    const accountId = request.session.accountId
+
+    accountManager.getAccountById(accountId, function (errors, account) {
 
         const model = {
-			errors,
+            errors,
             account,
             csrfToken: request.csrfToken()
-		}
-		response.render("account-edit.hbs", model)
-	})   
+        }
+        response.render("account-edit.hbs", model)
+    })
 })
 
-router.post('/edit', function(request, response){
+router.post('/edit', function (request, response) {
 
     const firstName = request.body.firstName
     const lastName = request.body.lastName
     const email = request.body.email
     const password = request.body.password
     const age = request.body.age
-    const city = request.body.city    
+    const city = request.body.city
     const gender = request.body.gender
     const accountId = request.session.accountId
     account = {
@@ -143,20 +150,20 @@ router.post('/edit', function(request, response){
         email,
         password,
         age,
-        city,        
+        city,
         gender
-    } 
-    accountManager.updateAccount(account, function(errors){
+    }
+    accountManager.updateAccount(account, function (errors) {
 
-        if(errors){
+        if (errors) {
             const model = {
                 errors,
                 csrfToken: request.csrfToken()
             }
             response.render("account-edit.hbs", model)
         }
-        else{
-            response.redirect("/accounts/" + accountId )
+        else {
+            response.redirect("/accounts/" + accountId)
         }
     })
 
@@ -164,13 +171,13 @@ router.post('/edit', function(request, response){
 
 
 
-router.get('/:id', middleware.isAuthorized, function(request, response){
-    
-	const accountId = request.params.id
-	
-	accountManager.getAccountById(accountId, function(errors, account){
+router.get('/:id', middleware.isAuthorized, function (request, response) {
 
-        if(errors){
+    const accountId = request.params.id
+
+    accountManager.getAccountById(accountId, function (errors, account) {
+
+        if (errors) {
             const model = {
                 errors,
                 csrfToken: request.csrfToken()
@@ -181,27 +188,27 @@ router.get('/:id', middleware.isAuthorized, function(request, response){
         const model = {
             account,
             csrfToken: request.csrfToken()
-		}
-		response.render("account-profile.hbs", model)
-	})
-    
+        }
+        response.render("account-profile.hbs", model)
+    })
+
 })
 
-router.post('/editId', function(request, response){
+router.post('/editId', function (request, response) {
     console.log("HALLÅÅÅÅ???")
     response.redirect('/accounts/edit')
 })
 
 
-router.post('/delete', function(request, response){
+router.post('/delete', function (request, response) {
 
 
     const accountId = request.session.accountId
 
 
-    accountManager.deleteAccount(accountId, function(error){
+    accountManager.deleteAccount(accountId, function (error) {
 
-        if(error){
+        if (error) {
             // MAN HAMNAR HÄR. TODO: Foreign constraints fail. Ta bort accountId från alla andra tables först.
             model = {
                 error,
@@ -209,7 +216,7 @@ router.post('/delete', function(request, response){
             }
             response.render("account-profile.hbs", model)
         }
-        else{
+        else {
             console.log("Kommer man hit?")
             response.redirect("/logout")
         }

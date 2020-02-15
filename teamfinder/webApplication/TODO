@@ -1,7 +1,3 @@
-validate user accessing specific group e.g. /groups/2
-
-update group
-
 delete group
 
 fix delete profile. Delete foreign constraints first.
@@ -9,6 +5,8 @@ fix delete profile. Delete foreign constraints first.
 kick member from group
 
 admin account to access all groups
+
+on registerPage: Render same page but with a green text saying "you successfully registered an account. Please login"
 
 update messages
 
