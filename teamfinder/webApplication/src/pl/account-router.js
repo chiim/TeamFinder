@@ -111,9 +111,7 @@ router.post('/sign-up', function (request, response) {
                 response.redirect("/")
             //})
         }
-
     })
-
 })
 
 

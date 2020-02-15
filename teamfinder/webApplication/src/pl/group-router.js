@@ -271,6 +271,9 @@ router.get("/:id", function (request, response) {
     const accountId = request.session.accountId
     const groupId = request.params.id
     var isAuthor = false
+    const updated = request.query.updated
+    console.log(typeof updated, updated)
+
     groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
         if (error) {
             const model = {
@@ -291,14 +294,6 @@ router.get("/:id", function (request, response) {
                     response.render('group-active.hbs', model)
                 }
                 else {
-                    /*messageManager.getMessagesByGroupId(id, function (error, messages) {
-                        if (error) {
-                            const model = {
-                                error
-                            }
-                            response.render("group-specific.hbs", model)
-                        }
-                        else {*/
                     if (accountId == group.AuthorId) {
                         isAuthor = true
                         const model = {
@@ -309,11 +304,11 @@ router.get("/:id", function (request, response) {
                         response.render('group-specific.hbs', model)
                     }
                     else {
-
                         const model = {
                             group,
                             csrfToken: request.csrfToken(),
-                            isAuthor
+                            isAuthor,
+                            updated
                         }
                         response.render("group-specific.hbs", model)
                     }
@@ -330,10 +325,44 @@ router.post('/:id', function (request, response) { // ADD MIDDLEWARE FOR VALIDAT
     response.redirect('/groups/' + id + '/edit')
 })
 
+router.post('/:id/redirectToEdit', function (request, response) {
+
+    // User is validated in the id/edit GET-request below. If they somehow create this button, they will still be redirected back to the specific group.
+    const id = request.params.id
+    response.redirect('/groups/' + id + '/edit')
+
+})
+
+router.get('/:id/manageMembers', function (request, response) {
+
+    const id = request.params.id
+
+    groupManager.getGroupById(id, function(error, group){
+        if(error){
+            const model = {
+                error
+            }
+            response.render('group-manageMembers.hbs', model)
+        }
+        else{
+
+            //TODO: Get groupMembers from groupManager, then get the names from each individual account
+
+            const model = {
+                group
+            }
+            response.render('group-manageMembers.hbs', model)
+        }
+    })
+
+    
+
+})
+
+
 router.get('/:id/edit', function (request, response) {
     const accountId = request.session.accountId
     const groupId = request.params.id
-    console.log("AccountId: " + accountId + ". GroupId: " + groupId)
     groupManager.getGroupById(groupId, function (error, group) {
         if (error) {
             const model = {
@@ -387,12 +416,13 @@ router.post('/:id/edit', function (request, response) {
         if (error) {
             const model = {
                 error,
-                csrfToken: request.csrfToken()
+                csrfToken: request.csrfToken(),
+                id
             }
-            response.render('/:id/edit', model)
+            response.render('group-edit.hbs', model)
         }
         else {
-            response.redirect('/groups/' + id)
+            response.redirect('/groups/' + id + '/?updated=true') // Ask why this isn't working properly.
         }
     })
 

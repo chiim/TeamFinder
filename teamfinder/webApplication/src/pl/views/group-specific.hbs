@@ -9,6 +9,9 @@
 
 <div class="container py-4">
     <div>
+        {{#if updated}}
+        <p class="green">{{updated}}</p>
+        {{/if}}
         <h1>Group Name: {{group.Name}}</h1>
         <div class="row">
             <div class="col-sm">
@@ -24,9 +27,13 @@
             </div>
         </div>
         {{#if isAuthor}}
-            <form method="post" action="/groups/{{group.GroupId}}/edit">
+            <form method="post" action="/groups/{{group.GroupId}}/redirectToEdit">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button class="btn btn-primary" type="submit">edit group</button>
+            </form>
+            <form method="post" action="/groups/{{group.GroupId}}/manageMembers">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button class="btn btn-primary" type="submit">Manage Group members</button>
             </form>
         {{/if}}
     </div>
