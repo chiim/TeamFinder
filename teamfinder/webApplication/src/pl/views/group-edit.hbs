@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/group-edit.css">
+    <title>Edit group</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="centerText">
+            <h1>Edit your group</h1>
+            <p>Fields marked with a * are mandatory</p>
+            <p class="important">IMPORTANT: Dropdown options are reset. You need to update those yourself</p>
+        </div>
+        {{#if errors.length}}
+        <div class="errorHandler">
+            <ul>
+                {{#each errors}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/if}}
+
+        <form method="POST">
+
+            <div class="form-group">
+                <label for="groupName">*Group Name</label>
+                <input type="text" class="form-control" name="groupName" placeholder="Group Name" value="{{group.Name}}" readonly="true">
+            </div>
+            <div class="form-group">
+                <label for="selectImage">Select Image</label>
+                <select class="form-control" name="image">
+                    <option>Volleyball</option>
+                    <option>PadelArena</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="selectSport">*Select Sport</label>
+                <select class="form-control" name="sport">
+                    <option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
+                    <option>Volleyball</option>
+                    <option>Padel</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="maxNumberOfMembers">*Max number of members</label>
+                <input type="text" class="form-control" name="memberSlots" placeholder="4" value="{{group.MemberSlots}}">
+            </div>
+            <div class="form-group">
+                <label for="city">*City</label>
+                <input type="text" class="form-control" name="city" placeholder="New York" value="{{group.City}}">
+            </div>
+            <div class="form-row">
+                <label for="ageRestriction">Age restriction:</label>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="0" name="minAge" value="{{group.MinAge}}">
+                </div>
+                _
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="100" name="maxAge" value="{{group.MaxAge}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="selectSport">*Skill level</label>
+                <select class="form-control" name="skillLevel">
+                    <option>Select a skill level</option> <!-- Validate that this is not selected when submitting. -->
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Semi-pro</option>
+                    <option>Pro</option>
+                    <option>Expert</option>
+                    <option>Master</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="selectGender">Gender restriction</label>
+                <select class="form-control" name="allowedGender">
+                    <option>Any</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+            
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <input type="submit" class="btn btn-primary" value="Update Group">
+        </form>
+    </div>
+</body>
+
+</html>

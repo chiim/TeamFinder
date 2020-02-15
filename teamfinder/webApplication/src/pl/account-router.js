@@ -12,8 +12,8 @@ const router = express.Router()
 
 router.get('/login', function (request, response) {
 
-    const authorized = request.query.unAuthorized
-    if(!authorized){
+    const authorized = request.query.authorized
+    if(authorized == "false"){
         const printErrorMessage = "You must login before accessing that page."
         const model = {
             printErrorMessage,

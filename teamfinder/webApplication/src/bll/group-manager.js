@@ -33,3 +33,13 @@ exports.getGroupById = function(id, callback){
     groupRepository.getGroupById(id, callback)
 
 }
+
+exports.updateGroup = function(group, callback){
+    const errors = validator.validateGroup(group)
+    if(errors > 0){
+        callback(errors, null)
+    }
+    else{
+        groupRepository.updateGroup(group, callback)
+    }
+}

@@ -14,6 +14,8 @@ update messages
 
 delete messages
 
+Search function for finding specific groups
+
 middleware function for checking if user exists in group - Used in specific group post & message posts in group
 
 Make it so users can see each others profiles

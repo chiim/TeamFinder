@@ -23,10 +23,12 @@
                 <p>Skill Level: {{group.SkillLevel}}</p>
             </div>
         </div>
-        <form method="post">
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button class="btn btn-primary" type="submit">edit group (/groups/id/edit)</button>
-        </form>
+        {{#if isAuthor}}
+            <form method="post" action="/groups/{{group.GroupId}}/edit">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button class="btn btn-primary" type="submit">edit group</button>
+            </form>
+        {{/if}}
     </div>
 
     <div>
@@ -38,7 +40,7 @@
                 </div>
                 <div class="col-2 my-1">
                     <input type="hidden" name="groupId" value='{{group.GroupId}}'>
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <input type="hidden" name="_csrf" value='{{csrfToken}}'>
                     <button type="submit" class="btn btn-primary">send message</button>
                 </div>
             </div>
