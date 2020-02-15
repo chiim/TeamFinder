@@ -5,6 +5,7 @@ const groupMemberManager = require('../bll/groupMember-manager')
 const validator = require('../bll/validator')
 const middleware = require('../pl/middleware-router')
 
+const messageManager = require('../bll/message-manager')
 const accountManager = require('../bll/account-manager')
 const router = express.Router()
 
@@ -273,6 +274,7 @@ router.post('/create', function (request, response) {
 router.get("/:id", function (request, response) {
 
     const id = request.params.id
+    const accountId = request.session.accountId
 
     groupMemberManager.getNrOfMembersInGroup(id, function (error) {
         if (error) {
@@ -294,21 +296,42 @@ router.get("/:id", function (request, response) {
                     response.render('group-active.hbs', model)
                 }
                 else {
-                    /*messageManager.getMessagesByGroupId(id, function (error, messages) {
+                    messageManager.getMessagesByGroupId(id, function (error, messages) {
                         if (error) {
                             const model = {
-                                error
+                                csrfToken: request.csrfToken(),
+                                error,
+                                group
                             }
                             response.render("group-specific.hbs", model)
                         }
-                        else {*/
-                    const model = {
-                        group,
-                        csrfToken: request.csrfToken()
+                        else {
+
+                            
+
+
+                            for (i = 0; i < messages.length; i++) {
+                                
+                                if(messages[i].AccountId == accountId){
+                                    messages[i]['isAuthor'] = true;
+                                }
+                                else{
+                                    messages[i]['isAuthor'] = false;
+                                }
+                                                              
+
+                            }
+
+
+                            const model = {
+                                csrfToken: request.csrfToken(),
+                                group,
+                                messages,
+                                accountId
+                            }
+                            response.render("group-specific.hbs", model)
                     }
-                    response.render("group-specific.hbs", model)
-                    //}
-                    //})
+                    })
                 }
             })
         }
@@ -320,5 +343,25 @@ router.post('/:id', function(request, response){ // ADD MIDDLEWARE FOR VALIDATIN
     response.redirect('/groups/' + id + '/edit')
 })
 
+//add middleware for validating right account does it. or is that handeled in hbs files?
+router.post('/delete', function(request, response){
+
+    const groupId = request.body.groupId
+
+    groupManager.deleteGroupById(groupId, function(error){
+
+        if(error){
+            model = {
+                csrfToken: request.csrfToken(),
+                error
+            }
+            response.render('group-specific.hbs', model)
+        }
+        else{
+            response.redirect('/groups/active')
+        }
+    })
+
+})
 
 module.exports = router

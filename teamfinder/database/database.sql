@@ -28,7 +28,7 @@ CREATE TABLE `Groups` (
     `AuthorId` INT NOT NULL,    
     `PublishingDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,    
     PRIMARY KEY (`GroupId`),
-    FOREIGN KEY (`AuthorId`) REFERENCES Accounts(`AccountId`),
+    FOREIGN KEY (`AuthorId`) REFERENCES Accounts(`AccountId`) ON DELETE CASCADE,
     UNIQUE(Name)
 );
 
@@ -44,15 +44,15 @@ CREATE TABLE `Messages` (
     `AuthorName` VARCHAR(50) NOT NULL,
     `PublishingDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`MessageId`),
-    FOREIGN KEY (`AccountId`) REFERENCES Accounts(`AccountId`),
-    FOREIGN KEY (`GroupId`) REFERENCES Groups(`GroupId`)
+    FOREIGN KEY (`AccountId`) REFERENCES Accounts(`AccountId`) ON DELETE CASCADE,
+    FOREIGN KEY (`GroupId`) REFERENCES Groups(`GroupId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `GroupMembers` (
     `AccountId` INT NOT NULL,
     `GroupId` INT NOT NULL,
-    FOREIGN KEY (`AccountId`) REFERENCES Accounts(`AccountId`),
-    FOREIGN KEY (`GroupId`) REFERENCES Groups(`GroupId`)
+    FOREIGN KEY (`AccountId`) REFERENCES Accounts(`AccountId`) ON DELETE CASCADE,
+    FOREIGN KEY (`GroupId`) REFERENCES Groups(`GroupId`) ON DELETE CASCADE
 );
 
 INSERT INTO `Accounts` (`FirstName`, `LastName`, `Email`, `Password`, `Age`, `City`, `Gender`) VALUES ('admin', 'admin', 'a@a', '', '28', 'Jkpg', 'male');
@@ -68,5 +68,7 @@ INSERT INTO `Messages` (`GroupId`, `AccountId`, `Text`, `AuthorName`) VALUES ('1
 INSERT INTO `Messages` (`GroupId`, `AccountId`, `Text`, `AuthorName`) VALUES ('1', '1', 'wtf gör du här Bulten?', 'Knugen');
 INSERT INTO `Messages` (`GroupId`, `AccountId`, `Text`, `AuthorName`) VALUES ('2', '2', 'woofwoof', 'Bulten');
 
-
-
+INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('1', '1');
+INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('1', '2');
+INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('1', '3');
+INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('2', '2');

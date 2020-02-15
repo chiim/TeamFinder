@@ -12,8 +12,10 @@ const router = express.Router()
 
 router.get('/login', function (request, response) {
 
-    const authorized = request.query.unAuthorized
-    if(!authorized){
+    const unAuthorized = request.query.unAuthorized//this is undefined if not existing
+    console.log("authorized in query?")
+    console.log(unAuthorized)
+    if(unAuthorized){
         const printErrorMessage = "You must login before accessing that page."
         const model = {
             printErrorMessage,
@@ -198,11 +200,10 @@ router.post('/delete', function(request, response){
 
     const accountId = request.session.accountId
 
-
     accountManager.deleteAccount(accountId, function(error){
 
         if(error){
-            // MAN HAMNAR HÄR. TODO: Foreign constraints fail. Ta bort accountId från alla andra tables först.
+            console.log("delete account lyckades inte... i callback")
             model = {
                 error,
                 csrfToken: request.csrfToken()
@@ -210,8 +211,8 @@ router.post('/delete', function(request, response){
             response.render("account-profile.hbs", model)
         }
         else{
-            console.log("Kommer man hit?")
-            response.redirect("/logout")
+            console.log("delete account lyckades, är i callbacken")
+            response.redirect("/accounts/logout")
         }
     })
 

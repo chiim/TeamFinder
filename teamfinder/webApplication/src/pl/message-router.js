@@ -18,6 +18,7 @@ router.post('/create', function(request, response){
 
         if(error){
             const model = {
+                csrfToken: request.csrfToken(),
                 error
             }
             response.render("group-specific.hbs", model)
@@ -39,14 +40,16 @@ router.post('/create', function(request, response){
                 console.log("i callback efter create message")
 
                 if(error){
-                    console.log("hamnade i error ändå ...")
+                    console.log("error create message ...")
             
                     model = {
-                    error
-                    }            
+                        csrfToken: request.csrfToken(),
+                        error
+                    }
+                    //vad ska render/redirekt vid fel?
                 }
                 else{
-                console.log("esle i callback")
+                console.log("else i callback")
                 response.redirect("../groups/" + groupId )
                 }
 
@@ -55,7 +58,34 @@ router.post('/create', function(request, response){
     })
 })
 
+router.post('/delete/:id', function(request, response) {
+    
+    //const accountId = request.body.accountId
 
+    console.log("inside deleteMessage router function")
+    
+    const groupId = request.body.groupId
+    const messageId = request.params.id
+
+    console.log(messageId)
+
+    messageManager.deleteMessageById(messageId, function(error){
+
+        if(error){
+            console.log("error vid delete message")
+            model = {
+                csrfToken: request.csrfToken(),
+                error
+            }
+            //vad ska render/redirekt vid fel?
+        }
+        else{
+            console.log("deleteMessage completed")
+            response.redirect("/groups/" + groupId)
+        }
+
+    })
+})
 
 
 module.exports = router

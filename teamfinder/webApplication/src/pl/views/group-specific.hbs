@@ -46,21 +46,19 @@
     </div>
 
     <div>
-        <div class="message-text">
-            <h4>name here</h4>
-            <p>message here</p>
-        </div>
-        <div class="message-text">
-            <h4>name here</h4>
-            <p>message here</p>
-        </div>
-        <div class="message-text">
-            <div class="col...">
-                <h4>name here</h4>
+        {{#each messages}}
+            <div class="message-text">
+                <h4>{{this.AuthorName}}</h4>
+                <p>{{this.Text}}</p>
+                {{#if this.isAuthor}}
+                    <form method="POST" action="/messages/delete/{{this.MessageId}}">
+                        <input type="hidden" name="groupId" value='{{../group.GroupId}}'>
+                        <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+                        <button class="btn btn-primary" type="submit">delete</button>                    
+                    </form>
+                {{/if}}
             </div>
-            <div>
-                <p>message here</p>
-            </div>
-        </div>
+        {{/each}}
     </div>
+
 </div>

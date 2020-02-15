@@ -26,9 +26,9 @@ exports.createMessage = function(message, callback){
     })
 }
 
-exports.getAllMessagesByGroupId = function(groupId, callback){
+exports.getMessagesByGroupId = function(groupId, callback){
 
-    const query = "SELECT * FROM Messages WHERE GroupId = ?"
+    const query = "SELECT * FROM Messages WHERE GroupId = ? ORDER BY MessageId DESC"
     const values = [groupId]
 
     db.query(query, values, function(error, messages){
@@ -44,4 +44,24 @@ exports.getAllMessagesByGroupId = function(groupId, callback){
 
     })
 
+}
+
+exports.deleteMessageById = function(messageId, callback){
+
+    const query = "DELETE FROM Messages WHERE MessageId = ?"
+    const values = [
+        messageId
+    ]
+    db.query(query, values, function(error){
+
+        if(error){
+            console.log(error)
+            const databaseError = "db error when deleting message"
+            callback(databaseError)
+        }
+        else{
+            callback(null)
+        }
+
+    })
 }

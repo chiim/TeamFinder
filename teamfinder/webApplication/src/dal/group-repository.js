@@ -92,3 +92,21 @@ exports.getGroupById = function(id, callback){
 
 }
 
+exports.deleteGroupById = function(groupId, callback){
+
+    const query = "DELETE FROM Groups WHERE GroupId = ?"
+    const values = [
+        groupId
+    ]
+
+    db.query(query, values, function(error){
+
+        if(error){
+            databaseError = "db error when deleting group"
+            callback(databaseError)
+        }
+        else{
+            callback(null)
+        }
+    })
+}

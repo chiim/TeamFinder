@@ -7,7 +7,7 @@ exports.isAuthorized = function(request, response, next){
     if(request.session.accountId == null){
         
         console.log("middleware redirects to login")
-        response.redirect('/accounts/login/?authorized=false')
+        response.redirect('/accounts/login/?unAuthorized=true')
     }
     else{
         console.log("middleware: is logged in")

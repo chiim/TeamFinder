@@ -24,7 +24,7 @@ app.use(csrf({
 
 app.use(session({
   saveUninitialized: false,
-  resave: false, 
+  resave: false,
   secret: 'sadjkfasblowihnmdhu',
   accountId: null
 }))

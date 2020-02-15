@@ -25,6 +25,10 @@ exports.createMessage = function(message, callback){
     messageRepository.createMessage(message, callback)
 }
 
-exports.getAllMessagesByGroupId = function(groupId, callback){
-    messageRepository.getAllMessagesByGroupId(groupId, callback)
+exports.getMessagesByGroupId = function(groupId, callback){
+    messageRepository.getMessagesByGroupId(groupId, callback)
+}
+
+exports.deleteMessageById = function(messageId, callback){
+    messageRepository.deleteMessageById(messageId, callback)
 }

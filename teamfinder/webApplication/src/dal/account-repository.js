@@ -99,9 +99,6 @@ exports.loginAccount = function(credentials, callback){
 
 exports.deleteAccount = function(accountId, callback){
 
-
-    //LÖS DET AXEL. TACK :)
-
     const query = "DELETE FROM Accounts WHERE AccountId = ?"
     const values = [
         accountId
@@ -110,6 +107,7 @@ exports.deleteAccount = function(accountId, callback){
     db.query(query, values, function(error) {
 
         if(error){
+            console.log(error)
             const databaseError = "error when deleting account"
             callback(databaseError)
 

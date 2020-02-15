@@ -33,3 +33,9 @@ exports.getGroupById = function(id, callback){
     groupRepository.getGroupById(id, callback)
 
 }
+
+exports.deleteGroupById = function(id, callback){
+
+    groupRepository.deleteGroupById(id, callback)
+
+}
