@@ -39,3 +39,13 @@ exports.deleteGroupById = function(id, callback){
     groupRepository.deleteGroupById(id, callback)
 
 }
+
+exports.updateGroup = function(group, callback){
+    const errors = validator.validateGroup(group)
+    if(errors > 0){
+        callback(errors, null)
+    }
+    else{
+        groupRepository.updateGroup(group, callback)
+    }
+}

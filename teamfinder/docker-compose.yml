@@ -9,6 +9,7 @@ services:
       - "./webApplication/src:/webApplication/src"
     depends_on:
       - database
+      #- redis
   database:
     build: ./database
     ports:
@@ -16,3 +17,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=user
       - MYSQL_DATABASE=database
+  #redis:
+   # build: "./session_db"
+    #volumes:
+     # - "./session_db"
+    #environment:
+     # - REDIS_PASSWORD=user
+      # The code below makes it so that someone can't remove all of the files. Check with teacher if it's important:
+      # - DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG 

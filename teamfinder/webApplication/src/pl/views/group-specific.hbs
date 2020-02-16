@@ -9,6 +9,9 @@
 
 <div class="container py-4">
     <div>
+        {{#if printUpdatedText}}
+        <p class="green">{{printUpdatedText}}</p>
+        {{/if}}
         <h1>Group Name: {{group.Name}}</h1>
         <div class="row">
             <div class="col-sm">
@@ -23,14 +26,21 @@
                 <p>Skill Level: {{group.SkillLevel}}</p>
             </div>
         </div>
-        <form method="post">
+
+        {{#if isAuthor}}
+        <form method="post" action="/groups/{{group.GroupId}}/redirectToEdit">
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button class="btn btn-primary" type="submit">edit group (/groups/id/edit)</button>
+            <button class="btn btn-primary" type="submit">edit group</button>
+        </form>
+        <form method="post" action="/groups/{{group.GroupId}}/redirectToManageMembers">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button class="btn btn-primary" type="submit">Manage Group members</button>
         </form>
         <form method="POST" action="/groups/delete/{{group.GroupId}}">
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button class="btn btn-primary" type="submit">delete group</button>
         </form>
+        {{/if}}
     </div>
 
     <div>
@@ -42,7 +52,7 @@
                 </div>
                 <div class="col-2 my-1">
                     <input type="hidden" name="groupId" value='{{group.GroupId}}'>
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <input type="hidden" name="_csrf" value='{{csrfToken}}'>
                     <button type="submit" class="btn btn-primary">send message</button>
                 </div>
             </div>
@@ -51,17 +61,17 @@
 
     <div>
         {{#each messages}}
-            <div class="message-text">
-                <h4>{{this.AuthorName}}</h4>
-                <p>{{this.Text}}</p>
-                {{#if this.isAuthor}}
-                    <form method="POST" action="/messages/delete/{{this.MessageId}}">
-                        <input type="hidden" name="groupId" value='{{../group.GroupId}}'>
-                        <input type="hidden" name="_csrf" value="{{../csrfToken}}">
-                        <button class="btn btn-primary" type="submit">delete</button>                    
-                    </form>
-                {{/if}}
-            </div>
+        <div class="message-text">
+            <h4>{{this.AuthorName}}</h4>
+            <p>{{this.Text}}</p>
+            {{#if this.isAuthor}}
+            <form method="POST" action="/messages/delete/{{this.MessageId}}">
+                <input type="hidden" name="groupId" value='{{../group.GroupId}}'>
+                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+                <button class="btn btn-primary" type="submit">delete</button>
+            </form>
+            {{/if}}
+        </div>
         {{/each}}
     </div>
 

@@ -1,14 +1,16 @@
-validate user accessing specific group e.g. /groups/2
-
-update group
-
 kick member from group
+
+handle errors in hbs files
+
+hash
 
 admin account to access all groups
 
+on registerPage: Render same page but with a green text saying "you successfully registered an account. Please login"
+
 update messages
 
-middleware function for checking if user exists in group - Used in specific group post & message posts in group
+Search function for finding specific groups
 
 Make it so users can see each others profiles
 

@@ -110,3 +110,30 @@ exports.deleteGroupById = function(groupId, callback){
         }
     })
 }
+
+exports.updateGroup = function(group, callback){
+
+    const query = "UPDATE Groups SET Image = ?, Sport = ?, MemberSlots = ?, City = ?, MinAge = ?, MaxAge = ?, SkillLevel = ?, AllowedGender = ?"
+    const values = [
+        group.image,
+        group.sport,
+        group.memberSlots,
+        group.city,
+        group.minAge,
+        group.maxAge,
+        group.skillLevel,
+        group.gender
+    ]
+
+    db.query(query, values, function(error, result){
+        if(error){
+            console.log(error)
+            const databaseError = "Something went wrong when updating the group information"
+            callback(databaseError)
+        }
+        else{
+            callback(null)
+        }
+    })
+
+}
