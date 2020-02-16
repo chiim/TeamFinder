@@ -27,6 +27,10 @@
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button class="btn btn-primary" type="submit">edit group (/groups/id/edit)</button>
         </form>
+        <form method="POST" action="/groups/delete/{{group.GroupId}}">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button class="btn btn-primary" type="submit">delete group</button>
+        </form>
     </div>
 
     <div>

@@ -321,13 +321,19 @@ router.get("/:id", function (request, response) {
                                                               
 
                             }
+                            var isAuthor = false
+
+                            if(group.AuthorId == accountId){
+                                isAuthor = true
+                            }
 
 
                             const model = {
                                 csrfToken: request.csrfToken(),
                                 group,
                                 messages,
-                                accountId
+                                accountId,
+                                isAuthor
                             }
                             response.render("group-specific.hbs", model)
                     }
@@ -344,9 +350,11 @@ router.post('/:id', function(request, response){ // ADD MIDDLEWARE FOR VALIDATIN
 })
 
 //add middleware for validating right account does it. or is that handeled in hbs files?
-router.post('/delete', function(request, response){
+router.post('/delete/:id', function(request, response){
 
-    const groupId = request.body.groupId
+    const groupId = request.params.id
+
+    console.log(groupId)
 
     groupManager.deleteGroupById(groupId, function(error){
 
