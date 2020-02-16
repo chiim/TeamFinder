@@ -27,3 +27,18 @@ exports.getNrOfMembersInGroup = function (groupId, callback) {
 
     })
 }
+
+exports.getGroupMembers = function(groupId,  callback){
+    const query = "SELECT AccountId FROM Groups WHERE GroupId = ?"
+    const values = [groupId]
+
+    db.query(query, values, function(error, result){
+        if(error){
+            const databaseError = "Error fetching group members"
+            callback(databaseError, null)
+        }
+        else{
+            callback(null, result)
+        }
+    })
+}

@@ -272,7 +272,6 @@ router.get("/:id", function (request, response) {
     const groupId = request.params.id
     var isAuthor = false
     const updated = request.query.updated
-    console.log(typeof updated, updated)
 
     groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
         if (error) {
@@ -294,12 +293,19 @@ router.get("/:id", function (request, response) {
                     response.render('group-active.hbs', model)
                 }
                 else {
+                    var printUpdatedText = ""
+                    if(updated){
+                        printUpdatedText = "You successfully updated the group information"
+                    }
+
                     if (accountId == group.AuthorId) {
                         isAuthor = true
+
                         const model = {
                             group,
                             csrfToken: request.csrfToken(),
-                            isAuthor
+                            isAuthor,
+                            printUpdatedText
                         }
                         response.render('group-specific.hbs', model)
                     }
@@ -308,12 +314,11 @@ router.get("/:id", function (request, response) {
                             group,
                             csrfToken: request.csrfToken(),
                             isAuthor,
-                            updated
+                            updated,
+                            printUpdatedText
                         }
                         response.render("group-specific.hbs", model)
                     }
-                    //}
-                    //})
                 }
             })
         }
@@ -333,11 +338,17 @@ router.post('/:id/redirectToEdit', function (request, response) {
 
 })
 
-router.get('/:id/manageMembers', function (request, response) {
+router.post('/:id/redirectToManageMembers', function(request, response){
 
     const id = request.params.id
+    response.redirect('/groups/' + id + '/manageMembers')
+})
 
-    groupManager.getGroupById(id, function(error, group){
+router.get('/:id/manageMembers', function (request, response) {
+    const accountId = request.session.accountId
+    const groupId = request.params.id
+
+    groupManager.getGroupById(groupId, function(error, group){
         if(error){
             const model = {
                 error
@@ -345,7 +356,27 @@ router.get('/:id/manageMembers', function (request, response) {
             response.render('group-manageMembers.hbs', model)
         }
         else{
-
+            if(accountId == group.AuthorId){
+                groupMemberManager.getGroupMembers(groupId, function(error, members){
+                    if(error){
+                        const model = {
+                            error,
+                            csrfToken: request.csrfToken()
+                        }
+                        response.render('group-manageMembers.hbs', model)
+                    }
+                    else{
+                        const model = {
+                            members,
+                            csrfToken: request.csrfToken()
+                        }
+                        response.render('group-manageMembers.hbs', model)
+                    }
+                })
+            }
+            else{
+                response.redirect('/groups/' + groupId)
+            }
             //TODO: Get groupMembers from groupManager, then get the names from each individual account
 
             const model = {
@@ -354,9 +385,6 @@ router.get('/:id/manageMembers', function (request, response) {
             response.render('group-manageMembers.hbs', model)
         }
     })
-
-    
-
 })
 
 
@@ -422,7 +450,7 @@ router.post('/:id/edit', function (request, response) {
             response.render('group-edit.hbs', model)
         }
         else {
-            response.redirect('/groups/' + id + '/?updated=true') // Ask why this isn't working properly.
+            response.redirect('/groups/' + id + '/?updated=true')
         }
     })
 

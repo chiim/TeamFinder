@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage members</title>
+</head>
+<div class="row">
+
+    {{#each members}}
+        <div class="col-sm">
+            <p>Name: {{this.FirstName this.LastName}}</p>
+            <p>City: {{this.City}}</p>
+            <p>Age: {{this.Age}}</p>
+            <form method="post">
+                <button type="submit" value="{{this.AccountId}}">Kick Member</button>
+            </form>
+        </div>
+    {{/each}}
+</html>
