@@ -37,19 +37,16 @@ router.post('/create', function(request, response){
             
             messageManager.createMessage(message, function(error){
 
-                console.log("i callback efter create message")
-
                 if(error){
-                    console.log("error create message ...")
             
                     model = {
                         csrfToken: request.csrfToken(),
                         error
                     }
-                    //vad ska render/redirekt vid fel?
+                    response.redirect("../groups/" + groupId + "/?createMessageError=true" )
+
                 }
                 else{
-                console.log("else i callback")
                 response.redirect("../groups/" + groupId )
                 }
 
@@ -72,15 +69,14 @@ router.post('/delete/:id', function(request, response) {
     messageManager.deleteMessageById(messageId, function(error){
 
         if(error){
-            console.log("error vid delete message")
             model = {
                 csrfToken: request.csrfToken(),
                 error
             }
-            //vad ska render/redirekt vid fel?
+            response.redirect("../groups/" + groupId + "/?deleteMessageError=true" )
         }
         else{
-            console.log("deleteMessage completed")
+
             response.redirect("/groups/" + groupId)
         }
 
