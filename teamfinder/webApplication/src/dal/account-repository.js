@@ -103,11 +103,9 @@ exports.deleteAccount = function(accountId, callback){
     const values = [
         accountId
     ]
-    console.log(accountId)
     db.query(query, values, function(error) {
 
         if(error){
-            console.log(error)
             const databaseError = "error when deleting account"
             callback(databaseError)
 

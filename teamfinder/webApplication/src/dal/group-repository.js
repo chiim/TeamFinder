@@ -127,7 +127,6 @@ exports.updateGroup = function(group, callback){
 
     db.query(query, values, function(error, result){
         if(error){
-            console.log(error)
             const databaseError = "Something went wrong when updating the group information"
             callback(databaseError)
         }

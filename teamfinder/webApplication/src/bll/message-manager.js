@@ -17,7 +17,6 @@ exports.createMessage = function(message, callback){
     }
 
     if(0 < errors.length){
-        console.log(errors)
         callback(errors)
         return
     }

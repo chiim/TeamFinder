@@ -277,10 +277,7 @@ router.get("/:id", function (request, response) {
     var isAuthor = false
     const updated = request.query.updated
 
-    const id = request.params.id
-    const accountId = request.session.accountId
-
-    groupMemberManager.getNrOfMembersInGroup(id, function (error) {
+    groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
         if (error) {
             const model = {
                 error,
@@ -300,7 +297,7 @@ router.get("/:id", function (request, response) {
                     response.render('group-active.hbs', model)
                 }
                 else {
-                    messageManager.getMessagesByGroupId(id, function (error, messages) {
+                    messageManager.getMessagesByGroupId(groupId, function (error, messages) {
                         if (error) {
                             const model = {
                                 csrfToken: request.csrfToken(),
@@ -440,8 +437,6 @@ router.get('/:id/edit', function (request, response) {
 router.post('/delete/:id', function (request, response) {
 
     const groupId = request.params.id
-
-    console.log(groupId)
 
     groupManager.deleteGroupById(groupId, function (error) {
 

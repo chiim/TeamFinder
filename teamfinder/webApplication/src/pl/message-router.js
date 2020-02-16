@@ -7,8 +7,6 @@ const accountManager = require('../bll/account-manager')
 
 router.post('/create', function(request, response){
 
-    console.log("message create reached")
-
     const groupId = request.body.groupId
     const accountId = request.session.accountId
     const text = request.body.text
@@ -58,13 +56,9 @@ router.post('/create', function(request, response){
 router.post('/delete/:id', function(request, response) {
     
     //const accountId = request.body.accountId
-
-    console.log("inside deleteMessage router function")
     
     const groupId = request.body.groupId
     const messageId = request.params.id
-
-    console.log(messageId)
 
     messageManager.deleteMessageById(messageId, function(error){
 

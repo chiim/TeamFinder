@@ -13,8 +13,6 @@ const router = express.Router()
 router.get('/login', function (request, response) {
 
     const unAuthorized = request.query.unAuthorized//this is undefined if not existing
-    console.log("authorized in query?")
-    console.log(unAuthorized)
     if(unAuthorized){
         const printErrorMessage = "You must login before accessing that page."
         const model = {
@@ -195,7 +193,6 @@ router.get('/:id', middleware.isAuthorized, function (request, response) {
 })
 
 router.post('/editId', function (request, response) {
-    console.log("HALLÅÅÅÅ???")
     response.redirect('/accounts/edit')
 })
 
@@ -216,7 +213,6 @@ router.post('/delete', function (request, response) {
             response.render("account-profile.hbs", model)
         }
         else{
-            console.log("delete account lyckades, är i callbacken")
             response.redirect("/accounts/logout")
         }
     })

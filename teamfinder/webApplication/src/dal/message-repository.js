@@ -14,12 +14,9 @@ exports.createMessage = function(message, callback){
     db.query(query, values, function(error, result){
 
         if(error){
-            console.log(error)
-            console.log("db error, createMessage")
             callback(error)
         }
         else{
-            console.log("no db error, createMessage")
             callback(null)
 
         }
@@ -38,7 +35,6 @@ exports.getMessagesByGroupId = function(groupId, callback){
             callback(databaseError, null)
         }
         else{
-            console.log("inga db errors vid hämtande av messages")
             callback(null, messages)
         }
 
@@ -55,7 +51,6 @@ exports.deleteMessageById = function(messageId, callback){
     db.query(query, values, function(error){
 
         if(error){
-            console.log(error)
             const databaseError = "db error when deleting message"
             callback(databaseError)
         }
