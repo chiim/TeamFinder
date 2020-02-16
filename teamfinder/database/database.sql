@@ -6,7 +6,7 @@ CREATE TABLE `Accounts` (
     `FirstName` VARCHAR(50) NOT NULL,
     `LastName` VARCHAR(50) NOT NULL,
     `Email` VARCHAR(50) NOT NULL,
-    `Password` VARCHAR(30) NOT NULL,
+    `Hash` VARCHAR(50) NOT NULL,
     `Age` VARCHAR(3) NOT NULL,
     `City` VARCHAR(30) NOT NULL,
     `Gender` VARCHAR(10) NOT NULL,

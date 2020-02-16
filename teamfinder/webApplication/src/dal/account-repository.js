@@ -5,13 +5,13 @@ const db = require('./dbConnection')
 
 exports.createAccount = function(account, callback){
 
-    const query = "INSERT INTO Accounts (FirstName, LastName, Email, Password, Age, City, Gender) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    const query = "INSERT INTO Accounts (FirstName, LastName, Email, Hash, Age, City, Gender) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
     const values = [
         account.firstName,
         account.lastName,
         account.email,
-        account.password,
+        account.hash,
         account.age,
         account.city,
         account.gender

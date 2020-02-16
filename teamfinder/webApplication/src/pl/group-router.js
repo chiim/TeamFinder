@@ -271,6 +271,7 @@ router.post('/create', function (request, response) {
 })
 
 //ska ha en middleware för ifall man är medlem i gruppen
+//finns 2 deklarationer av isAuthor 
 router.get("/:id", function (request, response) {
     const accountId = request.session.accountId
     const groupId = request.params.id

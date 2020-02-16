@@ -1,4 +1,5 @@
 const accountRepository = require('../dal/account-repository')
+const bcrypt = require('bcrypt')
 
 exports.createAccount = function(account, callback){
 
@@ -35,7 +36,21 @@ exports.createAccount = function(account, callback){
         return
     }
 
-    accountRepository.createAccount(account, callback)
+    const hashNrOfTimes = 10
+
+    bcrypt.genSalt(hashNrOfTimes, function(error, salt) {
+        bcrypt.hash(password, salt, function(error, hash){
+
+            account.delete(account.password)
+            account['hash'] = hash
+
+            console.log(account)
+
+            accountRepository.createAccount(account, callback)
+        })
+    })
+
+    
 }
 
 exports.getAccountById = function(accountId, callback){
