@@ -366,6 +366,7 @@ router.post('/:id/redirectToManageMembers', function (request, response) {
 router.get('/:id/manageMembers', function (request, response) {
     const accountId = request.session.accountId
     const groupId = request.params.id
+    const author = 1
 
     groupManager.getGroupById(groupId, function (error, group) {
         if (error) {
@@ -376,7 +377,7 @@ router.get('/:id/manageMembers', function (request, response) {
         }
         else {
             if (accountId == group.AuthorId) {
-                groupMemberManager.getGroupMembers(groupId, function (error, members) {
+                groupMemberManager.getGroupMembers(groupId, function (error, accountIds) {
                     if (error) {
                         const model = {
                             error,
@@ -385,8 +386,84 @@ router.get('/:id/manageMembers', function (request, response) {
                         response.render('group-manageMembers.hbs', model)
                     }
                     else {
+                        const members = []
+                        const databaseErrors = []
+                        try {
+                            for (var i = 0; i < accountIds.length; i++) {
+                                accountManager.getAccountById(accountIds[i].AccountId, function (error, account) {
+                                    if (error) {
+                                        throw (error)
+                                    }
+                                    else {
+                                        var author
+                                        if (account.AccountId == group.AuthorId) {
+                                            author = group.AuthorId
+                                        }
+                                        members.push(account)
+                                        if (members.length == accountIds.length) {
+                                            if (databaseErrors.length > 0) {
+                                                const model = {
+                                                    databaseErrors,
+                                                    members,
+                                                    author,
+                                                    csrfToken: request.csrfToken()
+                                                }
+                                                response.render('group-manageMembers.hbs', model)
+                                            }
+                                            else {
+                                                const model = {
+                                                    members,
+                                                    author,
+                                                    csrfToken: request.csrfToken()
+                                                }
+                                                response.render('group-manageMembers.hbs', model)
+                                            }
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        catch (error) {
+                            databaseErrors.push(error)
+                        }
+                    }
+                })
+            }
+            else {
+                response.redirect('/groups/' + groupId)
+            }
+        }
+    })
+})
+
+router.post('/:id/manageMembers', function (request, response) {
+
+    const accountId = request.body.accountId
+    const authorId = request.session.accountId
+    const groupId = request.params.id
+
+    groupManager.getGroupById(groupId, function (error, group) {
+        if (error) {
+            const model = {
+                error,
+                csrfToken: request.csrfToken()
+            }
+            response.render('group-manageMembers.hbs', model)
+        }
+        else {
+            if (group.AuthorId == authorId) {
+                groupMemberManager.removeGroupMemberLink(accountId, groupId, function (error) {
+                    if (error) {
                         const model = {
-                            members,
+                            error,
+                            csrfToken: request.csrfToken()
+                        }
+                        response.render('group-manageMembers.hbs', model)
+                    }
+                    else {
+                        const success = "You successfully kicked that member."
+                        const model = {
+                            success,
                             csrfToken: request.csrfToken()
                         }
                         response.render('group-manageMembers.hbs', model)
@@ -396,15 +473,10 @@ router.get('/:id/manageMembers', function (request, response) {
             else {
                 response.redirect('/groups/' + groupId)
             }
-            //TODO: Get groupMembers from groupManager, then get the names from each individual account
-
-            const model = {
-                group
-            }
-            response.render('group-manageMembers.hbs', model)
         }
     })
 })
+
 
 
 router.get('/:id/edit', function (request, response) {
@@ -451,7 +523,6 @@ router.post('/delete/:id', function (request, response) {
             response.redirect('/groups/active')
         }
     })
-
 })
 
 router.post('/:id/edit', function (request, response) {

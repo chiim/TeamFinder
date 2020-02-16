@@ -32,7 +32,6 @@ exports.createAccount = function(account, callback){
 exports.getAccountById = function(accountId, callback){
     const query = "Select * FROM Accounts WHERE AccountId = ? LIMIT 1"
     const values = [accountId]
-
     db.query(query, values, function(error, account){
 
         if(error){

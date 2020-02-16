@@ -12,11 +12,9 @@ exports.getNrOfMembersInGroup = function(groupId, callback){
 }
 
 exports.getGroupMembers = function(groupId, callback){
-    groupMemberRepository.getGroupMembers(groupId, function(error, accountIds){
-        if(error){
-            
-        }
-    })
+    groupMemberRepository.getGroupMembers(groupId, callback)
+}
 
-
+exports.removeGroupMemberLink = function(accountId, groupId, callback){
+    groupMemberRepository.removeGroupMemberLink(accountId, groupId, callback)
 }
