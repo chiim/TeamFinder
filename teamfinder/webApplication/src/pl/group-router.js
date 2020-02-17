@@ -10,7 +10,7 @@ const accountManager = require('../bll/account-manager')
 const router = express.Router()
 
 router.get('/', function (request, response) {
-    response.redirect('/') // User isn't supposed to be here. Therefore they are redirected.
+    response.redirect('/') // User isn't supposed to be here. Therefore they are redirected to home.
 })
 
 router.get('/finder', function (request, response) {
@@ -21,7 +21,6 @@ router.get('/finder', function (request, response) {
                 error,
                 csrfToken: request.csrfToken()
             }
-
             response.render('group-finder.hbs', model)
         }
         else {
@@ -208,12 +207,10 @@ router.post('/active', function (request, response) {
 
 router.get('/create', middleware.isAuthorized, function (request, response) {
 
-
     const model = {
         csrfToken: request.csrfToken()
     }
     response.render('group-create.hbs', model)
-
 })
 
 
@@ -363,10 +360,11 @@ router.post('/:id/redirectToManageMembers', function (request, response) {
     response.redirect('/groups/' + id + '/manageMembers')
 })
 
+
+
 router.get('/:id/manageMembers', function (request, response) {
     const accountId = request.session.accountId
     const groupId = request.params.id
-    const author = 1
 
     groupManager.getGroupById(groupId, function (error, group) {
         if (error) {
@@ -376,6 +374,7 @@ router.get('/:id/manageMembers', function (request, response) {
             response.render('group-manageMembers.hbs', model)
         }
         else {
+            const authorId = group.AuthorId
             if (accountId == group.AuthorId) {
                 groupMemberManager.getGroupMembers(groupId, function (error, accountIds) {
                     if (error) {
@@ -395,9 +394,12 @@ router.get('/:id/manageMembers', function (request, response) {
                                         throw (error)
                                     }
                                     else {
-                                        var author
+                                        console.log("accountId: " + account.AccountId + " authorId: " + group.AuthorId)
                                         if (account.AccountId == group.AuthorId) {
                                             author = group.AuthorId
+                                        }
+                                        else {
+                                            author = false
                                         }
                                         members.push(account)
                                         if (members.length == accountIds.length) {
@@ -405,17 +407,19 @@ router.get('/:id/manageMembers', function (request, response) {
                                                 const model = {
                                                     databaseErrors,
                                                     members,
-                                                    author,
+                                                    authorId,
                                                     csrfToken: request.csrfToken()
                                                 }
+                                                console.log(model)
                                                 response.render('group-manageMembers.hbs', model)
                                             }
                                             else {
                                                 const model = {
                                                     members,
-                                                    author,
+                                                    authorId,
                                                     csrfToken: request.csrfToken()
                                                 }
+                                                console.log(model)
                                                 response.render('group-manageMembers.hbs', model)
                                             }
                                         }

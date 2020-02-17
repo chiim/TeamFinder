@@ -10,6 +10,13 @@
 <body>
     <div class="container ">
         <h1 class="title mb-5">Find your new team members</h1>
+
+        {{#if error.length}}
+            {{#each error}}
+            <p class="errorColor">{{this}}</p>
+            {{/each}}
+        {{/if}}
+
         <table class="table table-dark table-striped table-hover">
             <tbody>
                 {{#each groups}}

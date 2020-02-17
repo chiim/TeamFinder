@@ -9,8 +9,11 @@
 
 <div class="container py-4">
     <div>
+        {{#if error}}
+            <p class="errorColor">{{error}}</p>
+        {{/if}}
         {{#if printUpdatedText}}
-        <p class="green">{{printUpdatedText}}</p>
+            <p class="green">{{printUpdatedText}}</p>
         {{/if}}
         <h1>Group Name: {{group.Name}}</h1>
         <div class="row">

@@ -10,6 +10,14 @@
 
 <h1 class="centerText">Manage your group members</h1>
 
+{{#if databaseErrors}}
+    <p class="errorColor">{{databaseErrors}}</p>
+{{/if}}
+{{#if error.length}}
+    {{#each error}}
+        <p class="errorColor">{{this}}</p>
+    {{/each}}
+{{/if}}
 {{#if success}}
     <p class="green">{{success}}</p>
 {{/if}}
@@ -21,11 +29,11 @@
             <p>Age: {{this.Age}}</p>
             <form method="post">
                 <input type="hidden" name="_csrf" value="{{../csrfToken}}">
-                {{#if ../author}} {{!-- This only works when there is one left? --}}
+                {{#isAuthor this.AccountId ../authorId}} {{!-- This only works when there is one left? --}}
                     <button class="btn btn-primary" type="submit" value="{{this.AccountId}}" disabled>Kick Member</button>
                 {{else}}
                     <button class="btn btn-primary" type="submit" name="accountId" value="{{this.AccountId}}">Kick Member</button>
-                {{/if}}
+                {{/isAuthor}}
             </form>
         </div>
     {{/each}}

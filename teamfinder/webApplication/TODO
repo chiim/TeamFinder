@@ -1,14 +1,20 @@
-kick member from group
+handle errors in hbs files (group finished)
 
-handle errors in hbs files
+limit group joining
 
 hash
 
-admin account to access all groups
+cant access login page if you're already logged in (by writing link manually. redirect to homepage)
 
 on registerPage: Render same page but with a green text saying "you successfully registered an account. Please login"
 
+part 6
+
+{ /////////////////////////////////////////
+
 update messages
+
+admin account to access all groups
 
 Search function for finding specific groups
 
@@ -16,4 +22,4 @@ Make it so users can see each others profiles
 
 clean up design
 
-part 6
+} ///////////////////////////////////////////
