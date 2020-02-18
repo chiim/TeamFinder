@@ -70,7 +70,17 @@ app.use(express.static(__dirname + "/pl/public/css"))
 app.use(express.static(__dirname + "/pl/public/images"))
 
 app.get('/', function(request, response){
-  response.render("home.hbs")
+  const error = request.query.error
+  if(error){
+    const logoutError = "There was an error logging out. Please try again"
+    const model = {
+      logoutError
+    }
+    response.render('home.hbs', model)
+  }
+  else{
+    response.render("home.hbs")
+  }
 })
 
 

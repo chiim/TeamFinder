@@ -1,12 +1,6 @@
-kick broken due to hbs helper.
-
 handle errors in hbs files (group finished)
 
-limit group joining
-
 hash
-
-cant access login page if you're already logged in (by writing link manually. redirect to homepage)
 
 on registerPage: Render same page but with a green text saying "you successfully registered an account. Please login"
 

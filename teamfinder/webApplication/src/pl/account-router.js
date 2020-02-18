@@ -3,17 +3,14 @@ const expressHandlebars = require('express-handlebars')
 const accountManager = require('../bll/account-manager')
 const middleware = require('../pl/middleware-router')
 
-//var login = middleware.isAuthorized o kalla på login istället
+const isAuthorized = middleware.isAuthorized
 
 const router = express.Router()
-
-
-
 
 router.get('/login', function (request, response) {
 
     const unAuthorized = request.query.unAuthorized//this is undefined if not existing
-    if(unAuthorized){
+    if (unAuthorized) {
         const printErrorMessage = "You must login before accessing that page."
         const model = {
             printErrorMessage,
@@ -51,11 +48,8 @@ router.post('/login', function (request, response) {
             response.render('account-login.hbs', model)
         }
         else {
-            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
-            //request.sessionID = sessionId
             request.session.accountId = account.AccountId // Remove when the other things are fixed.
             response.redirect('/')
-            //}) 
         }
     })
 })
@@ -63,9 +57,14 @@ router.post('/login', function (request, response) {
 
 router.get('/Logout', function (request, response) {
     request.session.accountId = null
-    //request.session.destroy({ // Use when database works
-    response.redirect("/")
-        //})
+    request.session.destroy(function (error) { // Use when database works
+        if (error) {
+            response.redirect('/?error=true')
+        }
+        else {
+            response.redirect('/')
+        }
+    })
 })
 
 
@@ -108,7 +107,7 @@ router.post('/sign-up', function (request, response) {
         else {
             //const sessionId = request.sessionID
             //sessionManager.insertSessionId(account.accountId, sessionId, function(error){
-                response.redirect("/")
+            response.redirect("/")
             //})
         }
     })
@@ -116,7 +115,7 @@ router.post('/sign-up', function (request, response) {
 
 
 //här får bara ägaren ändra kontot..
-router.get('/edit', middleware.isAuthorized, function (request, response) {
+router.get('/edit', isAuthorized, function (request, response) {
 
     const accountId = request.session.accountId
 
@@ -169,7 +168,7 @@ router.post('/edit', function (request, response) {
 
 
 
-router.get('/:id', middleware.isAuthorized, function (request, response) {
+router.get('/:id', isAuthorized, function (request, response) {
 
     const accountId = request.params.id
 
@@ -202,9 +201,9 @@ router.post('/delete', function (request, response) {
 
     const accountId = request.session.accountId
 
-    accountManager.deleteAccount(accountId, function(error){
+    accountManager.deleteAccount(accountId, function (error) {
 
-        if(error){
+        if (error) {
             console.log("delete account lyckades inte... i callback")
             model = {
                 error,
@@ -212,7 +211,7 @@ router.post('/delete', function (request, response) {
             }
             response.render("account-profile.hbs", model)
         }
-        else{
+        else {
             response.redirect("/accounts/logout")
         }
     })
