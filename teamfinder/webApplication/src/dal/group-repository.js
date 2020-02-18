@@ -24,6 +24,7 @@ exports.createGroup = function(groupCredentials, callback){
 
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong inserting data. Contact admin."]
             callback(databaseError, null)
         }
@@ -38,6 +39,7 @@ exports.getAllGroups = function(callback){
     const query = "SELECT * FROM Groups"
     db.query(query, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong fetching groups. Contact admin."]
             callback(databaseError, null)
         }
@@ -53,6 +55,7 @@ exports.getActiveGroups = function(accountId, callback){
 
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong fetching active groups."]
             callback(databaseError, null)
         }
@@ -67,6 +70,7 @@ exports.getAllGroupIds = function(callback){
     const query = "SELECT GroupId FROM Groups"
     db.query(query, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong fetching a group"]
         callback(databaseError, null)
         }
@@ -82,6 +86,7 @@ exports.getGroupById = function(id, callback){
     const values = [id]
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong fetching the group."]
             callback(databaseError, null)
         }
@@ -102,6 +107,7 @@ exports.deleteGroupById = function(groupId, callback){
     db.query(query, values, function(error){
 
         if(error){
+            console.log(error)
             databaseError = "db error when deleting group"
             callback(databaseError)
         }
@@ -127,6 +133,7 @@ exports.updateGroup = function(group, callback){
 
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = "Something went wrong when updating the group information"
             callback(databaseError)
         }

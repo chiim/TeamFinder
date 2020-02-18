@@ -53,8 +53,8 @@ app.use("/messages", messageRouter)
 
 var hbs = expressHandlebars.create({
   helpers: {
+      // function used in manageMembers.hbs
       isAuthor: function (accountId, authorId) {
-          console.log("ÄR JAG HÄR???")
           if (accountId == authorId) {
               return true
           }
@@ -64,13 +64,7 @@ var hbs = expressHandlebars.create({
   defaultLayout: "main.hbs"
 })
 
-
-
 app.engine('hbs', hbs.engine)
-
-// app.engine("hbs", expressHandlebars({
-//   defaultLayout: "main.hbs"
-// }))
 
 app.use(express.static(__dirname + "/pl/public/css"))
 app.use(express.static(__dirname + "/pl/public/images"))

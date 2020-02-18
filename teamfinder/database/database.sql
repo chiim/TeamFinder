@@ -69,6 +69,5 @@ INSERT INTO `Messages` (`GroupId`, `AccountId`, `Text`, `AuthorName`) VALUES ('1
 INSERT INTO `Messages` (`GroupId`, `AccountId`, `Text`, `AuthorName`) VALUES ('2', '2', 'woofwoof', 'Bulten');
 
 INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('1', '1');
-INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('1', '2');
 INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('1', '3');
 INSERT INTO `GroupMembers` (`AccountId`, `GroupId`) VALUES ('2', '2');

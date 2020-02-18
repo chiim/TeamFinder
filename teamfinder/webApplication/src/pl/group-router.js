@@ -13,8 +13,17 @@ router.get('/', function (request, response) {
     response.redirect('/') // User isn't supposed to be here. Therefore they are redirected to home.
 })
 
+function getGroupIds(groups) {
+    const groupIds = []
+    for (var i = 0; i < groups.length; i++) {
+        groupIds.push(groups[i].GroupId)
+    }
+    return groupIds
+}
+
 router.get('/finder', function (request, response) {
 
+    const accountId = request.session.accountId
     groupManager.getAllGroupIds(function (error, groupIds) {
         if (error) {
             const model = {
@@ -49,11 +58,52 @@ router.get('/finder', function (request, response) {
                     if (error) {
                         const model = {
                             error,
+                            groups,
                             csrfToken: request.csrfToken()
                         }
                         response.render('group-finder.hbs', model)
                     }
                     else {
+                        if (accountId) {
+                            const errors = []
+                            try {
+                                groupManager.getActiveGroups(accountId, function (error, activeGroups) {
+                                    if (error) {
+                                        throw (error)
+                                    }
+                                    else {
+                                        const groupIds = getGroupIds(groups)
+                                        const activeGroupIds = getGroupIds(activeGroups)
+                                        // Hämta alla grupper som ska visas
+                                        // Hämta alla idn som current user är med i
+                                        // for(let i = 0 ...)
+                                        //if activeGroups.includes(group[i].GroupId)
+                                        // poppa grupp
+                                        console.log(groupIds)
+                                        console.log(activeGroupIds)
+                                        for (var i = groupIds.length; i >= 0; i--) {
+                                            console.log("activeGroupIds: ", activeGroupIds)
+                                            console.log("Current GroupId: ", groupIds[i])
+                                            if (activeGroupIds.includes(groupIds[i])) {
+                                                groups.splice(i, 1) // pop specific element
+                                                console.log(groups)
+                                            }
+                                        }
+                                        console.log(groups)
+                                    }
+                                })
+                            }
+                            catch (error) {
+                                errors.push(error)
+                            }
+                            if (errors.length > 0) {
+                                const model = {
+                                    errors,
+                                    csrfToken: request.csrfToken()
+                                }
+                                response.render('group-finder.hbs', model)
+                            }
+                        }
                         const model = {
                             groups,
                             csrfToken: request.csrfToken()
@@ -555,19 +605,20 @@ router.post('/:id/edit', function (request, response) {
         gender
     }
 
-    groupManager.updateGroup(group, function (error) {
-        if (error) {
+    groupManager.updateGroup(group, function (errors) {
+        if (errors) {
             const model = {
-                error,
+                errors,
                 csrfToken: request.csrfToken(),
                 id
             }
+            console.log(errors)
             response.render('group-edit.hbs', model)
         }
         else {
             response.redirect('/groups/' + id + '/?updated=true')
         }
     })
-
 })
+
 module.exports = router

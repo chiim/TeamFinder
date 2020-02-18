@@ -19,33 +19,37 @@
 
         <table class="table table-dark table-striped table-hover">
             <tbody>
-                {{#each groups}}
-                <tr class="tableGroup">
-                    <td><img src="/{{this.Image}}.png" class="rounded img-size img-fluid" alt={{this.Image}}></td>
-                    <td>{{this.Name}}</td>
-                    <td>{{this.Sport}}</td>
-                    {{#if this.MinAge}}
-                    <td>Age requirement: {{this.MinAge}} - {{this.MaxAge}}</td>
-                    {{else}}
-                    <td>Age requirement: None</td>
-                    {{/if}}
-                    <td>City: {{this.City}}</td>
-                    <td>Gender: {{this.AllowedGender}}</td>
-
-                    <td>{{this.NrOfMembers}}/{{this.MemberSlots}} Members</td>
-                    <td>
-                        <form method="POST">
-                            <input type="hidden" name="groupId" value="{{this.GroupId}}">
-                            <input type="hidden" name="_csrf" value="{{../csrfToken}}">
-                            {{#if ../accountId}}
-                                <button class="btn btn-link btn-primary">Join Group</button>
+                {{#if groups.length}}
+                    {{#each groups}}
+                        <tr class="tableGroup">
+                            <td><img src="/{{this.Image}}.png" class="rounded img-size img-fluid" alt={{this.Image}}></td>
+                            <td>{{this.Name}}</td>
+                            <td>{{this.Sport}}</td>
+                            {{#if this.MinAge}}
+                                <td>Age requirement: {{this.MinAge}} - {{this.MaxAge}}</td>
                             {{else}}
-                                <button class="btn btn-link btn-primary" disabled>Login to join a group</button>
+                                <td>Age requirement: None</td>
                             {{/if}}
-                        </form>
-                    </td>
-                </tr>
-                {{/each}}
+                            <td>City: {{this.City}}</td>
+                            <td>Gender: {{this.AllowedGender}}</td>
+
+                            <td>{{this.NrOfMembers}}/{{this.MemberSlots}} Members</td>
+                            <td>
+                                <form method="POST">
+                                    <input type="hidden" name="groupId" value="{{this.GroupId}}">
+                                    <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+                                    {{#if ../accountId}}
+                                        <button class="btn btn-link btn-primary">Join Group</button>
+                                    {{else}}
+                                        <button class="btn btn-link btn-primary" disabled>Login to join a group</button>
+                                    {{/if}}
+                                </form>
+                            </td>
+                        </tr>
+                    {{/each}}
+                {{else}}
+                    <p>You seem to be a part of every single existing group! good job...?</p>
+                {{/if}}
             </tbody>
         </table>
     </div>
