@@ -74,11 +74,6 @@ router.get('/finder', function (request, response) {
                                     else {
                                         const groupIds = getGroupIds(groups)
                                         const activeGroupIds = getGroupIds(activeGroups)
-                                        // Hämta alla grupper som ska visas
-                                        // Hämta alla idn som current user är med i
-                                        // for(let i = 0 ...)
-                                        //if activeGroups.includes(group[i].GroupId)
-                                        // poppa grupp
                                         console.log(groupIds)
                                         console.log(activeGroupIds)
                                         for (var i = groupIds.length; i >= 0; i--) {
@@ -119,7 +114,6 @@ router.get('/finder', function (request, response) {
 router.post('/finder', function (request, response) {
     const groupId = request.body.groupId
     const accountId = request.session.accountId
-
     groupManager.getGroupById(groupId, function (error, group) {
         if (error) {
             const model = {
@@ -144,6 +138,7 @@ router.post('/finder', function (request, response) {
                             validationErrors,
                             csrfToken: request.csrfToken()
                         }
+                        console.log(validationErrors)
                         response.render('group-finder.hbs', model)
                     }
                     else {
@@ -156,6 +151,7 @@ router.post('/finder', function (request, response) {
                                 response.render('group-finder.hbs', model)
                             }
                             else {
+                                console.log("LEDSEN :(")
                                 response.redirect('/groups/' + groupId)
                             }
                         })

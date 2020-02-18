@@ -95,7 +95,7 @@ exports.validateRequirements = function(account, group){
         }        
     }
 
-    if(group.City != account.City){
+    if(group.City.toLowerCase() != account.City.toLowerCase()){
         validationErrors.push("You need to be in the same city as the group.")
     }
     return validationErrors
