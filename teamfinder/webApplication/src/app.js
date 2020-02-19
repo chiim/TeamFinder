@@ -7,13 +7,54 @@ const csrf = require('csurf')
 const redis = require('redis')
 const redisStore = require('connect-redis')(session)
 
+const groupRepository = require('./dal/group-repository')
+const groupManager = require('./bll/group-manager')
+const groupRouter = require('./pl/group-router')
+
+const accountRepository = require('./dal/account-repository')
+const accountManager = require('./bll/account-manager')
+const accountRouter = require('./pl/group-router')
+
+const messageRepository = require('./dal/message-repository')
+const messageManager = require('./bll/message-manager')
+const messageRouter = require('./pl/message-router')
+
+const groupMemberRepository = require('./dal/groupMember-repository')
+const groupMemberManager = require('./bll/groupMember-manager')
+
+const middlewareRouter = require('./pl/middleware-router')
+const db = require('./dal/dbConnection')
+const validator = require('./bll/validator')
+
+const awilix = require('awilix')
+const container = awilix.createContainer()
+
+container.register('groupRepository', awilix.asFunction(groupRepository))
+container.register('groupManager', awilix.asFunction(groupManager))
+container.register('groupRouter', awilix.asFunction(groupRouter))
+/*container.register('groupMemberRepository', awilix.asFunction(groupMemberRepository))
+container.register('groupMemberManager', awilix.asFunction(groupMemberManager))
+
+container.register('accountRepository', awilix.asFunction(accountRepository))
+container.register('accountManager', awilix.asFunction(accountManager))
+container.register('accountRouter', awilix.asFunction(accountRouter))
+container.register('middlewareRouter', awilix.asFunction(middlewareRouter))
+
+container.register('validator', awilix.asFunction(validator))
+
+container.register('messageRepository', awilix.asFunction(messageRepository))
+container.register('messageManager', awilix.asFunction(messageManager))
+container.register('messageRouter', awilix.asFunction(messageRouter))*/
+
+//container.register('db', awilix.asFunction(db))
+
+//const theAccountRouter = container.resolve('accountRouter')
+const theGroupRouter = container.resolve('groupRouter')
+//const theMessageRouter = container.resolve('messageRouter')
+
 const client = redis.createClient({
   host: 'redis'
 })
-
-const groupRouter = require('./pl/group-router')
-const accountRouter = require('./pl/account-router')
-const messageRouter = require('./pl/message-router')
 
 const app = express()
 
@@ -46,10 +87,14 @@ app.use(function (request, response, next) {
   next()
 })
 
+app.use('/groups', theGroupRouter)
+app.use('/accounts', accountRouter)
+app.use('/messages', messageRouter)
 
-app.use("/groups", groupRouter)
-app.use("/accounts", accountRouter)
-app.use("/messages", messageRouter)
+
+// app.use("/groups", groupRouter)
+// app.use("/accounts", accountRouter)
+// app.use("/messages", messageRouter)
 
 var hbs = expressHandlebars.create({
   helpers: {

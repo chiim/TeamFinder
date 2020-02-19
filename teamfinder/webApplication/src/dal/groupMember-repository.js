@@ -5,6 +5,7 @@ exports.createGroupMemberLink = function (accountId, groupId, callback) {
     const values = [accountId, groupId]
     db.query(query, values, function (error, result) {
         if (error) {
+            console.log(error)
             const databaseError = "Error linking account to group."
             callback(databaseError)
         }
@@ -20,6 +21,7 @@ exports.getNrOfMembersInGroup = function (groupId, callback) {
 
     db.query(query, values, function (error, result) {
         if (error) {
+            console.log(error)
             const databaseError = "Error updating number of members"
             callback(databaseError)
         }
@@ -34,6 +36,7 @@ exports.getGroupMembers = function(groupId,  callback){
 
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = "Error fetching group members"
             callback(databaseError, null)
         }
@@ -50,6 +53,7 @@ exports.removeGroupMemberLink = function(accountId, groupId, callback){
 
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = "Error when kicking member"
             callback(databaseError)
         }

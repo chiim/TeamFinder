@@ -19,6 +19,7 @@ exports.createAccount = function(account, callback){
 
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong inserting data. Contact admin."]
             callback(databaseError, null)
         }
@@ -35,6 +36,7 @@ exports.getAccountById = function(accountId, callback){
     db.query(query, values, function(error, account){
 
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong inserting data. Contact admin."]
             callback(databaseError, null)
         }
@@ -63,6 +65,7 @@ exports.updateAccount = function(account, callback){
     db.query(query, values, function(error) {
 
         if(error){
+            console.log(error)
             const databaseError = ["error when updating account"]
             callback(databaseError)
         }
@@ -83,6 +86,7 @@ exports.loginAccount = function(credentials, callback){
     db.query(query, values, function(error, account){
 
         if(error){
+            console.log(error)
             callback(error, null)
         }else if(account.length == 0){
             dbError = "no result found"
@@ -105,6 +109,7 @@ exports.deleteAccount = function(accountId, callback){
     db.query(query, values, function(error) {
 
         if(error){
+            console.log(error)
             const databaseError = "error when deleting account"
             callback(databaseError)
 

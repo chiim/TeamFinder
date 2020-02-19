@@ -1,51 +1,57 @@
-const groupRepository = require('../dal/group-repository')
+// groupRepository = require('../dal/group-repository')
 const validator = require("../bll/validator")
 
-exports.createGroup = function (groupCredentials, callback) {
+module.exports = function ({groupRepository}) {
 
-    const validationErrors = validator.validateGroup(groupCredentials)
+    return {
 
-    if (validationErrors.length > 0) {
-        callback(validationErrors, null)
-    }
+        createGroup: function (groupCredentials, callback) {
 
-    else {
-        groupRepository.createGroup(groupCredentials, callback)
-    }
-}
+            const validationErrors = validator.validateGroup(groupCredentials)
 
-exports.getAllGroups = function(callback){
+            if (validationErrors.length > 0) {
+                callback(validationErrors, null)
+            }
 
-    groupRepository.getAllGroups(callback)
+            else {
+                groupRepository.createGroup(groupCredentials, callback)
+            }
+        },
 
-}
+        getAllGroups: function (callback) {
 
-exports.getActiveGroups = function(accountId, callback){
-    groupRepository.getActiveGroups(accountId, callback)
-}
+            groupRepository.getAllGroups(callback)
 
-exports.getAllGroupIds = function(callback){
-    groupRepository.getAllGroupIds(callback)
-}
+        },
 
-exports.getGroupById = function(id, callback){
+        getActiveGroups: function (accountId, callback) {
+            groupRepository.getActiveGroups(accountId, callback)
+        },
 
-    groupRepository.getGroupById(id, callback)
+        getAllGroupIds: function (callback) {
+            groupRepository.getAllGroupIds(callback)
+        },
 
-}
+        getGroupById: function (id, callback) {
 
-exports.deleteGroupById = function(id, callback){
+            groupRepository.getGroupById(id, callback)
 
-    groupRepository.deleteGroupById(id, callback)
+        },
 
-}
+        deleteGroupById: function (id, callback) {
 
-exports.updateGroup = function(group, callback){
-    const errors = validator.validateGroup(group)
-    if(errors.length > 0){
-        callback(errors, null)
-    }
-    else{
-        groupRepository.updateGroup(group, callback)
+            groupRepository.deleteGroupById(id, callback)
+
+        },
+
+        updateGroup: function (group, callback) {
+            const errors = validator.validateGroup(group)
+            if (errors.length > 0) {
+                callback(errors, null)
+            }
+            else {
+                groupRepository.updateGroup(group, callback)
+            }
+        }
     }
 }
