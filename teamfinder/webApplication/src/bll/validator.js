@@ -1,5 +1,5 @@
 
-module.exports = function ({ }) {
+module.exports = function () {
     return {
 
         validateGroup: function (groupCredentials) {

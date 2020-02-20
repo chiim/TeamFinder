@@ -1,4 +1,3 @@
-const accountRepository = require('../dal/account-repository')
 
 module.exports = function ({ accountRepository }) {
     return {
