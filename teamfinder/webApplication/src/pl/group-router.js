@@ -1,9 +1,4 @@
 const express = require('express')
-//const middleware = require('../pl/middleware-router')
-//const groupManager = require('../bll/group-manager')
-//const groupMemberManager = require('../bll/groupMember-manager')
-//const messageManager = require('../bll/message-manager')
-//const accountManager = require('../bll/account-manager')
 
 module.exports = function ({groupManager, groupMemberManager, messageManager, accountManager, middleware}) {
 

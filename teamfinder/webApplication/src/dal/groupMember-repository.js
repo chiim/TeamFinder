@@ -1,4 +1,3 @@
-const db = require('./dbConnection')
 
 module.exports = function({db}){
     return{

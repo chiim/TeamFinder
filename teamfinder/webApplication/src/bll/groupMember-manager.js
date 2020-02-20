@@ -1,4 +1,3 @@
-//const groupMemberRepository = require('../dal/groupMember-repository')
 
 module.exports = function ({ groupMemberRepository }) {
 

@@ -46,6 +46,7 @@ container.register('messageRepository', awilix.asFunction(messageRepository))
 container.register('messageManager', awilix.asFunction(messageManager))
 container.register('messageRouter', awilix.asFunction(messageRouter))
 
+//container.register('express', awilix.asFunction(express))
 container.register('db', awilix.asFunction(db))
 
 const theAccountRouter = container.resolve('accountRouter')

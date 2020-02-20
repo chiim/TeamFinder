@@ -1,5 +1,3 @@
-// groupRepository = require('../dal/group-repository')
-//const validator = require("../bll/validator")
 
 module.exports = function ({groupRepository, validator}) {
 

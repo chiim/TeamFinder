@@ -1,6 +1,4 @@
 const express = require('express')
-//const accountManager = require('../bll/account-manager')
-//const middleware = require('../pl/middleware-router')
 
 module.exports = function({accountManager, middleware}){
 

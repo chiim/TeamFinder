@@ -1,4 +1,3 @@
-const messageRepository = require('../dal/message-repository')
 
 module.exports = function({ messageRepository }){
     return {

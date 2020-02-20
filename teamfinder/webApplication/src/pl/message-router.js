@@ -1,7 +1,4 @@
 const express = require('express')
-//const expressHandlebars = require('express-handlebars')
-//const messageManager = require('../bll/message-manager')
-//const accountManager = require('../bll/account-manager')
 
 module.exports = function ({ messageManager, accountManager}) {
     const router = express.Router()
