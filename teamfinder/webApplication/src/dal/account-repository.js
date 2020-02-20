@@ -1,17 +1,18 @@
 const mySql = require('mysql')
 const db = require('./dbConnection')
+const accountManager = require('../bll/account-manager')
 
 
 
-exports.createAccount = function(account, callback){
+exports.createAccount = function(hash, account, callback){
 
-    const query = "INSERT INTO Accounts (FirstName, LastName, Email, Hash, Age, City, Gender) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    const query = "INSERT INTO Accounts (FirstName, LastName, Email, Password, Age, City, Gender) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
     const values = [
         account.firstName,
         account.lastName,
         account.email,
-        account.hash,
+        hash,
         account.age,
         account.city,
         account.gender
@@ -19,6 +20,7 @@ exports.createAccount = function(account, callback){
 
     db.query(query, values, function(error, result){
         if(error){
+            console.log(error)
             const databaseError = ["Something went wrong inserting data. Contact admin."]
             callback(databaseError, null)
         }
@@ -73,24 +75,25 @@ exports.updateAccount = function(account, callback){
     })
 }
 
-exports.loginAccount = function(credentials, callback){
+exports.loginAccount = function(email, password, callback){
 
-    const query = "SELECT * FROM Accounts WHERE Email = ? AND Password = ? LIMIT 1"
+    const query = "SELECT * FROM Accounts WHERE Email = ? LIMIT 1"
     const values = [
-        credentials.email,
-        credentials.password
+        email
     ]
 
     db.query(query, values, function(error, account){
 
         if(error){
-            callback(error, null)
+            const dbError = "dbError logging in"
+            callback(dbError, null)
         }else if(account.length == 0){
-            dbError = "no result found"
+            
+            const dbError = "no result found"
             callback(dbError, null)
         }
         else{
-            callback(null, account[0])
+            accountManager.compareAccount(account[0], password, callback)
         }
 
     })

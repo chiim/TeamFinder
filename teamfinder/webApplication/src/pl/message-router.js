@@ -77,5 +77,37 @@ router.post('/delete/:id', function(request, response) {
     })
 })
 
+router.post('/editMessage/:id', function(request, response){
+
+    const messageId = request.params.id
+    const groupId = request.body.groupId
+
+    response.redirect("/groups/" + groupId + "/?editMessage=" + messageId)
+
+
+})
+
+router.post('/update/:id', function(request, response){
+
+    const messageId = request.params.id
+    const messageText = request.body.text
+    const groupId = request.body.groupId
+
+    const message = {
+        messageId,
+        messageText
+    }
+
+    messageManager.updateMessageById(message, function(error){
+
+        if(error){
+            response.redirect("../groups/" + groupId + "/?updateMessageError=true")
+        }
+        else{
+            response.redirect("/groups/" + groupId)
+        }
+    })
+})
+
 
 module.exports = router

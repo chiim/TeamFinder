@@ -31,3 +31,7 @@ exports.getMessagesByGroupId = function(groupId, callback){
 exports.deleteMessageById = function(messageId, callback){
     messageRepository.deleteMessageById(messageId, callback)
 }
+
+exports.updateMessageById = function(message, callback){
+    messageRepository.updateMessageById(message, callback)
+}

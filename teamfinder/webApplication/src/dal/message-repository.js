@@ -60,3 +60,23 @@ exports.deleteMessageById = function(messageId, callback){
 
     })
 }
+
+exports.updateMessageById = function(message, callback) {
+
+    const query = "UPDATE Messages SET Text = ? WHERE MessageId = ?"
+    const values = [
+        message.messageText,
+        message.messageId
+    ]
+
+    db.query(query, values, function(error){
+
+        if(error){
+            const databaseError = "error when updating message"
+            callback(databaseError)
+        }
+        else{
+            callback(null)
+        }
+    })
+}

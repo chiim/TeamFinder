@@ -43,7 +43,25 @@
         {{/if}}
     </div>
 
-    <div>
+    {{#if editMessage}}
+     <div>
+        <form method="POST" action="/messages/update/{{editMessage.MessageId}}">
+            <div class="form-row">
+                <div class="col-6 my-1">
+                    <textarea class="form-control" id="textarea" rows="1" name="text"
+                        placeholder="Required example textarea">{{editMessage.Text}}</textarea>
+                </div>
+                <div class="col-2 my-1">
+                    <input type="hidden" name="groupId" value='{{group.GroupId}}'>
+                    <input type="hidden" name="_csrf" value='{{csrfToken}}'>
+                    <button type="submit" class="btn btn-primary">send message</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {{else}}
+     <div>
         <form method="POST" action="/messages/create">
             <div class="form-row">
                 <div class="col-6 my-1">
@@ -59,6 +77,10 @@
         </form>
     </div>
 
+    {{/if}}
+
+   
+
     <div>
         {{#each messages}}
         <div class="message-text">
@@ -69,6 +91,11 @@
                 <input type="hidden" name="groupId" value='{{../group.GroupId}}'>
                 <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                 <button class="btn btn-primary" type="submit">delete</button>
+            </form>
+            <form method="POST" action="/messages/editMessage/{{this.MessageId}}">
+                <input type="hidden" name="groupId" value='{{../group.GroupId}}'>
+                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+                <button class="btn btn-primary" type="submit">edit</button>
             </form>
             {{/if}}
         </div>

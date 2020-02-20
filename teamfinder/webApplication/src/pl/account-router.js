@@ -2,6 +2,7 @@ const express = require('express')
 const expressHandlebars = require('express-handlebars')
 const accountManager = require('../bll/account-manager')
 const middleware = require('../pl/middleware-router')
+const bcrypt = require('bcrypt')
 
 //var login = middleware.isAuthorized o kalla på login istället
 
@@ -11,6 +12,7 @@ const router = express.Router()
 
 
 router.get('/login', function (request, response) {
+
 
     const unAuthorized = request.query.unAuthorized//this is undefined if not existing
     if(unAuthorized){
@@ -31,32 +33,29 @@ router.get('/login', function (request, response) {
 })
 
 router.post('/login', function (request, response) {
+  
     const email = request.body.email
     const password = request.body.password
 
-    const credentials = {
-        email,
-        password
-    }
-
-    accountManager.loginAccount(credentials, function (error, account) {
+    accountManager.loginAccount(email, password, function (error, account) {
 
         if (error) {
+            console.log(error)
             const model = {
                 email,
-                password,
                 error,
                 csrfToken: request.csrfToken()
             }
             response.render('account-login.hbs', model)
         }
-        else {
-            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
-            //request.sessionID = sessionId
+        else{
             request.session.accountId = account.AccountId // Remove when the other things are fixed.
             response.redirect('/')
-            //}) 
         }
+            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
+            //request.sessionID = sessionId
+            
+            //}) 
     })
 })
 
@@ -98,6 +97,7 @@ router.post('/sign-up', function (request, response) {
     accountManager.createAccount(account, function (error) {
 
         if (error) {
+            console.log(error)
             model = {
                 error,
                 account,

@@ -277,6 +277,10 @@ router.get("/:id", function (request, response) {
     const groupId = request.params.id
     var isAuthor = false
     const updated = request.query.updated
+    
+
+    const messageIdEdit = request.query.editMessage
+    var editMessage = null
 
     groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
         if (error) {
@@ -317,6 +321,9 @@ router.get("/:id", function (request, response) {
                                 else {
                                     messages[i]['isAuthor'] = false;
                                 }
+                                if(messages[i].MessageId == messageIdEdit){
+                                    editMessage = messages[i]
+                                }
                             }
 
                             var isAuthor = false
@@ -334,7 +341,8 @@ router.get("/:id", function (request, response) {
                                 messages,
                                 accountId,
                                 isAuthor,
-                                printUpdatedText
+                                printUpdatedText,
+                                editMessage
                             }
                             response.render("group-specific.hbs", model)
                         }
