@@ -40,7 +40,6 @@ router.post('/login', function (request, response) {
     accountManager.loginAccount(email, password, function (error, account) {
 
         if (error) {
-            console.log(error)
             const model = {
                 email,
                 error,
@@ -97,7 +96,6 @@ router.post('/sign-up', function (request, response) {
     accountManager.createAccount(account, function (error) {
 
         if (error) {
-            console.log(error)
             model = {
                 error,
                 account,
@@ -205,7 +203,6 @@ router.post('/delete', function (request, response) {
     accountManager.deleteAccount(accountId, function(error){
 
         if(error){
-            console.log("delete account lyckades inte... i callback")
             model = {
                 error,
                 csrfToken: request.csrfToken()

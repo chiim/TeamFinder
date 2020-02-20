@@ -20,7 +20,6 @@ exports.createAccount = function(hash, account, callback){
 
     db.query(query, values, function(error, result){
         if(error){
-            console.log(error)
             const databaseError = ["Something went wrong inserting data. Contact admin."]
             callback(databaseError, null)
         }

@@ -27,14 +27,12 @@ exports.compareAccount = function(account, password, callback){
     const hash = account.Password.toString()
 
     bcrypt.compare(password, hash, function(err, result) {
-        console.log(err)
 
         if(result == true){
             callback(null , account)
         }
         else{
             const dbError = "dbError logging in"
-            console.log("error i compare hash")
             callback(dbError, null)
         }
     })
