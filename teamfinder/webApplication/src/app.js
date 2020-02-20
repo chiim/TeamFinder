@@ -81,6 +81,10 @@ app.use(session({
   })
 }))
 
+
+
+
+
 app.set("views", "src/pl/views")
 
 app.use(function (request, response, next) {

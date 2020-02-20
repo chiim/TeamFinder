@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function ({ messageManager, accountManager}) {
+module.exports = function ({ messageManager, accountManager }) {
     const router = express.Router()
 
     router.post('/create', function (request, response) {
@@ -47,6 +47,39 @@ module.exports = function ({ messageManager, accountManager}) {
                     }
 
                 })
+            }
+        })
+    })
+
+
+    router.post('/editMessage/:id', function (request, response) {
+
+        const messageId = request.params.id
+        const groupId = request.body.groupId
+
+        response.redirect("/groups/" + groupId + "/?editMessage=" + messageId)
+
+
+    })
+
+    router.post('/update/:id', function (request, response) {
+
+        const messageId = request.params.id
+        const messageText = request.body.text
+        const groupId = request.body.groupId
+
+        const message = {
+            messageId,
+            messageText
+        }
+
+        messageManager.updateMessageById(message, function (error) {
+
+            if (error) {
+                response.redirect("../groups/" + groupId + "/?updateMessageError=true")
+            }
+            else {
+                response.redirect("/groups/" + groupId)
             }
         })
     })
