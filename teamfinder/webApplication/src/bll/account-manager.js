@@ -24,21 +24,7 @@ module.exports = function ({ accountRepository, validator }) {
             })
         },
 
-        compareAccount: function (account, password, callback) {
-
-            const hash = account.Password.toString()
-
-            bcrypt.compare(password, hash, function (err, result) {
-
-                if (result == true) {
-                    callback(null, account)
-                }
-                else {
-                    const dbError = "dbError logging in"
-                    callback(dbError, null)
-                }
-            })
-        },
+        
 
         getAccountById: function (accountId, callback) {
             accountRepository.getAccountById(accountId, callback)
@@ -78,25 +64,17 @@ module.exports = function ({ accountRepository, validator }) {
             accountRepository.updateAccount(account, callback)
         },
 
-        loginAccount: function (credentials, callback) {
+        loginAccount: function (email, password, callback) {
 
-            const errors = []
-
-            if (!credentials.hasOwnProperty("email")) {
-                errors.push("emailMissing")
-            } else if (!credentials.hasOwnProperty("password")) {
-                errors.push("passwordMissing")
-            }
-
-            if (0 < errors.length) {
-
-                callback(errors, null)
-                return
-            }
-
-
-            accountRepository.loginAccount(credentials, callback)
-
+            accountRepository.loginAccount(email, function(error, account){
+                if(error){
+                    callback(error, null)
+                }
+                else{//FRÅGA LINUS
+                    compareAccount(account, password, callback)
+                    
+                }
+            })
 
         },
 
@@ -104,4 +82,20 @@ module.exports = function ({ accountRepository, validator }) {
             accountRepository.deleteAccount(accountId, callback)
         }
     }
+}
+
+const compareAccount = function (account, password, callback) {
+
+    const hash = account.Password.toString()
+
+    bcrypt.compare(password, hash, function (err, result) {
+
+        if (result == true) {
+            callback(null, account)
+        }
+        else {
+            const dbError = "dbError logging in"
+            callback(dbError, null)
+        }
+    })
 }

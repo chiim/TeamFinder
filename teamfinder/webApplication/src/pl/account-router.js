@@ -1,13 +1,8 @@
 const express = require('express')
-<<<<<<< HEAD
-=======
-const expressHandlebars = require('express-handlebars')
-const accountManager = require('../bll/account-manager')
-const middleware = require('../pl/middleware-router')
 const bcrypt = require('bcrypt')
->>>>>>> 523913bb1befbfae22a50d115a1dae171842ed5f
 
-module.exports = function({accountManager, middleware}){
+
+module.exports = function ({ accountManager, middleware }) {
 
     const isAuthorized = middleware.isAuthorized
 
@@ -34,31 +29,15 @@ module.exports = function({accountManager, middleware}){
     })
 
     router.post('/login', function (request, response) {
+
         const email = request.body.email
         const password = request.body.password
 
-<<<<<<< HEAD
-        const credentials = {
-            email,
-            password
-=======
-
-    const unAuthorized = request.query.unAuthorized//this is undefined if not existing
-    if(unAuthorized){
-        const printErrorMessage = "You must login before accessing that page."
-        const model = {
-            printErrorMessage,
-            csrfToken: request.csrfToken()
->>>>>>> 523913bb1befbfae22a50d115a1dae171842ed5f
-        }
-
-<<<<<<< HEAD
-        accountManager.loginAccount(credentials, function (error, account) {
+        accountManager.loginAccount(email, password, function (error, account) {
 
             if (error) {
                 const model = {
                     email,
-                    password,
                     error,
                     csrfToken: request.csrfToken()
                 }
@@ -68,6 +47,10 @@ module.exports = function({accountManager, middleware}){
                 request.session.accountId = account.AccountId // Remove when the other things are fixed.
                 response.redirect('/')
             }
+            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
+            //request.sessionID = sessionId
+
+            //}) 
         })
     })
 
@@ -90,32 +73,8 @@ module.exports = function({accountManager, middleware}){
             csrfToken: request.csrfToken()
         }
         response.render("account-sign-up.hbs", model)
-=======
-router.post('/login', function (request, response) {
-  
-    const email = request.body.email
-    const password = request.body.password
-
-    accountManager.loginAccount(email, password, function (error, account) {
-
-        if (error) {
-            const model = {
-                email,
-                error,
-                csrfToken: request.csrfToken()
-            }
-            response.render('account-login.hbs', model)
-        }
-        else{
-            request.session.accountId = account.AccountId // Remove when the other things are fixed.
-            response.redirect('/')
-        }
-            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
-            //request.sessionID = sessionId
-            
-            //}) 
->>>>>>> 523913bb1befbfae22a50d115a1dae171842ed5f
     })
+
 
     router.post('/sign-up', function (request, response) {
 
@@ -245,20 +204,12 @@ router.post('/login', function (request, response) {
 
         accountManager.deleteAccount(accountId, function (error) {
 
-<<<<<<< HEAD
             if (error) {
-                console.log("delete account lyckades inte... i callback")
                 model = {
                     error,
                     csrfToken: request.csrfToken()
                 }
                 response.render("account-profile.hbs", model)
-=======
-        if(error){
-            model = {
-                error,
-                csrfToken: request.csrfToken()
->>>>>>> 523913bb1befbfae22a50d115a1dae171842ed5f
             }
             else {
                 response.redirect("/accounts/logout")
@@ -268,4 +219,3 @@ router.post('/login', function (request, response) {
     })
     return router
 }
-//module.exports = router

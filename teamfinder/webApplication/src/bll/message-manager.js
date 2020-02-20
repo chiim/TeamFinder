@@ -1,5 +1,5 @@
 
-module.exports = function({ messageRepository }){
+module.exports = function ({ messageRepository }) {
     return {
 
         createMessage: function (message, callback) {
@@ -18,7 +18,6 @@ module.exports = function({ messageRepository }){
                 errors.push("authorName missing")
             }
 
-<<<<<<< HEAD
             if (0 < errors.length) {
                 callback(errors)
                 return
@@ -33,14 +32,11 @@ module.exports = function({ messageRepository }){
 
         deleteMessageById: function (messageId, callback) {
             messageRepository.deleteMessageById(messageId, callback)
+
+        },
+
+        updateMessageById: function (message, callback) {
+            messageRepository.updateMessageById(message, callback)
         }
     }
-=======
-exports.deleteMessageById = function(messageId, callback){
-    messageRepository.deleteMessageById(messageId, callback)
-}
-
-exports.updateMessageById = function(message, callback){
-    messageRepository.updateMessageById(message, callback)
->>>>>>> 523913bb1befbfae22a50d115a1dae171842ed5f
 }
