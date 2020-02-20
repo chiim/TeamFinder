@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function({accountManager, middleware}){
+module.exports = function ({ accountManager, middleware }) {
 
     const isAuthorized = middleware.isAuthorized
 
@@ -104,10 +104,12 @@ module.exports = function({accountManager, middleware}){
                 response.render("account-sign-up.hbs", model)
             }
             else {
-                //const sessionId = request.sessionID
-                //sessionManager.insertSessionId(account.accountId, sessionId, function(error){
-                response.redirect("/")
-                //})
+                const success = "You successfully created an account! Please log in"
+                const model = {
+                    success,
+                    csrfToken: request.csrfToken()
+                }
+                response.render('account-sign-up.hbs', model)
             }
         })
     })

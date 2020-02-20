@@ -1,9 +1,5 @@
 handle errors in hbs files (group finished)
 
-on registerPage: Render same page but with a green text saying "you successfully registered an account. Please login"
-
-part 6
-
 { /////////////////////////////////////////
 
 admin account to access all groups

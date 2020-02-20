@@ -68,3 +68,7 @@ footer p{
 .errorColor{
     color: orangered;
 }
+
+.successColor{
+    color: lightgreen;
+}
