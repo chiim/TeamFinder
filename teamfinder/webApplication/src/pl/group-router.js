@@ -1,12 +1,11 @@
 const express = require('express')
-const validator = require('../bll/validator')
-const middleware = require('../pl/middleware-router')
+//const middleware = require('../pl/middleware-router')
 //const groupManager = require('../bll/group-manager')
-const groupMemberManager = require('../bll/groupMember-manager')
-const messageManager = require('../bll/message-manager')
-const accountManager = require('../bll/account-manager')
+//const groupMemberManager = require('../bll/groupMember-manager')
+//const messageManager = require('../bll/message-manager')
+//const accountManager = require('../bll/account-manager')
 
-module.exports = function ({groupManager}) {
+module.exports = function ({groupManager, groupMemberManager, messageManager, accountManager, middleware}) {
 
     const router = express.Router()
 
@@ -23,7 +22,6 @@ module.exports = function ({groupManager}) {
     }
 
     router.get('/finder', function (request, response) {
-
         const accountId = request.session.accountId
         groupManager.getAllGroupIds(function (error, groupIds) {
             if (error) {
@@ -127,7 +125,8 @@ module.exports = function ({groupManager}) {
                         response.render('group-finder.hbs', model)
                     }
                     else {
-                        const validationErrors = validator.validateRequirements(account, group)
+                        
+                        const validationErrors = groupManager.validateRequirements(account, group)
                         if (validationErrors.length > 0) {
                             const model = {
                                 validationErrors,
@@ -334,6 +333,7 @@ module.exports = function ({groupManager}) {
                     }
                     else {
                         messageManager.getMessagesByGroupId(groupId, function (error, messages) {
+                            
                             if (error) {
                                 const model = {
                                     csrfToken: request.csrfToken(),

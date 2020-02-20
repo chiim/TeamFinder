@@ -1,7 +1,7 @@
 // groupRepository = require('../dal/group-repository')
-const validator = require("../bll/validator")
+//const validator = require("../bll/validator")
 
-module.exports = function ({groupRepository}) {
+module.exports = function ({groupRepository, validator}) {
 
     return {
 
@@ -52,6 +52,11 @@ module.exports = function ({groupRepository}) {
             else {
                 groupRepository.updateGroup(group, callback)
             }
+        },
+
+        validateRequirements: function(account, group){
+            return validator.validateRequirements(account, group)
         }
+        
     }
 }

@@ -1,20 +1,23 @@
-const groupMemberRepository = require('../dal/groupMember-repository')
+//const groupMemberRepository = require('../dal/groupMember-repository')
 
+module.exports = function ({ groupMemberRepository }) {
 
-exports.createGroupMemberLink = function(accountId, groupId, callback){
+    return {
+        createGroupMemberLink: function (accountId, groupId, callback) {
+            groupMemberRepository.createGroupMemberLink(accountId, groupId, callback)
+        },
 
-    groupMemberRepository.createGroupMemberLink(accountId, groupId, callback)
+        getNrOfMembersInGroup: function (groupId, callback) {
+            groupMemberRepository.getNrOfMembersInGroup(groupId, callback)
+        },
 
-}
+        getGroupMembers: function (groupId, callback) {
+            groupMemberRepository.getGroupMembers(groupId, callback)
+        },
 
-exports.getNrOfMembersInGroup = function(groupId, callback){
-    groupMemberRepository.getNrOfMembersInGroup(groupId, callback)
-}
+        removeGroupMemberLink: function (accountId, groupId, callback) {
+            groupMemberRepository.removeGroupMemberLink(accountId, groupId, callback)
+        }
 
-exports.getGroupMembers = function(groupId, callback){
-    groupMemberRepository.getGroupMembers(groupId, callback)
-}
-
-exports.removeGroupMemberLink = function(accountId, groupId, callback){
-    groupMemberRepository.removeGroupMemberLink(accountId, groupId, callback)
+    }
 }

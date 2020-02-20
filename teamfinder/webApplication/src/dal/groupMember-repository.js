@@ -1,6 +1,9 @@
 const db = require('./dbConnection')
 
-exports.createGroupMemberLink = function (accountId, groupId, callback) {
+module.exports = function({db}){
+    return{
+
+createGroupMemberLink: function (accountId, groupId, callback) {
     const query = "INSERT INTO GroupMembers (AccountId, GroupId) VALUES (?, ?)"
     const values = [accountId, groupId]
     db.query(query, values, function (error, result) {
@@ -13,9 +16,9 @@ exports.createGroupMemberLink = function (accountId, groupId, callback) {
             callback(null)
         }
     })
-}
+},
 
-exports.getNrOfMembersInGroup = function (groupId, callback) {
+getNrOfMembersInGroup: function (groupId, callback) {
     const query = "UPDATE Groups SET NrOfMembers = (SELECT COUNT(AccountId) FROM GroupMembers WHERE GroupId = ?) WHERE GroupId = ?"
     const values = [groupId, groupId]
 
@@ -28,9 +31,9 @@ exports.getNrOfMembersInGroup = function (groupId, callback) {
         callback(null)
 
     })
-}
+},
 
-exports.getGroupMembers = function(groupId,  callback){
+getGroupMembers: function(groupId,  callback){
     const query = "SELECT AccountId FROM GroupMembers WHERE GroupId = ?"    
     const values = [groupId]
 
@@ -44,9 +47,9 @@ exports.getGroupMembers = function(groupId,  callback){
             callback(null, result)
         }
     })
-}
+},
 
-exports.removeGroupMemberLink = function(accountId, groupId, callback){
+removeGroupMemberLink: function(accountId, groupId, callback){
 
     const query = "DELETE FROM GroupMembers WHERE accountId = ? AND groupId = ?"
     const values = [accountId, groupId]
@@ -63,4 +66,6 @@ exports.removeGroupMemberLink = function(accountId, groupId, callback){
     })
 
 
+}
+    }
 }

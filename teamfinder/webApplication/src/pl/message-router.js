@@ -1,81 +1,81 @@
 const express = require('express')
-const expressHandlebars = require('express-handlebars')
-const router = express.Router()
-const messageManager = require('../bll/message-manager')
-const accountManager = require('../bll/account-manager')
+//const expressHandlebars = require('express-handlebars')
+//const messageManager = require('../bll/message-manager')
+//const accountManager = require('../bll/account-manager')
+
+module.exports = function ({ messageManager, accountManager}) {
+    const router = express.Router()
+
+    router.post('/create', function (request, response) {
+
+        const groupId = request.body.groupId
+        const accountId = request.session.accountId
+        const text = request.body.text
 
 
-router.post('/create', function(request, response){
+        accountManager.getAccountById(accountId, function (error, account) {
 
-    const groupId = request.body.groupId
-    const accountId = request.session.accountId
-    const text = request.body.text
-
-
-    accountManager.getAccountById(accountId, function(error, account){
-
-        if(error){
-            const model = {
-                csrfToken: request.csrfToken(),
-                error
+            if (error) {
+                const model = {
+                    csrfToken: request.csrfToken(),
+                    error
+                }
+                response.render("group-specific.hbs", model)
             }
-            response.render("group-specific.hbs", model)
-        }
 
-        else{
+            else {
 
-            const authorName = account.FirstName + ' ' + account.LastName
-            
-            const message = {
-                groupId,
-                accountId,
-                text,
-                authorName
-            }
-            
-            messageManager.createMessage(message, function(error){
+                const authorName = account.FirstName + ' ' + account.LastName
 
-                if(error){
-            
-                    model = {
-                        csrfToken: request.csrfToken(),
-                        error
+                const message = {
+                    groupId,
+                    accountId,
+                    text,
+                    authorName
+                }
+
+                messageManager.createMessage(message, function (error) {
+
+                    if (error) {
+
+                        model = {
+                            csrfToken: request.csrfToken(),
+                            error
+                        }
+                        response.redirect("../groups/" + groupId + "/?createMessageError=true")
+
                     }
-                    response.redirect("../groups/" + groupId + "/?createMessageError=true" )
+                    else {
+                        response.redirect("../groups/" + groupId)
+                    }
 
-                }
-                else{
-                response.redirect("../groups/" + groupId )
-                }
-
-            })
-        }
-    })
-})
-
-router.post('/delete/:id', function(request, response) {
-    
-    //const accountId = request.body.accountId
-    
-    const groupId = request.body.groupId
-    const messageId = request.params.id
-
-    messageManager.deleteMessageById(messageId, function(error){
-
-        if(error){
-            model = {
-                csrfToken: request.csrfToken(),
-                error
+                })
             }
-            response.redirect("../groups/" + groupId + "/?deleteMessageError=true" )
-        }
-        else{
-
-            response.redirect("/groups/" + groupId)
-        }
-
+        })
     })
-})
 
+    router.post('/delete/:id', function (request, response) {
 
-module.exports = router
+        //const accountId = request.body.accountId
+
+        const groupId = request.body.groupId
+        const messageId = request.params.id
+
+        messageManager.deleteMessageById(messageId, function (error) {
+
+            if (error) {
+                model = {
+                    csrfToken: request.csrfToken(),
+                    error
+                }
+                response.redirect("../groups/" + groupId + "/?deleteMessageError=true")
+            }
+            else {
+
+                response.redirect("/groups/" + groupId)
+            }
+
+        })
+    })
+    return router
+}

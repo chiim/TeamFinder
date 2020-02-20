@@ -1,6 +1,6 @@
 
-module.exports = function ({}) {
-    const db = require('./dbConnection')
+module.exports = function ({db}) {
+    //const db = require('./dbConnection')
 
     return {
         createGroup: function (groupCredentials, callback) {
