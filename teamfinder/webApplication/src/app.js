@@ -28,7 +28,7 @@ const groupMemberManager = require('./bll/groupMember-manager')
 
 const middlewareRouter = require('./pl/middleware-router')
 const validator = require('./bll/validator')
-const db = require('./dal/dbConnection')
+//const db = require('./dal/dbConnection')
 const sequelize = require('./dalORM/dbConnection')
 
 const awilix = require('awilix')
@@ -51,8 +51,10 @@ container.register('messageRepository', awilix.asFunction(messageRepository))
 container.register('messageManager', awilix.asFunction(messageManager))
 container.register('messageRouter', awilix.asFunction(messageRouter))
 
+container.register('db', awilix.asFunction(sequelize))
+
 //container.register('express', awilix.asFunction(express))
-container.register('db', awilix.asFunction(db))
+//container.register('db', awilix.asFunction(db))
 
 const theAccountRouter = container.resolve('accountRouter')
 const theGroupRouter = container.resolve('groupRouter')

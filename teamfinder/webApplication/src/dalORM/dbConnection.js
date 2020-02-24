@@ -6,13 +6,13 @@ const Sequelize = require('sequelize')
 module.exports = function () {
 
     
-    const sequelize = new Sequelize('databaseORM', 'username', 'password', {
-        host: 'databaseORM',
+    const sequelize = new Sequelize('databaseORM', 'postgres', 'password', {
+        host: 'database',
         dialect: 'postgres'
     })
     
     
-   //const sequelize = new Sequelize('postgres:databaseORM.js')
+   //const sequelize = new Sequelize('postgres:databaseORM')
 
     sequelize
         .authenticate()
