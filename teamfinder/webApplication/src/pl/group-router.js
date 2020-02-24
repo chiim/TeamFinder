@@ -351,6 +351,9 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                     else {
                                         messages[i]['isAuthor'] = false;
                                     }
+                                    if (messages[i].MessageId == messageIdEdit) {
+                                        editMessage = messages[i]
+                                    }
                                 }
 
                                 var isAuthor = false
@@ -361,9 +364,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                 if (updated) {
                                     printUpdatedText = "You successfully updated the group information"
                                 }
-                                if (messages[i].MessageId == messageIdEdit) {
-                                    editMessage = messages[i]
-                                }
+                                
                             }
 
                             const model = {
