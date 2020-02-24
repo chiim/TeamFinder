@@ -6,9 +6,9 @@ const Sequelize = require('sequelize')
 module.exports = function () {
 
     
-    const sequelize = new Sequelize('databaseORM', 'postgres', 'password', {
+    const sequelize = new Sequelize('databaseORM', 'user', 'root', {
         host: 'database',
-        dialect: 'postgres'
+        dialect: 'postgres',
     })
     
     

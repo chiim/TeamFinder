@@ -22,7 +22,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: user
       POSTGRES_DB: databaseORM
   redis:
     build: "./session_db"
