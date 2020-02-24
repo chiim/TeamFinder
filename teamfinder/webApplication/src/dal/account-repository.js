@@ -1,3 +1,5 @@
+const mySql = require('mysql')
+const db = require('./dbConnection')
 
 module.exports = function ({ db }) {
     return {
@@ -73,18 +75,16 @@ module.exports = function ({ db }) {
             })
         },
 
-        loginAccount: function (credentials, callback) {
+        loginAccount: function (email, callback) {
 
-            const query = "SELECT * FROM Accounts WHERE Email = ? AND Password = ? LIMIT 1"
+            const query = "SELECT * FROM Accounts WHERE Email = ? LIMIT 1"
             const values = [
-                credentials.email,
-                credentials.password
+                email
             ]
 
             db.query(query, values, function (error, account) {
 
                 if (error) {
-                    console.log(error)
                     callback(error, null)
                 } else if (account.length == 0) {
                     dbError = "no result found"
@@ -116,8 +116,8 @@ module.exports = function ({ db }) {
                     callback(null)
                 }
             })
-
         }
 
+        
     }
 }

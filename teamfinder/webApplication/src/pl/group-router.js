@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function ({groupManager, groupMemberManager, messageManager, accountManager, middleware}) {
+module.exports = function ({ groupManager, groupMemberManager, messageManager, accountManager, middleware }) {
 
     const router = express.Router()
 
@@ -120,7 +120,7 @@ module.exports = function ({groupManager, groupMemberManager, messageManager, ac
                         response.render('group-finder.hbs', model)
                     }
                     else {
-                        
+
                         const validationErrors = groupManager.validateRequirements(account, group)
                         if (validationErrors.length > 0) {
                             const model = {
@@ -300,12 +300,16 @@ module.exports = function ({groupManager, groupMemberManager, messageManager, ac
         })
     })
 
+
     //ska ha en middleware för ifall man är medlem i gruppen
     router.get("/:id", function (request, response) {
         const accountId = request.session.accountId
         const groupId = request.params.id
         var isAuthor = false
         const updated = request.query.updated
+
+        const messageIdEdit = request.query.editMessage
+        var editMessage = null
 
         groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
             if (error) {
@@ -328,7 +332,7 @@ module.exports = function ({groupManager, groupMemberManager, messageManager, ac
                     }
                     else {
                         messageManager.getMessagesByGroupId(groupId, function (error, messages) {
-                            
+
                             if (error) {
                                 const model = {
                                     csrfToken: request.csrfToken(),
@@ -347,6 +351,9 @@ module.exports = function ({groupManager, groupMemberManager, messageManager, ac
                                     else {
                                         messages[i]['isAuthor'] = false;
                                     }
+                                    if (messages[i].MessageId == messageIdEdit) {
+                                        editMessage = messages[i]
+                                    }
                                 }
 
                                 var isAuthor = false
@@ -357,17 +364,20 @@ module.exports = function ({groupManager, groupMemberManager, messageManager, ac
                                 if (updated) {
                                     printUpdatedText = "You successfully updated the group information"
                                 }
-
-                                const model = {
-                                    csrfToken: request.csrfToken(),
-                                    group,
-                                    messages,
-                                    accountId,
-                                    isAuthor,
-                                    printUpdatedText
-                                }
-                                response.render("group-specific.hbs", model)
+                                
                             }
+
+                            const model = {
+                                csrfToken: request.csrfToken(),
+                                group,
+                                messages,
+                                accountId,
+                                isAuthor,
+                                printUpdatedText,
+                                editMessage
+                            }
+                            response.render("group-specific.hbs", model)
+
                         })
                     }
                 })

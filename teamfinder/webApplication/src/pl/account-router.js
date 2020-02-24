@@ -1,4 +1,5 @@
 const express = require('express')
+const bcrypt = require('bcrypt')
 
 module.exports = function ({ accountManager, middleware }) {
 
@@ -27,20 +28,15 @@ module.exports = function ({ accountManager, middleware }) {
     })
 
     router.post('/login', function (request, response) {
+
         const email = request.body.email
         const password = request.body.password
 
-        const credentials = {
-            email,
-            password
-        }
-
-        accountManager.loginAccount(credentials, function (error, account) {
+        accountManager.loginAccount(email, password, function (error, account) {
 
             if (error) {
                 const model = {
                     email,
-                    password,
                     error,
                     csrfToken: request.csrfToken()
                 }
@@ -50,6 +46,10 @@ module.exports = function ({ accountManager, middleware }) {
                 request.session.accountId = account.AccountId // Remove when the other things are fixed.
                 response.redirect('/')
             }
+            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
+            //request.sessionID = sessionId
+
+            //}) 
         })
     })
 
@@ -73,6 +73,7 @@ module.exports = function ({ accountManager, middleware }) {
         }
         response.render("account-sign-up.hbs", model)
     })
+
 
     router.post('/sign-up', function (request, response) {
 
@@ -205,7 +206,6 @@ module.exports = function ({ accountManager, middleware }) {
         accountManager.deleteAccount(accountId, function (error) {
 
             if (error) {
-                console.log("delete account lyckades inte... i callback")
                 model = {
                     error,
                     csrfToken: request.csrfToken()
@@ -220,4 +220,3 @@ module.exports = function ({ accountManager, middleware }) {
     })
     return router
 }
-//module.exports = router

@@ -1,5 +1,5 @@
 
-module.exports = function({ messageRepository }){
+module.exports = function ({ messageRepository }) {
     return {
 
         createMessage: function (message, callback) {
@@ -32,6 +32,11 @@ module.exports = function({ messageRepository }){
 
         deleteMessageById: function (messageId, callback) {
             messageRepository.deleteMessageById(messageId, callback)
+
+        },
+
+        updateMessageById: function (message, callback) {
+            messageRepository.updateMessageById(message, callback)
         }
     }
 }
