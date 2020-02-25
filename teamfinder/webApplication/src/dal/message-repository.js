@@ -1,5 +1,5 @@
 
-module.exports = function ({ dbPostgres }) {
+module.exports = function ({ dbMySQL }) {
     return {
 
         createMessage: function (message, callback) {
@@ -12,7 +12,7 @@ module.exports = function ({ dbPostgres }) {
                 message.text,
                 message.authorName
             ]
-            dbPostgres.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
 
                 if (error) {
                     callback(error)
@@ -29,7 +29,7 @@ module.exports = function ({ dbPostgres }) {
             const query = "SELECT * FROM Messages WHERE GroupId = ? ORDER BY MessageId DESC"
             const values = [groupId]
 
-            dbPostgres.query(query, values, function (error, messages) {
+            dbMySQL.query(query, values, function (error, messages) {
 
                 if (error) {
                     const databaseError = ["something went wrong getting messages from database"]
@@ -49,10 +49,10 @@ module.exports = function ({ dbPostgres }) {
             const values = [
                 messageId
             ]
-            dbPostgres.query(query, values, function (error) {
+            dbMySQL.query(query, values, function (error) {
 
                 if (error) {
-                    const databaseError = "dbPostgres error when deleting message"
+                    const databaseError = "dbMySQL error when deleting message"
                     callback(databaseError)
                 }
                 else {
@@ -73,7 +73,7 @@ module.exports = function ({ dbPostgres }) {
                 message.messageId
             ]
 
-            dbPostgres.query(query, values, function (error) {
+            dbMySQL.query(query, values, function (error) {
 
                 if (error) {
                     const databaseError = "error when updating message"

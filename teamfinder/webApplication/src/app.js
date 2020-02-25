@@ -11,15 +11,15 @@ const redisStore = require('connect-redis')(session)
 
 //vi använder väl MYSQL ? ska detta ligga i en connection fil?
 
-const groupRepository = require('./dal/group-repository')
+const groupRepository = require('./dalORM/group-repository')
 const groupManager = require('./bll/group-manager')
 const groupRouter = require('./pl/group-router')
 
-const accountRepository = require('./dal/account-repository')
+const accountRepository = require('./dalORM/account-repository')
 const accountManager = require('./bll/account-manager')
 const accountRouter = require('./pl/account-router')
 
-const messageRepository = require('./dal/message-repository')
+const messageRepository = require('./dalORM/message-repository')
 const messageManager = require('./bll/message-manager')
 const messageRouter = require('./pl/message-router')
 
@@ -54,6 +54,9 @@ container.register('messageRouter', awilix.asFunction(messageRouter))
 
 container.register('initPostgres', awilix.asFunction(initPostgres))
 container.register('dbPostgres', awilix.asFunction(dbPostgres))
+/*container.register('dbMessage', awilix.asFunction(dbPostgres.Message))
+container.register('dbAccount', awilix.asFunction(dbPostgres.Account))
+container.register('dbGroupMember', awilix.asFunction(dbPostgres.GroupMember))*/
 
 
 //container.register('express', awilix.asFunction(express))

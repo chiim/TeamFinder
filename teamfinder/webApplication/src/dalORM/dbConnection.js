@@ -8,10 +8,10 @@ module.exports = function ({initPostgres}) {
     
     const sequelize = new Sequelize('databaseORM', 'user', 'root', {
         host: 'database',
-        dialect: 'postgres'
+        dialect: 'postgres',
+        database: 'databaseORM'
     })
     
-    return sequelize
    //const sequelize = new Sequelize('postgres:databaseORM')
 
     return sequelize
@@ -31,7 +31,6 @@ module.exports = function ({initPostgres}) {
         .catch(err => {
             console.error('Unable to connect to the database:', err);
             return sequelize
-
         });
 
 

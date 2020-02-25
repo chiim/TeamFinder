@@ -1,27 +1,82 @@
-module.exports = function({ Account }){
+module.exports = function ({ Account }) {
 
-    return{
+    return {
 
-        createAccount: function(account, callback){
+        createAccount: function (account, callback) {
 
             Account.create({
-                Firstname: account.firstName,
-                Lastname: account.lastName,
-                Email: account.email,
-                Password: account.password,
-                Age: account.age,
-                City: account.city,
-                Gender: account.gender
-            }).then(function(createdAccount){
+                firstname: account.firstName,
+                lastname: account.lastName,
+                email: account.email,
+                password: account.password,
+                age: account.age,
+                city: account.city,
+                gender: account.gender
+            }).then(function (createdAccount) {
                 callback(null, createdAccount)
-            }).catch(function(error){
+            }).catch(function (error) {
                 console.log(error)
-                const databaseError = ["Something went wrong inserting data. Contact admin."]
+                const databaseError = "Something went wrong inserting data. Contact admin."
                 callback(databaseError, null)
             })
+        },
 
+        getAccountById: function (accountId, callback) {
+
+            Account.findById(accountId).then(function (account) {
+                callback(null, account[0])
+            }).catch(function (error) {
+                console.log(error)
+                const databaseError = "Something went wrong inserting data. Contact admin."
+                callback(databaseError, null)
+            })
+        },
+
+        updateAccount: function (account, callback) {
+            Account.update({
+                firstName: account.firstName,
+                lastName: account.lastName,
+                email: account.email,
+                age: account.age,
+                city: account.city,
+                gender: account.gender,
+            }, {
+                where: { accountId: account.accoundId }
+            }).then(function () {
+                callback(null)
+            }).catch(function (error) {
+                console.log(error)
+                const databaseError = "error when updating account"
+                callback(databaseError)
+            })
+        },
+
+        loginAccount: function (email, callback) {
+            Account.findOne({
+                where: { email: email }
+            }).then(function (account) {
+                if (account.length == 0) {
+                    databaseError = "no result found"
+                    callback(databaseError, null)
+                }
+                else {
+                    callback(null, account[0])
+                }
+            }).catch(function (error) {
+                callback(error, null)
+            })
+        },
+
+        deleteAccount: function(accountId, callback){
+
+            Account.destroy({
+                where: {id: accountId}
+            }).then(function(){
+                callback(null)
+            }).catch(function(error){
+                console.log(error)
+                const databaseError = "error when deleting account"
+            })
         }
-
     }
-
 }
