@@ -30,6 +30,7 @@ const middlewareRouter = require('./pl/middleware-router')
 const validator = require('./bll/validator')
 const dbMySQL = require('./dal/dbConnection')
 const dbPostgres = require('./dalORM/dbConnection')
+const initPostgres = require('./dalORM/initPostgres')
 
 const awilix = require('awilix')
 const container = awilix.createContainer()
@@ -51,7 +52,9 @@ container.register('messageRepository', awilix.asFunction(messageRepository))
 container.register('messageManager', awilix.asFunction(messageManager))
 container.register('messageRouter', awilix.asFunction(messageRouter))
 
+container.register('initPostgres', awilix.asFunction(initPostgres))
 container.register('dbPostgres', awilix.asFunction(dbPostgres))
+
 
 //container.register('express', awilix.asFunction(express))
 container.register('dbMySQL', awilix.asFunction(dbMySQL))

@@ -1,7 +1,7 @@
 const mySql = require('mysql')
 const dbPostgres = require('./dbConnection')
 
-module.exports = function ({ dbPostgres }) {
+module.exports = function ({ db }) {
     return {
         createAccount: function (account, callback) {
 
