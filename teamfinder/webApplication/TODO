@@ -1,8 +1,4 @@
-handle errors in hbs files (group finished)
 
-on registerPage: Render same page but with a green text saying "you successfully registered an account. Please login"
-
-part 6
 
 { /////////////////////////////////////////
 
@@ -13,5 +9,7 @@ Search function for finding specific groups
 Make it so users can see each others profiles
 
 clean up design
+
+remove "for="exampleInputPassword1" and leftover tags etc
 
 } ///////////////////////////////////////////

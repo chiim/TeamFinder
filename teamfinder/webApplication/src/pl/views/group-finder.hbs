@@ -22,21 +22,21 @@
                 {{#if groups.length}}
                     {{#each groups}}
                         <tr class="tableGroup">
-                            <td><img src="/{{this.Image}}.png" class="rounded img-size img-fluid" alt={{this.Image}}></td>
-                            <td>{{this.Name}}</td>
-                            <td>{{this.Sport}}</td>
-                            {{#if this.MinAge}}
-                                <td>Age requirement: {{this.MinAge}} - {{this.MaxAge}}</td>
+                            <td><img src="/{{this.image}}.png" class="rounded img-size img-fluid" alt={{this.image}}></td>
+                            <td>{{this.name}}</td>
+                            <td>{{this.sport}}</td>
+                            {{#if this.minAge}}
+                                <td>Age requirement: {{this.minAge}} - {{this.maxAge}}</td>
                             {{else}}
                                 <td>Age requirement: None</td>
                             {{/if}}
-                            <td>City: {{this.City}}</td>
-                            <td>Gender: {{this.AllowedGender}}</td>
+                            <td>City: {{this.city}}</td>
+                            <td>Gender: {{this.allowedGender}}</td>
 
-                            <td>{{this.NrOfMembers}}/{{this.MemberSlots}} Members</td>
+                            <td>{{this.nrOfMembers}}/{{this.memberSlots}} Members</td>
                             <td>
                                 <form method="POST">
-                                    <input type="hidden" name="groupId" value="{{this.GroupId}}">
+                                    <input type="hidden" name="groupId" value="{{this.groupId}}">
                                     <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                                     {{#if ../accountId}}
                                         <button class="btn btn-link btn-primary">Join Group</button>

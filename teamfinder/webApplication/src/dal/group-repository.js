@@ -7,7 +7,6 @@ module.exports = function ({dbPostgres}) {
             //const today = new Date()
             //date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
 
-            const authorId = '1' //här ska ett dynamiskt id hämtas med rätt skapare id
 
             const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MaxAge, MinAge, SkillLevel, AllowedGender, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -22,7 +21,7 @@ module.exports = function ({dbPostgres}) {
                 groupCredentials.maxAge,
                 groupCredentials.skillLevel,
                 groupCredentials.allowedGender,
-                authorId
+                accountId
             ]
 
             dbPostgres.query(query, values, function (error, result) {
@@ -40,14 +39,14 @@ module.exports = function ({dbPostgres}) {
 
         getAllGroups: function (callback) {
             const query = "SELECT * FROM Groups"
-            dbPostgres.query(query, function (error, result) {
+            dbPostgres.query(query, function (error, groups) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching groups. Contact admin."]
+                    const databaseError = "Something went wrong fetching groups. Contact admin."]
                     callback(databaseError, null)
                 }
                 else {
-                    callback(null, result)
+                    callback(null, groups)
                 }
             })
         },

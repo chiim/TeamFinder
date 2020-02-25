@@ -77,27 +77,27 @@ module.exports = function () {
 
         validateRequirements: function (account, group) {
             const validationErrors = []
-            if (group.nrOfMembers >= group.MemberSlots) {
+            if (group.nrOfMembers >= group.memberSlots) {
                 validationErrors.push("This group is full.")
             }
 
-            if (group.MinAge) {
-                if (parseInt(account.Age) < parseInt(group.MinAge)) {
+            if (group.minAge) {
+                if (parseInt(account.age) < parseInt(group.minAge)) {
                     validationErrors.push("You're too young to join this group.")
                 }
             }
-            if (group.MaxAge) {
-                if (parseInt(account.Age) > parseInt(group.MaxAge)) {
+            if (group.maxAge) {
+                if (parseInt(account.age) > parseInt(group.maxAge)) {
                     validationErrors.push("You're too old to join this group.")
                 }
             }
-            if (group.AllowedGender != 'Any') {
-                if (account.Gender != group.AllowedGender) {
-                    validationErrors.push("You're not allowed to join this group. It's restricted to " + group.AllowedGender)
+            if (group.allowedGender != 'Any') {
+                if (account.gender != group.allowedGender) {
+                    validationErrors.push("You're not allowed to join this group. It's restricted to " + group.allowedGender)
                 }
             }
 
-            if (group.City.toLowerCase() != account.City.toLowerCase()) {
+            if (group.city.toLowerCase() != account.city.toLowerCase()) {
                 validationErrors.push("You need to be in the same city as the group.")
             }
             return validationErrors
