@@ -2,6 +2,16 @@
 
   <h1>Edit profile</h1>
 
+  {{#if errors.length}}
+  <div class="errorHandler">
+    <ul>
+      {{#each errors}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
   <form method="POST" action="/accounts/edit">
 
     <div class="form-group">

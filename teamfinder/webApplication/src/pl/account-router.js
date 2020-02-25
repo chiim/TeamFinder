@@ -8,8 +8,7 @@ module.exports = function ({ accountManager, middleware }) {
     const router = express.Router()
 
     router.get('/login', function (request, response) {
-        console.log("Kommer jag hit?")
-        const unAuthorized = request.query.unAuthorized//this is undefined if not existing
+        const unAuthorized = request.query.unAuthorized
         if (unAuthorized) {
             const printErrorMessage = "You must login before accessing that page."
             const model = {
@@ -123,12 +122,21 @@ module.exports = function ({ accountManager, middleware }) {
 
         accountManager.getAccountById(accountId, function (errors, account) {
 
-            const model = {
-                errors,
-                account,
-                csrfToken: request.csrfToken()
+            if(errors){
+                const model = {
+                    errors,
+                    csrfToken: request.csrfToken()
+                }
+                response.render("account-edit.hbs", model)
             }
-            response.render("account-edit.hbs", model)
+            else{
+                const model = {
+                    account,
+                    csrfToken: request.csrfToken()
+                }
+                response.render("account-edit.hbs", model)
+            }
+            
         })
     })
 
@@ -183,7 +191,6 @@ module.exports = function ({ accountManager, middleware }) {
                 }
                 response.render('account-profile.hbs', model)
             }
-
             const model = {
                 account,
                 csrfToken: request.csrfToken()

@@ -20,7 +20,7 @@ module.exports = function ({ db }) {
             db.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong inserting data. Contact admin."]
+                    const databaseError = "Something went wrong inserting data. Contact admin."
                     callback(databaseError, null)
                 }
                 else {
@@ -37,11 +37,11 @@ module.exports = function ({ db }) {
 
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong inserting data. Contact admin."]
+                    const databaseError = "Something went wrong inserting data. Contact admin."
                     callback(databaseError, null)
                 }
                 else {
-                    callback(null, account[0])//ful lösning?
+                    callback(null, account[0])
                 }
 
             })
@@ -66,7 +66,7 @@ module.exports = function ({ db }) {
 
                 if (error) {
                     console.log(error)
-                    const databaseError = ["error when updating account"]
+                    const databaseError = "error when updating account"
                     callback(databaseError)
                 }
                 else {
@@ -85,9 +85,11 @@ module.exports = function ({ db }) {
             db.query(query, values, function (error, account) {
 
                 if (error) {
-                    callback(error, null)
+                    console.log(error)
+                    const dbError = "error when retrieving account"
+                    callback(dbError, null)
                 } else if (account.length == 0) {
-                    dbError = "no result found"
+                    const dbError = "no result found"
                     callback(dbError, null)
                 }
                 else {

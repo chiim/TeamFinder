@@ -3,8 +3,16 @@
 
   <h1>Sign-Up</h1>
 
+  {{#if errors.length}}
+  <ul>
+    {{#each errors}}
+    <li>{{this}}</li>
+    {{/each}}
+  </ul>
+  {{else}}
+
   {{#if success}}
-    <h4 class="successColor">{{success}}</h4>
+  <h4 class="successColor">{{success}}</h4>
   {{/if}}
 
 
