@@ -1,5 +1,5 @@
 
-module.exports = function ({db}) {
+module.exports = function ({dbPostgres}) {
     //const db = require('./dbConnection')
 
     return {
@@ -25,7 +25,7 @@ module.exports = function ({db}) {
                 authorId
             ]
 
-            db.query(query, values, function (error, result) {
+            dbPostgres.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = ["Something went wrong inserting data. Contact admin."]
@@ -40,7 +40,7 @@ module.exports = function ({db}) {
 
         getAllGroups: function (callback) {
             const query = "SELECT * FROM Groups"
-            db.query(query, function (error, result) {
+            dbPostgres.query(query, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = ["Something went wrong fetching groups. Contact admin."]
@@ -56,7 +56,7 @@ module.exports = function ({db}) {
             const query = "SELECT GroupId FROM GroupMembers WHERE AccountId = ?"
             const values = [accountId]
 
-            db.query(query, values, function (error, result) {
+            dbPostgres.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = ["Something went wrong fetching active groups."]
@@ -71,7 +71,7 @@ module.exports = function ({db}) {
 
         getAllGroupIds: function (callback) {
             const query = "SELECT GroupId FROM Groups"
-            db.query(query, function (error, result) {
+            dbPostgres.query(query, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = ["Something went wrong fetching a group"]
@@ -87,7 +87,7 @@ module.exports = function ({db}) {
 
             const query = "SELECT * FROM Groups WHERE GroupId = ? LIMIT 1"
             const values = [id]
-            db.query(query, values, function (error, result) {
+            dbPostgres.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = ["Something went wrong fetching the group."]
@@ -107,11 +107,11 @@ module.exports = function ({db}) {
                 groupId
             ]
 
-            db.query(query, values, function (error) {
+            dbPostgres.query(query, values, function (error) {
 
                 if (error) {
                     console.log(error)
-                    databaseError = "db error when deleting group"
+                    databaseError = "dbPostgres error when deleting group"
                     callback(databaseError)
                 }
                 else {
@@ -134,7 +134,7 @@ module.exports = function ({db}) {
                 group.gender
             ]
 
-            db.query(query, values, function (error, result) {
+            dbPostgres.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Something went wrong when updating the group information"
