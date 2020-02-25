@@ -1,10 +1,11 @@
-module.exports = function ({ Account }) {
+module.exports = function ({ dbPostgres }) {
 
+    const dbAccount = dbPostgres.Account
     return {
 
         createAccount: function (account, callback) {
 
-            Account.create({
+            dbAccount.create({
                 firstname: account.firstName,
                 lastname: account.lastName,
                 email: account.email,
@@ -23,7 +24,7 @@ module.exports = function ({ Account }) {
 
         getAccountById: function (accountId, callback) {
 
-            Account.findById(accountId).then(function (account) {
+            dbAccount.findById(accountId).then(function (account) {
                 callback(null, account[0])
             }).catch(function (error) {
                 console.log(error)
@@ -33,7 +34,7 @@ module.exports = function ({ Account }) {
         },
 
         updateAccount: function (account, callback) {
-            Account.update({
+            dbAccount.update({
                 firstName: account.firstName,
                 lastName: account.lastName,
                 email: account.email,
@@ -52,7 +53,7 @@ module.exports = function ({ Account }) {
         },
 
         loginAccount: function (email, callback) {
-            Account.findOne({
+            dbAccount.findOne({
                 where: { email: email }
             }).then(function (account) {
                 if (account.length == 0) {
@@ -67,13 +68,13 @@ module.exports = function ({ Account }) {
             })
         },
 
-        deleteAccount: function(accountId, callback){
+        deleteAccount: function (accountId, callback) {
 
-            Account.destroy({
-                where: {id: accountId}
-            }).then(function(){
+            dbAccount.destroy({
+                where: { id: accountId }
+            }).then(function () {
                 callback(null)
-            }).catch(function(error){
+            }).catch(function (error) {
                 console.log(error)
                 const databaseError = "error when deleting account"
             })

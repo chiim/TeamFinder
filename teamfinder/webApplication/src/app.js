@@ -8,9 +8,6 @@ const redis = require('redis')
 const redisStore = require('connect-redis')(session)
 
 
-
-//vi använder väl MYSQL ? ska detta ligga i en connection fil?
-
 const groupRepository = require('./dalORM/group-repository')
 const groupManager = require('./bll/group-manager')
 const groupRouter = require('./pl/group-router')

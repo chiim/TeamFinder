@@ -15,7 +15,9 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error, result) {
 
                 if (error) {
-                    callback(error)
+                    console.log(error)
+                    const databaseError = "Could not create message"
+                    callback(databaseError)
                 }
                 else {
                     callback(null)
