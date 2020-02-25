@@ -15,16 +15,16 @@
                 <tbody>
                     {{#each activeGroups}}
                     <tr class="tableGroup">
-                        <td><img src="/{{this.Image}}.png" class="rounded img-size img-fluid" alt={{this.Image}}></td>
-                        <td>{{this.Name}}</td>
-                        <td>{{this.Sport}}</td>
-                        <td>City: {{this.City}}</td>
-                        <td>Gender: {{this.AllowedGender}}</td>
-                        <td>{{this.NrOfMembers}}/{{this.MemberSlots}} Members</td>
+                        <td><img src="/{{this.image}}.png" class="rounded img-size img-fluid" alt={{this.image}}></td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.sport}}</td>
+                        <td>City: {{this.city}}</td>
+                        <td>Gender: {{this.allowedGender}}</td>
+                        <td>{{this.nrOfMembers}}/{{this.memberSlots}} Members</td>
                         <td>
                             <form method="post">
                                 <input type="hidden" name="_csrf" value="{{../csrfToken}}">
-                                <button class="btn btn-link btn-primary" name="groupId" value="{{this.GroupId}}">View
+                                <button class="btn btn-link btn-primary" name="groupId" value="{{this.groupId}}">View
                                     Group</button>
                             </form>
                         </td>

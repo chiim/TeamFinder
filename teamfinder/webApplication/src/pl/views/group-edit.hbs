@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <label for="groupName">*Group Name</label>
-                <input type="text" class="form-control" name="groupName" placeholder="Group Name" value="{{group.Name}}" readonly="true">
+                <input type="text" class="form-control" name="groupName" placeholder="Group Name" value="{{group.name}}" readonly="true">
             </div>
             <div class="form-group">
                 <label for="selectImage">Select Image</label>
@@ -47,20 +47,20 @@
             </div>
             <div class="form-group">
                 <label for="maxNumberOfMembers">*Max number of members</label>
-                <input type="text" class="form-control" name="memberSlots" placeholder="4" value="{{group.MemberSlots}}">
+                <input type="text" class="form-control" name="memberSlots" placeholder="4" value="{{group.memberSlots}}">
             </div>
             <div class="form-group">
                 <label for="city">*City</label>
-                <input type="text" class="form-control" name="city" placeholder="New York" value="{{group.City}}">
+                <input type="text" class="form-control" name="city" placeholder="New York" value="{{group.city}}">
             </div>
             <div class="form-row">
                 <label for="ageRestriction">Age restriction:</label>
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="0" name="minAge" value="{{group.MinAge}}">
+                    <input type="text" class="form-control" placeholder="0" name="minAge" value="{{group.minAge}}">
                 </div>
                 _
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="100" name="maxAge" value="{{group.MaxAge}}">
+                    <input type="text" class="form-control" placeholder="100" name="maxAge" value="{{group.maxAge}}">
                 </div>
             </div>
             <div class="form-group">

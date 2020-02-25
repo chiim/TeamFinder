@@ -86,7 +86,7 @@ module.exports = function ({ accountRepository, validator }) {
 
 const compareAccount = function (account, password, callback) {
 
-    const hash = account.Password.toString()
+    const hash = account.password.toString()
 
     bcrypt.compare(password, hash, function (err, result) {
 

@@ -24,15 +24,15 @@
 <div class="row">
     {{#each members}}
         <div class="col-sm">
-            <p>Name: {{this.FirstName}} {{this.LastName}}</p>
-            <p>City: {{this.City}}</p>
-            <p>Age: {{this.Age}}</p>
+            <p>Name: {{this.firstName}} {{this.lastName}}</p>
+            <p>City: {{this.city}}</p>
+            <p>Age: {{this.age}}</p>
             <form method="post">
                 <input type="hidden" name="_csrf" value="{{../csrfToken}}">
-                {{#if (isAuthor this.AccountId ../authorId)}} {{!-- This only works when there is one left? --}}
-                    <button class="btn btn-primary" type="submit" value="{{this.AccountId}}" disabled>Kick Member</button>
+                {{#if (isAuthor this.accountId ../authorId)}} {{!-- This only works when there is one left? --}}
+                    <button class="btn btn-primary" type="submit" value="{{this.accountId}}" disabled>Kick Member</button>
                 {{else}}
-                    <button class="btn btn-primary" type="submit" name="accountId" value="{{this.AccountId}}">Kick Member</button>
+                    <button class="btn btn-primary" type="submit" name="accountId" value="{{this.accountId}}">Kick Member</button>
                 {{/if}}
             </form>
         </div>

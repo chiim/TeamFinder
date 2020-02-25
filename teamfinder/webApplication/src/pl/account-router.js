@@ -44,10 +44,10 @@ module.exports = function ({ accountManager, middleware }) {
                 response.render('account-login.hbs', model)
             }
             else {
-                request.session.accountId = account.AccountId // Remove when the other things are fixed.
+                request.session.accountId = account.accountId // Remove when the other things are fixed.
                 response.redirect('/')
             }
-            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
+            //sessionManager.getSessionId(account.accountId, function(error, sessionId){
             //request.sessionID = sessionId
 
             //}) 
