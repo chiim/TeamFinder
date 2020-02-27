@@ -1,11 +1,11 @@
 
-module.exports = function ({ dbPostgres }) {
+module.exports = function ({ dbMySQL }) {
     return {
 
         createGroupMemberLink: function (accountId, groupId, callback) {
             const query = "INSERT INTO GroupMembers (AccountId, GroupId) VALUES (?, ?)"
             const values = [accountId, groupId]
-            dbPostgres.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Error linking account to group."
@@ -21,7 +21,7 @@ module.exports = function ({ dbPostgres }) {
             const query = "UPDATE Groups SET NrOfMembers = (SELECT COUNT(AccountId) FROM GroupMembers WHERE GroupId = ?) WHERE GroupId = ?"
             const values = [groupId, groupId]
 
-            dbPostgres.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Error updating number of members"
@@ -36,7 +36,7 @@ module.exports = function ({ dbPostgres }) {
             const query = "SELECT AccountId FROM GroupMembers WHERE GroupId = ?"
             const values = [groupId]
 
-            dbPostgres.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Error fetching group members"
@@ -53,7 +53,7 @@ module.exports = function ({ dbPostgres }) {
             const query = "DELETE FROM GroupMembers WHERE accountId = ? AND groupId = ?"
             const values = [accountId, groupId]
 
-            dbPostgres.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Error when kicking member"

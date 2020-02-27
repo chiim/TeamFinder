@@ -1,9 +1,12 @@
 
-module.exports = function ({ GroupMember, Group }) {
+module.exports = function ({ dbPostgres }) {
 
+    const GroupMember = dbPostgres.GroupMember
+    const Group = dbPostgres.group
     return {
 
         createGroupMemberLink: function (accountId, groupId, callback) {
+            const dbGroupMember = dbPostgres.model("groupMember")
 
             GroupMember.create({
                 accountId: accountId,
@@ -18,6 +21,8 @@ module.exports = function ({ GroupMember, Group }) {
         },
 
         getNrOfMembersInGroup: function(groupId, callback) {
+
+            const dbGroupMember = dbPostgres.model("groupMember")
 
             const { QueryTypes } = require('sequelize');
 
@@ -37,6 +42,8 @@ module.exports = function ({ GroupMember, Group }) {
 
         getGroupMembers: function(groupId, callback){
 
+            const dbGroupMember = dbPostgres.model("groupMember")
+
             GroupMember.findAll({
                 attributes: ['accountId'],
                 where: {
@@ -52,6 +59,8 @@ module.exports = function ({ GroupMember, Group }) {
         },
 
         removeGroupMemberLink: function (accountId, groupId, callback){
+
+            const dbGroupMember = dbPostgres.model("groupMember")
 
             GroupMember.destroy({
                 where :{
