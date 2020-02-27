@@ -1,12 +1,12 @@
 
-module.exports = function ({ Group }) {
+module.exports = function ({ dbGroup }) {
 
     return {
 
         createGroup: function (groupCredentials, callback) {
 
 
-            Group.create({
+            dbGroup.create({
                 name: groupCredentials.groupName,
                 image: groupCredentials.image,
                 sport: SpogroupCredentials.sport,
@@ -29,7 +29,7 @@ module.exports = function ({ Group }) {
 
         getAllGroups: function (callback) {
 
-            group.findAll().then(function (groups) {
+            dbGroup.findAll().then(function (groups) {
                 callback(null, groups)
             }).catch(function (error) {
                 console.log(error)
@@ -40,7 +40,7 @@ module.exports = function ({ Group }) {
 
         getActiveGroups: function (accountId, callback) {
 
-            Group.findAll({
+            dbGroup.findAll({
                 where: {
                     accountId: accountId
                 }
@@ -54,8 +54,10 @@ module.exports = function ({ Group }) {
         },
 
         getAllGroupIds: function (callback) {
+            
+            console.log("DBGROUP HÄÄÄÄÄR", dbGroup)
 
-            Group.findAll({
+            dbGroup.findAll({
                 attributes: ['groupId']
             }).then(function (groupIds) {
                 callback(null, groupIds)
@@ -70,7 +72,7 @@ module.exports = function ({ Group }) {
 
         getGroupById: function (groupId, callback) {
 
-            Group.findByPk(groupId).then(function (group) {
+            dbGroup.findByPk(groupId).then(function (group) {
                 callback(null, group)
             }).catch(function (error) {
                 console.log(error)
@@ -82,7 +84,7 @@ module.exports = function ({ Group }) {
 
         deleteGroupById: function (groupId, callback) {
 
-            Group.destroy({
+            dbGroup.destroy({
                 where: {
                     groupId: groupId
                 }
@@ -98,7 +100,7 @@ module.exports = function ({ Group }) {
 
         updateGroup: function (group, callback) {
 
-            Group.update({
+            dbGroup.update({
                 image: group.image,
                 sport: group.sport,
                 memberSlots: group.memberSlots,

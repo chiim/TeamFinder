@@ -51,9 +51,13 @@ container.register('messageRouter', awilix.asFunction(messageRouter))
 
 container.register('initPostgres', awilix.asFunction(initPostgres))
 container.register('dbPostgres', awilix.asFunction(dbPostgres))
-/*container.register('dbMessage', awilix.asFunction(dbPostgres.Message))
-container.register('dbAccount', awilix.asFunction(dbPostgres.Account))
-container.register('dbGroupMember', awilix.asFunction(dbPostgres.GroupMember))*/
+
+const db = container.resolve('dbPostgres')
+console.log(db)
+container.register('dbMessage', awilix.asValue(db.Message))
+container.register('dbAccount', awilix.asValue(db.Account))
+container.register('dbGroupMember', awilix.asValue(db.GroupMember))
+container.register('dbGroup', awilix.asValue(db.Group))
 
 
 //container.register('express', awilix.asFunction(express))

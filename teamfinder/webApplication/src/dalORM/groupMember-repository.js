@@ -1,6 +1,8 @@
 
-module.exports = function ({ GroupMember, Group }) {
+module.exports = function ({ dbPostgres }) {
 
+    const GroupMember = dbPostgres.GroupMember
+    const Group = dbPostgres.group
     return {
 
         createGroupMemberLink: function (accountId, groupId, callback) {
