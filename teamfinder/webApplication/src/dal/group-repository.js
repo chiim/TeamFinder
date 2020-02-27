@@ -27,7 +27,7 @@ module.exports = function ({dbPostgres}) {
             dbPostgres.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong inserting data. Contact admin."]
+                    const databaseError = "Something went wrong inserting data. Contact admin."
                     callback(databaseError, null)
                 }
                 else {
@@ -42,7 +42,7 @@ module.exports = function ({dbPostgres}) {
             dbPostgres.query(query, function (error, groups) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong fetching groups. Contact admin."]
+                    const databaseError = "Something went wrong fetching groups. Contact admin."
                     callback(databaseError, null)
                 }
                 else {
@@ -58,7 +58,7 @@ module.exports = function ({dbPostgres}) {
             dbPostgres.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching active groups."]
+                    const databaseError = "Something went wrong fetching active groups."
                     callback(databaseError, null)
                 }
                 else {
@@ -73,7 +73,7 @@ module.exports = function ({dbPostgres}) {
             dbPostgres.query(query, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching a group"]
+                    const databaseError = "Something went wrong fetching a group"
                     callback(databaseError, null)
                 }
                 else {
@@ -89,7 +89,7 @@ module.exports = function ({dbPostgres}) {
             dbPostgres.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching the group."]
+                    const databaseError = "Something went wrong fetching the group."
                     callback(databaseError, null)
                 }
                 else {
