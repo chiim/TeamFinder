@@ -21,7 +21,7 @@ module.exports = function ({ GroupMember, Group }) {
 
             const { QueryTypes } = require('sequelize');
 
-            Group.query("UPDATE Groups SET NrOfMembers = (SELECT COUNT(AccountId) FROM GroupMembers WHERE GroupId = ?) WHERE GroupId = ?", 
+            sequelize.query("UPDATE Groups SET NrOfMembers = (SELECT COUNT(AccountId) FROM GroupMembers WHERE GroupId = ?) WHERE GroupId = ?", 
             {
                 replacements: [groupId, groupId],
                 type: QueryTypes.UPDATE
