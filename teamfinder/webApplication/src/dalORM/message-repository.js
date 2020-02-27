@@ -5,7 +5,9 @@ module.exports = function ({ dbPostgres }) {
     return {
 
         createMessage: function (message, callback) {
-            Message.create({
+            const dbMessage = dbPostgres.model("message")
+
+            dbMessage.create({
                 groupId: message.groupId,
                 accountId: message.accountId,
                 text: message.text,
@@ -20,8 +22,9 @@ module.exports = function ({ dbPostgres }) {
         },
 
         getMessagesByGroupId: function (groupId, callback) {
+            const dbMessage = dbPostgres.model("message")
 
-            Message.findAll({
+            dbMessage.findAll({
                 where: {
                     groupId: groupId
                 },

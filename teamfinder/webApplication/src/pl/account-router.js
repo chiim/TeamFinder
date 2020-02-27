@@ -9,7 +9,6 @@ module.exports = function ({ accountManager, middleware }) {
     const router = express.Router()
 
     router.get('/login', function (request, response) {
-        console.log("Kommer jag hit?")
         const unAuthorized = request.query.unAuthorized//this is undefined if not existing
         if (unAuthorized) {
             const printErrorMessage = "You must login before accessing that page."

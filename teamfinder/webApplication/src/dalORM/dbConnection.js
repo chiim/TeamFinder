@@ -12,24 +12,21 @@ module.exports = function ({ initPostgres }) {
         database: 'databaseORM'
     })
 
-    return sequelize
+    sequelize
         .authenticate()
         .then(() => {
 
-            return initPostgres.initDb(sequelize, Sequelize).then(function (tables) {
+            initPostgres.initDb(sequelize, Sequelize).then(function (tables) {
 
                 console.log('Connection has been established successfully.');
-
-                return tables
+                return sequelize
             })
         })
         .catch(err => {
             console.error('Unable to connect to the database:', err);
             return sequelize
-        });
-
-
-
+        });    
+        return sequelize
 
 
 }

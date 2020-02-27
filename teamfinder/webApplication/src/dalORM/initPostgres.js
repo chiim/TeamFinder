@@ -83,7 +83,7 @@ module.exports = function () {
                 })
             }).then(function (dataExists) {
 
-                /*
+                
 
                 if (!dataExists) {
                     Account.bulkCreate([
@@ -205,7 +205,6 @@ module.exports = function () {
                     })
 
                 }
-                */
                 return { sequelize, Account, Group, Message, GroupMember }
             })
         }

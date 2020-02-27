@@ -1,10 +1,11 @@
 
-module.exports = function ({ dbGroup }) {
+module.exports = function ({dbPostgres}) {
 
     return {
 
         createGroup: function (groupCredentials, callback) {
 
+            const dbGroup = dbPostgres.model("group")
 
             dbGroup.create({
                 name: groupCredentials.groupName,
@@ -29,6 +30,8 @@ module.exports = function ({ dbGroup }) {
 
         getAllGroups: function (callback) {
 
+            const dbGroup = dbPostgres.model("group")
+
             dbGroup.findAll().then(function (groups) {
                 callback(null, groups)
             }).catch(function (error) {
@@ -39,6 +42,8 @@ module.exports = function ({ dbGroup }) {
         },
 
         getActiveGroups: function (accountId, callback) {
+
+            const dbGroup = dbPostgres.model("group")
 
             dbGroup.findAll({
                 where: {
@@ -54,8 +59,11 @@ module.exports = function ({ dbGroup }) {
         },
 
         getAllGroupIds: function (callback) {
-            
-            console.log("DBGROUP HÄÄÄÄÄR", dbGroup)
+
+            console.log("DBGROUP HÄÄÄÄÄR", dbPostgres)
+
+            const dbGroup = dbPostgres.model("group")
+
 
             dbGroup.findAll({
                 attributes: ['groupId']
@@ -72,6 +80,8 @@ module.exports = function ({ dbGroup }) {
 
         getGroupById: function (groupId, callback) {
 
+            const dbGroup = dbPostgres.model("group")
+
             dbGroup.findByPk(groupId).then(function (group) {
                 callback(null, group)
             }).catch(function (error) {
@@ -83,6 +93,8 @@ module.exports = function ({ dbGroup }) {
         },
 
         deleteGroupById: function (groupId, callback) {
+
+            const dbGroup = dbPostgres.model("group")
 
             dbGroup.destroy({
                 where: {
@@ -99,6 +111,8 @@ module.exports = function ({ dbGroup }) {
 
 
         updateGroup: function (group, callback) {
+
+            const dbGroup = dbPostgres.model("group")
 
             dbGroup.update({
                 image: group.image,
