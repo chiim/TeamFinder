@@ -3,18 +3,19 @@ module.exports = function ({ dbPostgres }) {
     const dbAccount = dbPostgres.Account
     return {
 
-        createAccount: function (account, callback) {
+        createAccount: function (hash, account, callback) {
             const dbAccount = dbPostgres.model("account")
-            console.log(account)
+            console.log("ACCOUNT: ", account)
             dbAccount.create({
-                firstname: account.firstName,
-                lastname: account.lastName,
+                firstName: account.firstName,
+                lastName: account.lastName,
                 email: account.email,
-                password: account.password,
+                password: hash,
                 age: account.age,
                 city: account.city,
                 gender: account.gender
             }).then(function (createdAccount) {
+                console.log("created account: ", createdAccount)
                 callback(null, createdAccount)
             }).catch(function (error) {
                 console.log(error)
@@ -37,19 +38,21 @@ module.exports = function ({ dbPostgres }) {
 
         updateAccount: function (account, callback) {
             const dbAccount = dbPostgres.model("account")
-
+            console.log("Account update: ", account)
             dbAccount.update({
                 firstName: account.firstName,
                 lastName: account.lastName,
                 email: account.email,
                 age: account.age,
                 city: account.city,
-                gender: account.gender,
+                gender: account.gender
             }, {
-                where: { accountId: account.accoundId }
+                where: { accountId: account.accountId }
             }).then(function () {
+                console.log("Testar")
                 callback(null)
             }).catch(function (error) {
+                console.log("Do I end up here????")
                 console.log(error)
                 const databaseError = "error when updating account"
                 callback(databaseError)
@@ -80,7 +83,7 @@ module.exports = function ({ dbPostgres }) {
             const dbAccount = dbPostgres.model("account")
 
             dbAccount.destroy({
-                where: { id: accountId }
+                where: { accountId: accountId }
             }).then(function () {
                 callback(null)
             }).catch(function (error) {

@@ -93,7 +93,7 @@ module.exports = function ({ accountManager, middleware }) {
             city,
             gender
         }
-
+        console.log("Kolla account innan repo: ", account)
         accountManager.createAccount(account, function (error) {
 
             if (error) {
@@ -140,7 +140,7 @@ module.exports = function ({ accountManager, middleware }) {
         const city = request.body.city
         const gender = request.body.gender
         const accountId = request.session.accountId
-        account = {
+        const account = {
             accountId,
             firstName,
             lastName,
@@ -150,6 +150,7 @@ module.exports = function ({ accountManager, middleware }) {
             city,
             gender
         }
+
         accountManager.updateAccount(account, function (errors) {
 
             if (errors) {
