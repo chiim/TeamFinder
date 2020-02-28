@@ -1,6 +1,5 @@
 module.exports = function ({ dbPostgres }) {
 
-    const dbAccount = dbPostgres.Account
     return {
 
         createAccount: function (hash, account, callback) {
@@ -38,7 +37,6 @@ module.exports = function ({ dbPostgres }) {
 
         updateAccount: function (account, callback) {
             const dbAccount = dbPostgres.model("account")
-            console.log("Account update: ", account)
             dbAccount.update({
                 firstName: account.firstName,
                 lastName: account.lastName,
@@ -47,12 +45,12 @@ module.exports = function ({ dbPostgres }) {
                 city: account.city,
                 gender: account.gender
             }, {
-                where: { accountId: account.accountId }
+                where: { 
+                    accountId: account.accountId 
+                }
             }).then(function () {
-                console.log("Testar")
                 callback(null)
             }).catch(function (error) {
-                console.log("Do I end up here????")
                 console.log(error)
                 const databaseError = "error when updating account"
                 callback(databaseError)
@@ -89,6 +87,7 @@ module.exports = function ({ dbPostgres }) {
             }).catch(function (error) {
                 console.log(error)
                 const databaseError = "error when deleting account"
+                callback(databaseError)
             })
         }
     }
