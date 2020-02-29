@@ -32,6 +32,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                     for (var i = 0; i < groupIds.length; i++) {
                         groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
                             if (error) {
+                                console.log(error)
                                 throw (error)
                             }
                         })
@@ -167,11 +168,25 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                     var checkMemberCountErrors = []
                     try {
                         for (var i = 0; i < groupIds.length; i++) {
+                            
                             groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
                                 if (error) {
+                                    console.log(error)
                                     throw (error)
                                 }
+                                else{
+
+                                    if(i == groupIds.length){
+
+                                        // solve group updates to slow
+                                        //get groups should be done here...
+                                    }
+
+                                }
+
+                                
                             })
+
                         }
                     }
                     catch (error) {
@@ -277,6 +292,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
         groupManager.createGroup(groupCredentials, function (error, groupId) {
             if (error) {
+                console.log("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
                 const model = {
                     error,
                     csrfToken: request.csrfToken()
@@ -284,6 +300,8 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 response.render("group-create.hbs", model)
             }
             else {
+
+                console.log("REEEEEEEEEEEEEEEEEEEEEEEEEEEEE", groupId)
                 
 
                 groupMemberManager.createGroupMemberLink(accountId, groupId, function (error) {

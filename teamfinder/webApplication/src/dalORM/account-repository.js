@@ -4,6 +4,7 @@ module.exports = function ({ dbPostgres }) {
     return {
 
         createAccount: function (account, callback) {
+
             const dbAccount = dbPostgres.model("account")
             console.log(account)
             dbAccount.create({
@@ -68,7 +69,7 @@ module.exports = function ({ dbPostgres }) {
                     callback(databaseError, null)
                 }
                 else {
-                    console.log("Account: ", account)
+                    ("Account: ", account)
                     callback(null, account)
                 }
             }).catch(function (error) {

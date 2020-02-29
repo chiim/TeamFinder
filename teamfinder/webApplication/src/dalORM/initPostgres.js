@@ -29,7 +29,7 @@ module.exports = function () {
             })
             Group.belongsTo(
                 Account,
-                { foreignKey: 'accountId' }
+                { foreignKey: 'authorId' }
             )
 
 
@@ -75,9 +75,11 @@ module.exports = function () {
                 return Account.findByPk('1').then(function (account) {
                     if (account) {
                         dataExists = true
+
                         return dataExists
                     }
                 }).catch(function (error) {
+
                     console.log("CATCH ERROR: ", error)
                     return dataExists
                 })
@@ -86,6 +88,8 @@ module.exports = function () {
                 
 
                 if (!dataExists) {
+
+                    console.log("THIS SHOULD ONLY APPEAR ONCEEEEEEEEEEEEEEEEEEEEEEEEEE when data is created")
                     Account.bulkCreate([
                         {
                             firstName: 'admin',
@@ -128,7 +132,8 @@ module.exports = function () {
                                     minAge: '2',
                                     maxAge: '100',
                                     skillLevel: 'Beginner',
-                                    allowedGender: 'Any'
+                                    allowedGender: 'Any',
+                                    authorId: '1'
                                 },
                                 {
                                     name: 'champs',
@@ -140,7 +145,8 @@ module.exports = function () {
                                     minAge: '2',
                                     maxAge: '100',
                                     skillLevel: 'Master',
-                                    allowedGender: 'Any'
+                                    allowedGender: 'Any',
+                                    authorId: '2'
                                 },
                                 {
                                     name: 'trash',
@@ -152,7 +158,8 @@ module.exports = function () {
                                     minAge: '2',
                                     maxAge: '100',
                                     skillLevel: 'Beginner',
-                                    allowedGender: 'Any'
+                                    allowedGender: 'Any',
+                                    authorId: '1'
                                 }
                             ]
                         ).then(function () {

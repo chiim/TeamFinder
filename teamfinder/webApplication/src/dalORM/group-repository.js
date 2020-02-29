@@ -10,7 +10,7 @@ module.exports = function ({dbPostgres}) {
             dbGroup.create({
                 name: groupCredentials.groupName,
                 image: groupCredentials.image,
-                sport: SpogroupCredentials.sport,
+                sport: groupCredentials.sport,
                 nrOfMembers: groupCredentials.nrOfMembers,
                 memberSlots: groupCredentials.memberSlots,
                 city: groupCredentials.city,
@@ -18,11 +18,15 @@ module.exports = function ({dbPostgres}) {
                 minAge: groupCredentials.maxAge,
                 skillLevel: groupCredentials.skillLevel,
                 allowedGender: groupCredentials.allowedGender,
-                authorId: accountId
-            }).then(function () {
-                callback(null)
+                authorId: groupCredentials.accountId
+            },{
+                model: "group",
+                raw: true
+            }).then(function (group) {
+                
+                callback(null, group.dataValues.groupId)
             }).catch(function (error) {
-                console.log(error)
+                console.log(error, null)
                 const databaseError = "Something went wrong inserting data. Contact admin."
                 callback(databaseError)
             })
@@ -32,7 +36,7 @@ module.exports = function ({dbPostgres}) {
 
             const dbGroup = dbPostgres.model("group")
 
-            dbGroup.findAll().then(function (groups) {
+            dbGroup.findAll( {raw: true} ).then(function (groups) {
                 callback(null, groups)
             }).catch(function (error) {
                 console.log(error)
@@ -47,8 +51,9 @@ module.exports = function ({dbPostgres}) {
 
             dbGroup.findAll({
                 where: {
-                    accountId: accountId
-                }
+                    authorId: accountId
+                },
+                raw: true
             }).then(function (groups) {
                 callback(null, groups)
             }).catch(function (error) {
@@ -60,13 +65,12 @@ module.exports = function ({dbPostgres}) {
 
         getAllGroupIds: function (callback) {
 
-            console.log("DBGROUP HÄÄÄÄÄR", dbPostgres)
-
             const dbGroup = dbPostgres.model("group")
 
 
             dbGroup.findAll({
-                attributes: ['groupId']
+                attributes: ['groupId'],
+                raw: true
             }).then(function (groupIds) {
                 callback(null, groupIds)
             }).catch(function (error) {
@@ -82,7 +86,7 @@ module.exports = function ({dbPostgres}) {
 
             const dbGroup = dbPostgres.model("group")
 
-            dbGroup.findByPk(groupId).then(function (group) {
+            dbGroup.findByPk(groupId, {raw: true} ).then(function (group) {
                 callback(null, group)
             }).catch(function (error) {
                 console.log(error)

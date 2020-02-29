@@ -20,7 +20,7 @@ const messageRepository = require('./dalORM/message-repository')
 const messageManager = require('./bll/message-manager')
 const messageRouter = require('./pl/message-router')
 
-const groupMemberRepository = require('./dal/groupMember-repository')
+const groupMemberRepository = require('./dalORM/groupMember-repository')
 const groupMemberManager = require('./bll/groupMember-manager')
 
 const middlewareRouter = require('./pl/middleware-router')

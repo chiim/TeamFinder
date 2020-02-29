@@ -6,7 +6,6 @@ module.exports = function () {
 
       if (request.session.accountId == null) {
 
-        console.log("middleware redirects to login")
         response.redirect('/accounts/login/?unAuthorized=true')
       }
       else {
