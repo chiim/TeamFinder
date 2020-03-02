@@ -69,6 +69,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                         else {
                                             const groupIds = getGroupIds(groups)
                                             const activeGroupIds = getGroupIds(activeGroups)
+                                            console.log("SUUUUUUUUUREEEEE", groupIds, activeGroupIds)
                                             for (var i = groupIds.length; i >= 0; i--) {
                                                 if (activeGroupIds.includes(groupIds[i])) {
                                                     groups.splice(i, 1) // pop specific element
@@ -87,12 +88,21 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                     }
                                     response.render('group-finder.hbs', model)
                                 }
+                                else{
+                                    const model = {
+                                        groups,
+                                        csrfToken: request.csrfToken()
+                                    }
+                                    response.render('group-finder.hbs', model)
+                                }
                             }
-                            const model = {
-                                groups,
-                                csrfToken: request.csrfToken()
+                            else {
+                                const model = {
+                                    groups,
+                                    csrfToken: request.csrfToken()
+                                }
+                                response.render('group-finder.hbs', model)
                             }
-                            response.render('group-finder.hbs', model)
                         }
                     })
                 }
@@ -168,15 +178,15 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                     var checkMemberCountErrors = []
                     try {
                         for (var i = 0; i < groupIds.length; i++) {
-                            
+
                             groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
                                 if (error) {
                                     console.log(error)
                                     throw (error)
                                 }
-                                else{
+                                else {
 
-                                    if(i == groupIds.length){
+                                    if (i == groupIds.length) {
 
                                         // solve group updates to slow
                                         //get groups should be done here...
@@ -184,7 +194,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
                                 }
 
-                                
+
                             })
 
                         }
@@ -292,7 +302,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
         groupManager.createGroup(groupCredentials, function (error, groupId) {
             if (error) {
-                console.log("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
                 const model = {
                     error,
                     csrfToken: request.csrfToken()
@@ -300,9 +309,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 response.render("group-create.hbs", model)
             }
             else {
-
-                console.log("REEEEEEEEEEEEEEEEEEEEEEEEEEEEE", groupId)
-                
 
                 groupMemberManager.createGroupMemberLink(accountId, groupId, function (error) {
                     if (error) {
@@ -343,6 +349,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             else {
                 groupManager.getGroupById(groupId, function (error, group) {
                     if (error) {
+
                         const model = {
                             error,
                             csrfToken: request.csrfToken(),
@@ -354,6 +361,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         messageManager.getMessagesByGroupId(groupId, function (error, messages) {
 
                             if (error) {
+
                                 const model = {
                                     csrfToken: request.csrfToken(),
                                     error,
@@ -384,19 +392,20 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                 if (updated) {
                                     printUpdatedText = "You successfully updated the group information"
                                 }
-                                
+
+                                const model = {
+                                    csrfToken: request.csrfToken(),
+                                    group,
+                                    messages,
+                                    accountId,
+                                    isAuthor,
+                                    printUpdatedText,
+                                    editMessage
+                                }
+                                response.render("group-specific.hbs", model)
                             }
 
-                            const model = {
-                                csrfToken: request.csrfToken(),
-                                group,
-                                messages,
-                                accountId,
-                                isAuthor,
-                                printUpdatedText,
-                                editMessage
-                            }
-                            response.render("group-specific.hbs", model)
+
 
                         })
                     }

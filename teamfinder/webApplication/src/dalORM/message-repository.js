@@ -27,7 +27,9 @@ module.exports = function ({ dbPostgres }) {
                 where: {
                     groupId: groupId
                 },
-                order: [messageId, 'DESC']
+                raw: true,
+                model: "message"
+                //order: [messageId, 'DESC']
             }).then(function (messages) {
                 callback(null, messages)
             }).catch(function (error) {

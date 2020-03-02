@@ -47,12 +47,13 @@ module.exports = function ({dbPostgres}) {
 
         getActiveGroups: function (accountId, callback) {
 
-            const dbGroup = dbPostgres.model("group")
+            const dbGroupMembers = dbPostgres.model("groupMember")
 
-            dbGroup.findAll({
+            dbGroupMembers.findAll({
+                attributes: ['groupId'],
                 where: {
-                    authorId: accountId
-                },
+                    accountId: accountId
+                },                
                 raw: true
             }).then(function (groups) {
                 callback(null, groups)
@@ -116,7 +117,7 @@ module.exports = function ({dbPostgres}) {
 
         updateGroup: function (group, callback) {
 
-            const dbGroup = dbPostgres.model("group")
+            const dbGroup = dbPostgres.model("group")          
 
             dbGroup.update({
                 image: group.image,
@@ -126,12 +127,12 @@ module.exports = function ({dbPostgres}) {
                 maxAge: group.minAge,
                 minAge: group.maxAge,
                 skillLevel: group.skillLevel,
-                allowedGender: group.gender,
+                allowedGender: group.gender
             }, {
                 where: {
-                    groupId: groupId
+                    groupId: group.id
                 }
-            }).this(function(){
+            }).then(function(){
                 callback(null)
             }).catch(function(error){
                 console.log(error)

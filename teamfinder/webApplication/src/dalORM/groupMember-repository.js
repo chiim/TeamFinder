@@ -20,8 +20,6 @@ module.exports = function ({ dbPostgres }) {
 
         getNrOfMembersInGroup: function (groupId, callback) {
 
-            //const { QueryTypes } = require('sequelize');
-
             const dbGroupMember = dbPostgres.model("groupMember")
             const dbGroup = dbPostgres.model("group")
 

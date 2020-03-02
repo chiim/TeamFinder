@@ -121,6 +121,8 @@ module.exports = function ({dbMySQL}) {
 
         updateGroup: function (group, callback) {
 
+            // no where clause??
+
             const query = "UPDATE Groups SET Image = ?, Sport = ?, MemberSlots = ?, City = ?, MinAge = ?, MaxAge = ?, SkillLevel = ?, AllowedGender = ?"
             const values = [
                 group.image,
