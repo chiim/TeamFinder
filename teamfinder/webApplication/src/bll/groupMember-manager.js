@@ -1,9 +1,15 @@
 
-module.exports = function ({ groupMemberRepository }) {
+module.exports = function ({ groupMemberRepository, groupManager }) {
 
     return {
-        createGroupMemberLink: function (accountId, groupId, callback) {
-            groupMemberRepository.createGroupMemberLink(accountId, groupId, callback)
+        createGroupMemberLink: function (account, group, callback) {
+            const validationErrors = groupManager.validateRequirements(account, group)
+            if (validationErrors.length > 0) {
+                callback(validationErrors)
+            }
+            else {
+                groupMemberRepository.createGroupMemberLink(account.accountId, group.groupId, callback)
+            }
         },
 
         getNrOfMembersInGroup: function (groupId, callback) {

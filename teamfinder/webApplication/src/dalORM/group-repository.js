@@ -27,7 +27,7 @@ module.exports = function ({dbPostgres}) {
                 callback(null, group.dataValues.groupId)
             }).catch(function (error) {
                 console.log(error, null)
-                const databaseError = "Something went wrong inserting data. Contact admin."
+                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
                 callback(databaseError)
             })
         },
@@ -40,7 +40,7 @@ module.exports = function ({dbPostgres}) {
                 callback(null, groups)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong retrieving groups"
+                const databaseError = "DatabaseError: Something went wrong retrieving groups"
                 callback(databaseError, null)
             })
         },
@@ -59,7 +59,7 @@ module.exports = function ({dbPostgres}) {
                 callback(null, groups)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong retrieving groups"
+                const databaseError = "DatabaseError: Something went wrong retrieving groups"
                 callback(databaseError, null)
             })
         },
@@ -76,7 +76,7 @@ module.exports = function ({dbPostgres}) {
                 callback(null, groupIds)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong retrieving groupsIds"
+                const databaseError = "DatabaseError: Something went wrong retrieving groupsIds"
                 callback(databaseError, null)
             })
 
@@ -91,7 +91,7 @@ module.exports = function ({dbPostgres}) {
                 callback(null, group)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong retrieving group"
+                const databaseError = "DatabaseError: Something went wrong retrieving group"
                 callback(databaseError, null)
             })
 
@@ -109,7 +109,7 @@ module.exports = function ({dbPostgres}) {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong retrieving group"
+                const databaseError = "DatabaseError: Something went wrong retrieving group"
                 callback(databaseError)
             })
         },
@@ -118,8 +118,8 @@ module.exports = function ({dbPostgres}) {
         updateGroup: function (group, callback) {
 
             const dbGroup = dbPostgres.model("group")          
-
-            dbGroup.update({
+            console.log("groupId: ", group.id)
+            dbGroup.update({ // Den kommer hit men gör inte update?? GroupId stämmer, får in grupp data, kör callback(null) som den ska men updaterar inte rows.
                 image: group.image,
                 sport: group.sport,
                 memberSlots: group.memberSlots,
@@ -131,12 +131,15 @@ module.exports = function ({dbPostgres}) {
             }, {
                 where: {
                     groupId: group.id
-                }
-            }).then(function(){
+                },
+                returning: true,
+                raw: true
+            }).then(function(result){
+                console.log("result after updating: ", result)
                 callback(null)
             }).catch(function(error){
                 console.log(error)
-                const databaseError = "Something went wrong updating group"
+                const databaseError = "DatabaseError: Something went wrong updating group"
                 callback(databaseError)
             })
         }

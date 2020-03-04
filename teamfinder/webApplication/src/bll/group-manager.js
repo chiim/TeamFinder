@@ -44,6 +44,7 @@ module.exports = function ({groupRepository, validator}) {
 
         updateGroup: function (group, callback) {
             const errors = validator.validateGroup(group)
+            console.log("group: ", group)
             if (errors.length > 0) {
                 callback(errors, null)
             }

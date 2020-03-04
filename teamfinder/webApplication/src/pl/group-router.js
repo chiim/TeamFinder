@@ -122,17 +122,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         response.render('group-finder.hbs', model)
                     }
                     else {
-
-                        const validationErrors = groupManager.validateRequirements(account, group)
-                        if (validationErrors.length > 0) {
-                            const model = {
-                                validationErrors,
-                                csrfToken: request.csrfToken()
-                            }
-                            response.render('group-finder.hbs', model)
-                        }
-                        else {
-                            groupMemberManager.createGroupMemberLink(accountId, groupId, function (error) {
+                            groupMemberManager.createGroupMemberLink(account, group, function (error) {
                                 if (error) {
                                     const model = {
                                         error,
@@ -144,7 +134,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                     response.redirect('/groups/' + groupId)
                                 }
                             })
-                        }
                     }
                 })
             }
@@ -570,7 +559,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         })
     })
 
-    //add middleware for validating right account does it. or is that handeled in hbs files?
+    // Random member cant get here due to the get request validating that it's the author trying to access webpage
     router.post('/delete/:id', function (request, response) {
 
         const groupId = request.params.id

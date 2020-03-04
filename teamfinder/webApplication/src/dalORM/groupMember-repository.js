@@ -10,11 +10,14 @@ module.exports = function ({ dbPostgres }) {
                 accountId: accountId,
                 groupId: groupId
             }).then(function () {
+                console.log("Then funkar")
                 callback(null)
-            }).catch(function (error) {
-                console.log(error)
-                const databaseError = "Something went wrong inserting data."
-                callback(databaseError)
+                return
+            }).catch(function (error) { // Med postman kommer den alltid hit? Via hemsidan gör den inte det.
+                    const databaseError = "DatabaseError: You're already part of the group"
+                    console.log("Database error logged here: ", databaseError)
+                    console.log("Error from catch logged here: ", error)
+                    callback(databaseError)
             })
         },
 
@@ -40,13 +43,13 @@ module.exports = function ({ dbPostgres }) {
                     callback(null)
                 }).catch(function (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong updating groupMembers. inside update"
+                    const databaseError = "DatabaseError: Something went wrong updating groupMembers. inside update"
                     callback(databaseError)
                 })
 
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong updating groupMembers. with count"
+                const databaseError = "DatabaseError: Something went wrong updating groupMembers. with count"
                 callback(databaseError)
             })
 
@@ -85,7 +88,7 @@ module.exports = function ({ dbPostgres }) {
                 callback(null, accountIds)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong retreiving groupMembers."
+                const databaseError = "DatabaseError: Something went wrong retreiving groupMembers."
                 callback(databaseError, null)
             })
         },
@@ -103,7 +106,7 @@ module.exports = function ({ dbPostgres }) {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong deleting groupMembers."
+                const databaseError = "DatabaseError: Something went wrong deleting groupMembers."
                 callback(databaseError)
             })
         }
