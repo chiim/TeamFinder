@@ -22,8 +22,8 @@ module.exports = function ({ messageManager, accountManager }) {
 
             else {
 
-                const authorName = account.FirstName + ' ' + account.LastName
-
+                const authorName = account.firstName + ' ' + account.lastName
+                
                 const message = {
                     groupId,
                     accountId,

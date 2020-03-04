@@ -1,8 +1,19 @@
-handle errors in hbs files (group finished)
+Part 7: Sequelize
 
-sequelize
+Part 8: REST api
 
-{ /////////////////////////////////////////
+Part 9: SPA
+
+
+--------------- HIGHER GRADE ------------
+
+Update & delete for all resources on website (Not for REST API) {GRADE 4} --- FINISHED :) 
+
+Loading indicator for SPA when sending request to REST API {GRADE 4}
+
+Third party authentication (Login with google/facebook/steam/etc.) {GRADE 5}
+
+--------------- OPTIONAL ----------------
 
 admin account to access all groups
 
@@ -12,4 +23,4 @@ Make it so users can see each others profiles
 
 clean up design
 
-} ///////////////////////////////////////////
+remove "for="exampleInputPassword1" and leftover tags etc

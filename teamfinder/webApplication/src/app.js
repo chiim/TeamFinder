@@ -7,24 +7,30 @@ const csrf = require('csurf')
 const redis = require('redis')
 const redisStore = require('connect-redis')(session)
 
-const groupRepository = require('./dal/group-repository')
+
+const groupRepository = require('./dalORM/group-repository')
 const groupManager = require('./bll/group-manager')
 const groupRouter = require('./pl/group-router')
 
-const accountRepository = require('./dal/account-repository')
+const accountRepository = require('./dalORM/account-repository')
 const accountManager = require('./bll/account-manager')
 const accountRouter = require('./pl/account-router')
 
-const messageRepository = require('./dal/message-repository')
+const messageRepository = require('./dalORM/message-repository')
 const messageManager = require('./bll/message-manager')
 const messageRouter = require('./pl/message-router')
 
-const groupMemberRepository = require('./dal/groupMember-repository')
+const groupMemberRepository = require('./dalORM/groupMember-repository')
 const groupMemberManager = require('./bll/groupMember-manager')
 
 const middlewareRouter = require('./pl/middleware-router')
 const validator = require('./bll/validator')
-const db = require('./dal/dbConnection')
+const dbMySQL = require('./dal/dbConnection')
+const dbPostgres = require('./dalORM/dbConnection')
+const initPostgres = require('./dalORM/initPostgres')
+
+const apiAccountRouter = require('./pl-api/account-router')
+const apiGroupRouter = require('./pl-api/group-router')
 
 const awilix = require('awilix')
 const container = awilix.createContainer()
@@ -46,12 +52,27 @@ container.register('messageRepository', awilix.asFunction(messageRepository))
 container.register('messageManager', awilix.asFunction(messageManager))
 container.register('messageRouter', awilix.asFunction(messageRouter))
 
+container.register('initPostgres', awilix.asFunction(initPostgres))
+container.register('dbPostgres', awilix.asFunction(dbPostgres))
+
+container.register('apiAccountRouter', awilix.asFunction(apiAccountRouter))
+container.register('apiGroupRouter', awilix.asFunction(apiGroupRouter))
+
+/*container.register('dbMessage', awilix.asValue(db.Message))
+container.register('dbAccount', awilix.asValue(db.Account))
+container.register('dbGroupMember', awilix.asValue(db.GroupMember))
+container.register('dbGroup', awilix.asValue(db.Group))*/
+
+
 //container.register('express', awilix.asFunction(express))
-container.register('db', awilix.asFunction(db))
+container.register('dbMySQL', awilix.asFunction(dbMySQL))
 
 const theAccountRouter = container.resolve('accountRouter')
 const theGroupRouter = container.resolve('groupRouter')
 const theMessageRouter = container.resolve('messageRouter')
+
+const theApiAccountRouter = container.resolve('apiAccountRouter')
+const theApiGroupRouter = container.resolve('apiGroupRouter')
 
 const client = redis.createClient({
   host: 'redis'
@@ -64,10 +85,6 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(cookieParser())
-
-app.use(csrf({
-    cookie: true
-}))
 
 app.use(session({
   saveUninitialized: false,
@@ -84,7 +101,6 @@ app.use(session({
 
 
 
-
 app.set("views", "src/pl/views")
 
 app.use(function (request, response, next) {
@@ -92,10 +108,12 @@ app.use(function (request, response, next) {
   next()
 })
 
-app.use('/groups', theGroupRouter)
-app.use('/accounts', theAccountRouter)
-app.use('/messages', theMessageRouter)
+app.use('/groups',csrf({cookie: true}), theGroupRouter)
+app.use('/accounts', csrf({cookie: true}), theAccountRouter)
+app.use('/messages', csrf({cookie: true}), theMessageRouter)
 
+app.use('/pl-api/groups', theApiGroupRouter)
+app.use('/pl-api/accounts', theApiAccountRouter)
 
 // app.use("/groups", groupRouter)
 // app.use("/accounts", accountRouter)

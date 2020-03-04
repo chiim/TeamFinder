@@ -10,13 +10,21 @@ services:
     depends_on:
       - database
       - redis
+  #database:
+    #build: ./database
+    #ports:
+    #- "3306:3306"
+    #environment:
+      #- MYSQL_ROOT_PASSWORD=user
+      #- MYSQL_DATABASE=database
   database:
-    build: ./database
+    build: ./databaseORM
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      - MYSQL_ROOT_PASSWORD=user
-      - MYSQL_DATABASE=database
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: user
+      POSTGRES_DB: databaseORM
   redis:
     build: "./session_db"
     volumes:

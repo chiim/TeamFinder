@@ -32,7 +32,7 @@ module.exports = function ({ accountRepository, validator }) {
 
         updateAccount: function (account, callback) {
 
-
+            console.log("Account in manager: ", account)
             //validering
 
             const errors = []
@@ -60,7 +60,6 @@ module.exports = function ({ accountRepository, validator }) {
                 callback(errors)
                 return
             }
-
             accountRepository.updateAccount(account, callback)
         },
 
@@ -86,7 +85,7 @@ module.exports = function ({ accountRepository, validator }) {
 
 const compareAccount = function (account, password, callback) {
 
-    const hash = account.Password.toString()
+    const hash = account.password.toString()
 
     bcrypt.compare(password, hash, function (err, result) {
 

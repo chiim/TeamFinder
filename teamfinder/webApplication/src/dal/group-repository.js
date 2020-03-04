@@ -1,5 +1,5 @@
 
-module.exports = function ({db}) {
+module.exports = function ({dbMySQL}) {
     //const db = require('./dbConnection')
 
     return {
@@ -7,7 +7,6 @@ module.exports = function ({db}) {
             //const today = new Date()
             //date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
 
-            const authorId = '1' //här ska ett dynamiskt id hämtas med rätt skapare id
 
             const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MaxAge, MinAge, SkillLevel, AllowedGender, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -22,13 +21,13 @@ module.exports = function ({db}) {
                 groupCredentials.maxAge,
                 groupCredentials.skillLevel,
                 groupCredentials.allowedGender,
-                authorId
+                accountId
             ]
 
-            db.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong inserting data. Contact admin."]
+                    const databaseError = "Something went wrong inserting data. Contact admin."
                     callback(databaseError, null)
                 }
                 else {
@@ -40,14 +39,14 @@ module.exports = function ({db}) {
 
         getAllGroups: function (callback) {
             const query = "SELECT * FROM Groups"
-            db.query(query, function (error, result) {
+            dbMySQL.query(query, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching groups. Contact admin."]
+                    const databaseError = "Something went wrong fetching groups. Contact admin."
                     callback(databaseError, null)
                 }
                 else {
-                    callback(null, result)
+                    callback(null, groups)
                 }
             })
         },
@@ -56,10 +55,10 @@ module.exports = function ({db}) {
             const query = "SELECT GroupId FROM GroupMembers WHERE AccountId = ?"
             const values = [accountId]
 
-            db.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching active groups."]
+                    const databaseError = "Something went wrong fetching active groups."
                     callback(databaseError, null)
                 }
                 else {
@@ -71,10 +70,10 @@ module.exports = function ({db}) {
 
         getAllGroupIds: function (callback) {
             const query = "SELECT GroupId FROM Groups"
-            db.query(query, function (error, result) {
+            dbMySQL.query(query, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching a group"]
+                    const databaseError = "Something went wrong fetching a group"
                     callback(databaseError, null)
                 }
                 else {
@@ -87,10 +86,10 @@ module.exports = function ({db}) {
 
             const query = "SELECT * FROM Groups WHERE GroupId = ? LIMIT 1"
             const values = [id]
-            db.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = ["Something went wrong fetching the group."]
+                    const databaseError = "Something went wrong fetching the group."
                     callback(databaseError, null)
                 }
                 else {
@@ -107,11 +106,11 @@ module.exports = function ({db}) {
                 groupId
             ]
 
-            db.query(query, values, function (error) {
+            dbMySQL.query(query, values, function (error) {
 
                 if (error) {
                     console.log(error)
-                    databaseError = "db error when deleting group"
+                    databaseError = "dbMySQL error when deleting group"
                     callback(databaseError)
                 }
                 else {
@@ -121,6 +120,8 @@ module.exports = function ({db}) {
         },
 
         updateGroup: function (group, callback) {
+
+            // no where clause??
 
             const query = "UPDATE Groups SET Image = ?, Sport = ?, MemberSlots = ?, City = ?, MinAge = ?, MaxAge = ?, SkillLevel = ?, AllowedGender = ?"
             const values = [
@@ -134,7 +135,7 @@ module.exports = function ({db}) {
                 group.gender
             ]
 
-            db.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Something went wrong when updating the group information"

@@ -1,5 +1,5 @@
 
-module.exports = function ({ db }) {
+module.exports = function ({ dbMySQL }) {
     return {
 
         createMessage: function (message, callback) {
@@ -12,10 +12,12 @@ module.exports = function ({ db }) {
                 message.text,
                 message.authorName
             ]
-            db.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
 
                 if (error) {
-                    callback(error)
+                    console.log(error)
+                    const databaseError = "Could not create message"
+                    callback(databaseError)
                 }
                 else {
                     callback(null)
@@ -29,7 +31,7 @@ module.exports = function ({ db }) {
             const query = "SELECT * FROM Messages WHERE GroupId = ? ORDER BY MessageId DESC"
             const values = [groupId]
 
-            db.query(query, values, function (error, messages) {
+            dbMySQL.query(query, values, function (error, messages) {
 
                 if (error) {
                     const databaseError = ["something went wrong getting messages from database"]
@@ -49,10 +51,10 @@ module.exports = function ({ db }) {
             const values = [
                 messageId
             ]
-            db.query(query, values, function (error) {
+            dbMySQL.query(query, values, function (error) {
 
                 if (error) {
-                    const databaseError = "db error when deleting message"
+                    const databaseError = "dbMySQL error when deleting message"
                     callback(databaseError)
                 }
                 else {
@@ -73,7 +75,7 @@ module.exports = function ({ db }) {
                 message.messageId
             ]
 
-            db.query(query, values, function (error) {
+            dbMySQL.query(query, values, function (error) {
 
                 if (error) {
                     const databaseError = "error when updating message"

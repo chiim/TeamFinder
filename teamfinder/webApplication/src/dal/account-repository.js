@@ -1,7 +1,7 @@
 const mySql = require('mysql')
-const db = require('./dbConnection')
+const dbPostgres = require('./dbConnection')
 
-module.exports = function ({ db }) {
+module.exports = function ({ dbMySQL }) {
     return {
         createAccount: function (account, callback) {
 
@@ -17,7 +17,7 @@ module.exports = function ({ db }) {
                 account.gender
             ]
 
-            db.query(query, values, function (error, result) {
+            dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Something went wrong inserting data. Contact admin."
@@ -33,7 +33,7 @@ module.exports = function ({ db }) {
         getAccountById: function (accountId, callback) {
             const query = "Select * FROM Accounts WHERE AccountId = ? LIMIT 1"
             const values = [accountId]
-            db.query(query, values, function (error, account) {
+            dbMySQL.query(query, values, function (error, account) {
 
                 if (error) {
                     console.log(error)
@@ -62,7 +62,7 @@ module.exports = function ({ db }) {
                 account.accountId
             ]
 
-            db.query(query, values, function (error) {
+            dbMySQL.query(query, values, function (error) {
 
                 if (error) {
                     console.log(error)
@@ -82,15 +82,15 @@ module.exports = function ({ db }) {
                 email
             ]
 
-            db.query(query, values, function (error, account) {
+            dbMySQL.query(query, values, function (error, account) {
 
                 if (error) {
                     console.log(error)
                     const dbError = "error when retrieving account"
                     callback(dbError, null)
                 } else if (account.length == 0) {
-                    const dbError = "no result found"
-                    callback(dbError, null)
+                    const databaseError = "no result found"
+                    callback(databaseError, null)
                 }
                 else {
                     callback(null, account[0])
@@ -106,7 +106,7 @@ module.exports = function ({ db }) {
             const values = [
                 accountId
             ]
-            db.query(query, values, function (error) {
+            dbMySQL.query(query, values, function (error) {
 
                 if (error) {
                     console.log(error)

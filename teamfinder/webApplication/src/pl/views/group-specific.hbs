@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>GroupNameHere</title>
+    <title>{{Group.name}}</title>
     <link rel="stylesheet" href="/group-specific.css">
 </head>
 
@@ -15,36 +15,36 @@
         {{#if printUpdatedText}}
         <p class="successColor">{{printUpdatedText}}</p>
         {{/if}}
-        <h1>Group Name: {{group.Name}}</h1>
+        <h1>Group Name: {{group.name}}</h1>
         <div class="row">
             <div class="col-sm">
-                <p>Sport: {{group.Sport}}</p>
-                <p>City: {{group.City}}</p>
-                <p>Members: {{group.NrOfMembers}} / {{group.MemberSlots}}</p>
-                <small>Group Created: {{group.PublishingDate}}</small>
+                <p>Sport: {{group.sport}}</p>
+                <p>City: {{group.city}}</p>
+                <p>Members: {{group.nrOfMembers}} / {{group.memberSlots}}</p>
+                <small>Group Created: {{group.publishingDate}}</small>
             </div>
             <div class="col-sm">
-                <p>Allowed Gender: {{group.AllowedGender}}</p>
-                <p>Age Restriction: {{group.MinAge}} - {{group.MaxAge}}</p>
-                <p>Skill Level: {{group.SkillLevel}}</p>
+                <p>Allowed Gender: {{group.allowedGender}}</p>
+                <p>Age Restriction: {{group.minAge}} - {{group.maxAge}}</p>
+                <p>Skill Level: {{group.skillLevel}}</p>
             </div>
         </div>
 
         {{#if isAuthor}}
         <div class="inline">
-            <form method="post" action="/groups/{{group.GroupId}}/redirectToEdit">
+            <form method="post" action="/groups/{{group.groupId}}/redirectToEdit">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button class="btn btn-primary" type="submit">edit group</button>
             </form>
         </div>
         <div class="inline">
-            <form method="post" action="/groups/{{group.GroupId}}/redirectToManageMembers">
+            <form method="post" action="/groups/{{group.groupId}}/redirectToManageMembers">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button class="btn btn-primary" type="submit">Manage Group members</button>
             </form>
         </div>
         <div class="inline">
-            <form method="POST" action="/groups/delete/{{group.GroupId}}">
+            <form method="POST" action="/groups/delete/{{group.groupId}}">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button class="btn btn-primary" type="submit">delete group</button>
             </form>
@@ -54,14 +54,14 @@
 
     {{#if editMessage}}
     <div>
-        <form method="POST" action="/messages/update/{{editMessage.MessageId}}">
+        <form method="POST" action="/messages/update/{{editMessage.messageId}}">
             <div class="form-row">
                 <div class="col-6 my-1">
                     <textarea class="form-control" id="textarea" rows="1" name="text"
-                        placeholder="Required example textarea">{{editMessage.Text}}</textarea>
+                        placeholder="Required example textarea">{{editMessage.text}}</textarea>
                 </div>
                 <div class="col-2 my-1">
-                    <input type="hidden" name="groupId" value='{{group.GroupId}}'>
+                    <input type="hidden" name="groupId" value='{{group.groupId}}'>
                     <input type="hidden" name="_csrf" value='{{csrfToken}}'>
                     <button type="submit" class="btn btn-primary">send message</button>
                 </div>
@@ -78,7 +78,7 @@
                         placeholder="Required example textarea"></textarea>
                 </div>
                 <div class="col-2 my-1">
-                    <input type="hidden" name="groupId" value='{{group.GroupId}}'>
+                    <input type="hidden" name="groupId" value='{{group.groupId}}'>
                     <input type="hidden" name="_csrf" value='{{csrfToken}}'>
                     <button type="submit" class="btn btn-primary">send message</button>
                 </div>
@@ -93,19 +93,19 @@
     <div>
         {{#each messages}}
         <div class="message-text">
-            <h4>{{this.AuthorName}}</h4>
-            <p>{{this.Text}}</p>
+            <h4>{{this.authorName}}</h4>
+            <p>{{this.text}}</p>
             {{#if this.isAuthor}}
             <div class="inline">
-                <form method="POST" action="/messages/delete/{{this.MessageId}}">
-                    <input type="hidden" name="groupId" value='{{../group.GroupId}}'>
+                <form method="POST" action="/messages/delete/{{this.messageId}}">
+                    <input type="hidden" name="groupId" value='{{../group.groupId}}'>
                     <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                     <button class="btn btn-primary" type="submit">delete</button>
                 </form>
             </div>
             <div class="inline">
-                <form method="POST" action="/messages/editMessage/{{this.MessageId}}">
-                    <input type="hidden" name="groupId" value='{{../group.GroupId}}'>
+                <form method="POST" action="/messages/editMessage/{{this.messageId}}">
+                    <input type="hidden" name="groupId" value='{{../group.groupId}}'>
                     <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                     <button class="btn btn-primary" type="submit">edit</button>
                 </form>

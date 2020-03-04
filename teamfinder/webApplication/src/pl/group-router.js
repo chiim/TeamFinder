@@ -11,7 +11,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
     function getGroupIds(groups) {
         const groupIds = []
         for (var i = 0; i < groups.length; i++) {
-            groupIds.push(groups[i].GroupId)
+            groupIds.push(groups[i].groupId)
         }
         return groupIds
     }
@@ -30,8 +30,9 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 var databaseErrors = []
                 try {
                     for (var i = 0; i < groupIds.length; i++) {
-                        groupMemberManager.getNrOfMembersInGroup(groupIds[i].GroupId, function (error) {
+                        groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
                             if (error) {
+                                console.log(error)
                                 throw (error)
                             }
                         })
@@ -68,6 +69,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                         else {
                                             const groupIds = getGroupIds(groups)
                                             const activeGroupIds = getGroupIds(activeGroups)
+                                            console.log("SUUUUUUUUUREEEEE", groupIds, activeGroupIds)
                                             for (var i = groupIds.length; i >= 0; i--) {
                                                 if (activeGroupIds.includes(groupIds[i])) {
                                                     groups.splice(i, 1) // pop specific element
@@ -86,12 +88,21 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                     }
                                     response.render('group-finder.hbs', model)
                                 }
+                                else{
+                                    const model = {
+                                        groups,
+                                        csrfToken: request.csrfToken()
+                                    }
+                                    response.render('group-finder.hbs', model)
+                                }
                             }
-                            const model = {
-                                groups,
-                                csrfToken: request.csrfToken()
+                            else {
+                                const model = {
+                                    groups,
+                                    csrfToken: request.csrfToken()
+                                }
+                                response.render('group-finder.hbs', model)
                             }
-                            response.render('group-finder.hbs', model)
                         }
                     })
                 }
@@ -167,11 +178,25 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                     var checkMemberCountErrors = []
                     try {
                         for (var i = 0; i < groupIds.length; i++) {
-                            groupMemberManager.getNrOfMembersInGroup(groupIds[i].GroupId, function (error) {
+
+                            groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
                                 if (error) {
+                                    console.log(error)
                                     throw (error)
                                 }
+                                else {
+
+                                    if (i == groupIds.length) {
+
+                                        // solve group updates to slow
+                                        //get groups should be done here...
+                                    }
+
+                                }
+
+
                             })
+
                         }
                     }
                     catch (error) {
@@ -188,7 +213,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         const activeGroups = []
                         try {
                             for (var i = 0; i < groupIds.length; i++) {
-                                groupManager.getGroupById(groupIds[i].GroupId, function (error, group) {
+                                groupManager.getGroupById(groupIds[i].groupId, function (error, group) {
                                     if (error) {
                                         throw (error)
                                     }
@@ -260,6 +285,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         const skillLevel = request.body.skillLevel
         const allowedGender = request.body.allowedGender
 
+        const accountId = request.session.accountId
         const groupCredentials = {
             groupName,
             image,
@@ -270,7 +296,8 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             minAge,
             maxAge,
             skillLevel,
-            allowedGender
+            allowedGender,
+            accountId
         }
 
         groupManager.createGroup(groupCredentials, function (error, groupId) {
@@ -282,7 +309,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 response.render("group-create.hbs", model)
             }
             else {
-                const accountId = request.session.accountId
 
                 groupMemberManager.createGroupMemberLink(accountId, groupId, function (error) {
                     if (error) {
@@ -323,6 +349,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             else {
                 groupManager.getGroupById(groupId, function (error, group) {
                     if (error) {
+
                         const model = {
                             error,
                             csrfToken: request.csrfToken(),
@@ -334,6 +361,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         messageManager.getMessagesByGroupId(groupId, function (error, messages) {
 
                             if (error) {
+
                                 const model = {
                                     csrfToken: request.csrfToken(),
                                     error,
@@ -345,38 +373,39 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
                                 for (i = 0; i < messages.length; i++) {
 
-                                    if (messages[i].AccountId == accountId) {
+                                    if (messages[i].accountId == accountId) {
                                         messages[i]['isAuthor'] = true;
                                     }
                                     else {
                                         messages[i]['isAuthor'] = false;
                                     }
-                                    if (messages[i].MessageId == messageIdEdit) {
+                                    if (messages[i].messageId == messageIdEdit) {
                                         editMessage = messages[i]
                                     }
                                 }
 
                                 var isAuthor = false
-                                if (group.AuthorId == accountId) {
+                                if (group.authorId == accountId) {
                                     isAuthor = true
                                 }
                                 var printUpdatedText = ""
                                 if (updated) {
                                     printUpdatedText = "You successfully updated the group information"
                                 }
-                                
+
+                                const model = {
+                                    csrfToken: request.csrfToken(),
+                                    group,
+                                    messages,
+                                    accountId,
+                                    isAuthor,
+                                    printUpdatedText,
+                                    editMessage
+                                }
+                                response.render("group-specific.hbs", model)
                             }
 
-                            const model = {
-                                csrfToken: request.csrfToken(),
-                                group,
-                                messages,
-                                accountId,
-                                isAuthor,
-                                printUpdatedText,
-                                editMessage
-                            }
-                            response.render("group-specific.hbs", model)
+
 
                         })
                     }
@@ -418,8 +447,8 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 response.render('group-manageMembers.hbs', model)
             }
             else {
-                const authorId = group.AuthorId
-                if (accountId == group.AuthorId) {
+                const authorId = group.authorId
+                if (accountId == group.authorId) {
                     groupMemberManager.getGroupMembers(groupId, function (error, accountIds) {
                         if (error) {
                             const model = {
@@ -433,13 +462,13 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                             const databaseErrors = []
                             try {
                                 for (var i = 0; i < accountIds.length; i++) {
-                                    accountManager.getAccountById(accountIds[i].AccountId, function (error, account) {
+                                    accountManager.getAccountById(accountIds[i].accountId, function (error, account) {
                                         if (error) {
                                             throw (error)
                                         }
                                         else {
-                                            if (account.AccountId == group.AuthorId) {
-                                                author = group.AuthorId
+                                            if (account.accountId == group.authorId) {
+                                                author = group.authorId
                                             }
                                             else {
                                                 author = false
@@ -496,7 +525,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 response.render('group-manageMembers.hbs', model)
             }
             else {
-                if (group.AuthorId == authorId) {
+                if (group.authorId == authorId) {
                     groupMemberManager.removeGroupMemberLink(accountId, groupId, function (error) {
                         if (error) {
                             const model = {
@@ -536,7 +565,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 response.render('group-edit.hbs', model)
             }
             else {
-                if (accountId == group.AuthorId) {
+                if (accountId == group.authorId) {
                     const model = {
                         group,
                         csrfToken: request.csrfToken()

@@ -8,7 +8,7 @@ module.exports = function ({ accountManager, middleware }) {
     const router = express.Router()
 
     router.get('/login', function (request, response) {
-        const unAuthorized = request.query.unAuthorized
+        const unAuthorized = request.query.unAuthorized//this is undefined if not existing
         if (unAuthorized) {
             const printErrorMessage = "You must login before accessing that page."
             const model = {
@@ -42,10 +42,10 @@ module.exports = function ({ accountManager, middleware }) {
                 response.render('account-login.hbs', model)
             }
             else {
-                request.session.accountId = account.AccountId // Remove when the other things are fixed.
+                request.session.accountId = account.accountId // Remove when the other things are fixed.
                 response.redirect('/')
             }
-            //sessionManager.getSessionId(account.AccountId, function(error, sessionId){
+            //sessionManager.getSessionId(account.accountId, function(error, sessionId){
             //request.sessionID = sessionId
 
             //}) 
@@ -92,7 +92,7 @@ module.exports = function ({ accountManager, middleware }) {
             city,
             gender
         }
-
+        console.log("Kolla account innan repo: ", account)
         accountManager.createAccount(account, function (error) {
 
             if (error) {
@@ -150,7 +150,7 @@ module.exports = function ({ accountManager, middleware }) {
         const city = request.body.city
         const gender = request.body.gender
         const accountId = request.session.accountId
-        account = {
+        const account = {
             accountId,
             firstName,
             lastName,
@@ -160,6 +160,7 @@ module.exports = function ({ accountManager, middleware }) {
             city,
             gender
         }
+
         accountManager.updateAccount(account, function (errors) {
 
             if (errors) {
