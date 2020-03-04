@@ -29,6 +29,10 @@ const dbMySQL = require('./dal/dbConnection')
 const dbPostgres = require('./dalORM/dbConnection')
 const initPostgres = require('./dalORM/initPostgres')
 
+const apiAccountRouter = require('./pl-api/account-router')
+const apiGroupRouter = require('./pl-api/group-router')
+const apiMessageRouter = require('./pl-api/message-router')
+
 const awilix = require('awilix')
 const container = awilix.createContainer()
 
@@ -52,6 +56,9 @@ container.register('messageRouter', awilix.asFunction(messageRouter))
 container.register('initPostgres', awilix.asFunction(initPostgres))
 container.register('dbPostgres', awilix.asFunction(dbPostgres))
 
+container.register('apiAccountRouter', awilix.asFunction(apiAccountRouter))
+container.register('apiGroupRouter', awilix.asFunction(apiGroupRouter))
+container.register('apiMessageRouter', awilix.asFunction(apiMessageRouter))
 
 /*container.register('dbMessage', awilix.asValue(db.Message))
 container.register('dbAccount', awilix.asValue(db.Account))
@@ -65,6 +72,10 @@ container.register('dbMySQL', awilix.asFunction(dbMySQL))
 const theAccountRouter = container.resolve('accountRouter')
 const theGroupRouter = container.resolve('groupRouter')
 const theMessageRouter = container.resolve('messageRouter')
+
+const theApiAccountRouter = container.resolve('apiAccountRouter')
+const theApiGroupRouter = container.resolve('apiGroupRouter')
+const theApiMessageRouter = container.resolve('apiMessageRouter')
 
 const client = redis.createClient({
   host: 'redis'
@@ -108,6 +119,9 @@ app.use('/groups', theGroupRouter)
 app.use('/accounts', theAccountRouter)
 app.use('/messages', theMessageRouter)
 
+app.use('/pl-api/groups', theApiGroupRouter)
+app.use('/pl-api/accounts', theApiAccountRouter)
+app.use('/pl-api/messages', theApiMessageRouter)
 
 // app.use("/groups", groupRouter)
 // app.use("/accounts", accountRouter)
