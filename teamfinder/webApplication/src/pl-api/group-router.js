@@ -2,6 +2,15 @@ const express = require('express')
 
 module.exports = function ({ groupManager, groupMemberManager, accountManager }) {
 
+    //FRÅGOR: 
+
+    // rad 109
+    // rad 115
+    // rad 125
+    // rad 138
+    // rad 153: Update updaterar inte
+    // rad 195
+
     const router = express.Router()
 
     router.get('/', function (request, response) {
@@ -97,7 +106,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager })
                         response.status(500).json(error)
                     }
                     else if (account.length == 0) {
-                        // Lägga till en sträng som skickas med?
+                        // Borde det läggas till en sträng som skickas med som fel?
                         // const noAccountFound = "Couldn't fetch the account"
                         response.status(204).end()
                     }
@@ -183,7 +192,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager })
                 response.setHeader("Location", "/groups/" + id)
                 response.status(204).end()  // No content
 
-                // Ska man ta med queryn updated=true i api'n eller hanteras det i den applikationen?
+                // Ska man ta med queryn updated=true nedan i api'n eller hanteras det i den applikationen?
                 //response.redirect('/groups/' + id + '/?updated=true')
 
             }
