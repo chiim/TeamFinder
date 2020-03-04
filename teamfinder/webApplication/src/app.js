@@ -108,7 +108,7 @@ app.use(function (request, response, next) {
   next()
 })
 
-app.use('/groups',csrf({cookie: true}), theGroupRouter)
+app.use('/groups', csrf({cookie: true}), theGroupRouter)
 app.use('/accounts', csrf({cookie: true}), theAccountRouter)
 app.use('/messages', csrf({cookie: true}), theMessageRouter)
 

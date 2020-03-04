@@ -30,7 +30,7 @@ module.exports = function ({ accountManager }) {
             } else if (0 < errors.length) {
                 response.status(400).json(error)
             } else {
-                response.setHeader("Location", "/accounts/" + id) // /profile/id ??
+                response.setHeader("Location", "/accounts/" + id)
                 response.status(201).end()
             }
         })

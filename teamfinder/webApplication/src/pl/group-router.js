@@ -61,40 +61,31 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         else {
                             if (accountId) {
                                 const errors = []
-                                try {
-                                    groupManager.getActiveGroups(accountId, function (error, activeGroups) {
-                                        if (error) {
-                                            throw (error)
+                                groupManager.getActiveGroups(accountId, function (error, activeGroups) {
+                                    if (error) {
+                                        
+                                        const model = {
+                                            errors,
+                                            csrfToken: request.csrfToken()
                                         }
-                                        else {
-                                            const groupIds = getGroupIds(groups)
-                                            const activeGroupIds = getGroupIds(activeGroups)
-                                            console.log("SUUUUUUUUUREEEEE", groupIds, activeGroupIds)
-                                            for (var i = groupIds.length; i >= 0; i--) {
-                                                if (activeGroupIds.includes(groupIds[i])) {
-                                                    groups.splice(i, 1) // pop specific element
-                                                }
+                                        response.render('group-finder.hbs', model)
+                                    }
+                                    else {
+                                        const groupIds = getGroupIds(groups)
+                                        const activeGroupIds = getGroupIds(activeGroups)
+                                        console.log("SUUUUUUUUUREEEEE", groupIds, activeGroupIds)
+                                        for (var i = groupIds.length; i >= 0; i--) {
+                                            if (activeGroupIds.includes(groupIds[i])) {
+                                                groups.splice(i, 1) // pop specific element
                                             }
                                         }
-                                    })
-                                }
-                                catch (error) {
-                                    errors.push(error)
-                                }
-                                if (errors.length > 0) {
-                                    const model = {
-                                        errors,
-                                        csrfToken: request.csrfToken()
+                                        const model = {
+                                            groups,
+                                            csrfToken: request.csrfToken()
+                                        }
+                                        response.render('group-finder.hbs', model)
                                     }
-                                    response.render('group-finder.hbs', model)
-                                }
-                                else{
-                                    const model = {
-                                        groups,
-                                        csrfToken: request.csrfToken()
-                                    }
-                                    response.render('group-finder.hbs', model)
-                                }
+                                })
                             }
                             else {
                                 const model = {
