@@ -31,7 +31,6 @@ const initPostgres = require('./dalORM/initPostgres')
 
 const apiAccountRouter = require('./pl-api/account-router')
 const apiGroupRouter = require('./pl-api/group-router')
-const apiMessageRouter = require('./pl-api/message-router')
 
 const awilix = require('awilix')
 const container = awilix.createContainer()
@@ -58,7 +57,6 @@ container.register('dbPostgres', awilix.asFunction(dbPostgres))
 
 container.register('apiAccountRouter', awilix.asFunction(apiAccountRouter))
 container.register('apiGroupRouter', awilix.asFunction(apiGroupRouter))
-container.register('apiMessageRouter', awilix.asFunction(apiMessageRouter))
 
 /*container.register('dbMessage', awilix.asValue(db.Message))
 container.register('dbAccount', awilix.asValue(db.Account))
@@ -75,7 +73,6 @@ const theMessageRouter = container.resolve('messageRouter')
 
 const theApiAccountRouter = container.resolve('apiAccountRouter')
 const theApiGroupRouter = container.resolve('apiGroupRouter')
-const theApiMessageRouter = container.resolve('apiMessageRouter')
 
 const client = redis.createClient({
   host: 'redis'
@@ -88,10 +85,6 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(cookieParser())
-
-app.use(csrf({
-    cookie: true
-}))
 
 app.use(session({
   saveUninitialized: false,
@@ -115,13 +108,12 @@ app.use(function (request, response, next) {
   next()
 })
 
-app.use('/groups', theGroupRouter)
-app.use('/accounts', theAccountRouter)
-app.use('/messages', theMessageRouter)
+app.use('/groups',csrf({cookie: true}), theGroupRouter)
+app.use('/accounts', csrf({cookie: true}), theAccountRouter)
+app.use('/messages', csrf({cookie: true}), theMessageRouter)
 
 app.use('/pl-api/groups', theApiGroupRouter)
 app.use('/pl-api/accounts', theApiAccountRouter)
-app.use('/pl-api/messages', theApiMessageRouter)
 
 // app.use("/groups", groupRouter)
 // app.use("/accounts", accountRouter)
