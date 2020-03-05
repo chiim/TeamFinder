@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function ({ groupManager, groupMemberManager, accountManager }) {
+module.exports = function ({ groupManager, groupMemberManager, accountManager, messageManager }) {
 
     const router = express.Router()
 
@@ -70,6 +70,87 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager })
                         }
                     })
                 }
+            }
+        })
+    })
+
+    router.get("/:id", function (request, response) {
+        const accountId = 1 // VALIDATE USER WITH TOKEN
+        
+        const groupId = request.params.id
+        var isAuthor = false
+        const updated = request.query.updated
+
+        const messageIdEdit = request.query.editMessage
+        var editMessage = null
+
+        groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
+            if (error) {
+                response.header("Content-Type", "application/json")
+                response.status(500).json(error)
+            }
+            else {
+                groupManager.getGroupById(groupId, function (error, group) {
+                    if (error) {
+                        response.header("Content-Type", "application/json")
+                        response.status(500).json(error)
+                    }
+                    else {
+                        messageManager.getMessagesByGroupId(groupId, function (error, messages) {
+                            if (error) {
+                                response.header("Content-Type", "application/json")
+                                response.status(500).json(error)
+                                // Skicka med group med. Hur?
+                                /*const model = {
+                                    csrfToken: request.csrfToken(),
+                                    error,
+                                    group
+                                }
+                                response.render("group-specific.hbs", model)*/
+                            }
+                            else if(messages.length == 0){
+                                response.status(404).end() // Not found
+                            }
+                            else {
+                                for (i = 0; i < messages.length; i++) {
+
+                                    if (messages[i].accountId == accountId) {
+                                        messages[i]['isAuthor'] = true;
+                                    }
+                                    else {
+                                        messages[i]['isAuthor'] = false;
+                                    }
+                                    if (messages[i].messageId == messageIdEdit) {
+                                        editMessage = messages[i]
+                                    }
+                                }
+
+                                var isAuthor = false
+                                if (group.authorId == accountId) {
+                                    isAuthor = true
+                                }
+                                var printUpdatedText = ""
+                                if (updated) {
+                                    printUpdatedText = "You successfully updated the group information"
+                                }
+                                response.header("Content-Type", "application/json")
+                                response.status(200).json({group})
+                                // Skicka med mer data????
+
+                                /*const model = {
+                                    csrfToken: request.csrfToken(),
+                                    group,
+                                    messages,
+                                    accountId,
+                                    isAuthor,
+                                    printUpdatedText,
+                                    editMessage
+                                }
+                                response.render("group-specific.hbs", model)*/
+                            }
+                        })
+                    }
+                })
             }
         })
     })

@@ -3,7 +3,7 @@ const mysql   = require('mysql')
 module.exports = function(){
 
 const connection = mysql.createConnection({
-	host     : 'database',
+	host     : 'mysqldatabase',
 	user     : 'root',
 	password : 'user',
 	database : 'database'
