@@ -77,7 +77,7 @@ module.exports = function ({ accountManager }) {
                     */
 
                     response.status(200).json({
-                        access_token: accessToken
+                        access_token: accessToken,
                         //id_token: idToken
                     })
                 }

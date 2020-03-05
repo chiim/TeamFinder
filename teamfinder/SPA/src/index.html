@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Petto</title>
+	<link rel="stylesheet" href="/styles.css">
+	<script src="/navigation-handler.js"></script>
+</head>
+
+<body>
+
+	<header>
+		Teamfinder
+	</header>
+
+	<nav>
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/groups">View groups</a></li>
+			<li class="showIfLoggedIn"><a href="/create-group">Create group</a></li>
+			<li class="showIfLoggedOut"><a href="/login">Login</a></li>
+			<li class="showIfLoggedOut"><a href="/sign-up">Sign-up</a></li>
+		</ul>
+	</nav>
+
+	<main>
+
+		<div id="home-page">
+			<h1>Home</h1>
+			<p>This is the home page...</p>
+		</div>
+
+
+		<div id="groups-page">
+			<h1>Groups</h1>
+			<ul>
+
+			</ul>
+		</div>
+
+		<div id="group-page">
+			<h1>Group</h1>
+			<div>Name: <span class="name"></span></div>
+			<div>Sport: <span class="sport"></span></div>
+			<div>Members: <span class="nrOfMembers"></span></div>
+			<div>Memberslots: <span class="memberSlots"></span></div>
+			<div>City: <span class="city"></span></div>
+			<div>Max Age: <span class="maxAge"></span></div>
+			<div>Min Age: <span class="minAge"></span></div>
+			<div>Skill: <span class="skillLevel"></span></div>
+			<div>Gender: <span class="allowedGender"></span></div>
+
+			<form action="">
+				<input type="submit" value="Update">
+			</form>
+			<form action="">
+				<input type="submit" value="Delete">
+			</form>
+
+		</div>
+
+		<div id="create-group-page">
+			<h1>Create Group</h1>
+			<form action="">
+				<div>Name: <input type="text" class="name"></div>
+				<div>Sport: <input type="text" class="sport"></div>
+				<div>Memberslots: <input type="text" class="memberSlots"></div>
+				<div>City: <input type="text" class="city"></div>
+				<div>Max Age: <input type="text" class="maxAge"></div>
+				<div>Min Age: <input type="text" class="minAge"></div>
+				<div>Skill: <input type="text" class="skillLevel"></div>
+				<div>Genders: <input type="text" class="allowedGender"></div>
+				<input type="submit" value="Create">
+			</form>
+		</div>
+
+		<div id="update-group-page">
+			<h1>Update Group</h1>
+			<form action="">
+				<div>Name: <input type="text" class="name"></div>
+				<div>Sport: <input type="text" class="sport"></div>
+				<div>Memberslots: <input type="text" class="memberSlots"></div>
+				<div>City: <input type="text" class="city"></div>
+				<div>Max Age: <input type="text" class="maxAge"></div>
+				<div>Min Age: <input type="text" class="minAge"></div>
+				<div>Skill: <input type="text" class="skillLevel"></div>
+				<div>Genders: <input type="text" class="allowedGender"></div>
+				<input type="submit" value="Create">
+			</form>
+		</div>
+
+		<div id="sign-up-page">
+			<h1>Sign-Up</h1>
+			<form action="">
+				<div>First name: <input type="text" class="firstName"></div>
+				<div>Last name: <input type="text" class="lastName"></div>
+				<div>Email: <input type="text" class="email"></div>
+				<div>Password: <input type="text" class="password"></div>
+				<div>City: <input type="text" class="city"></div>
+				<div>Gender: <input type="text" class="gender"></div>
+				<input type="submit" value="Create">
+			</form>
+		</div>
+
+		<div id="login-page">
+			<h1>Login</h1>
+			<form action="">
+				<div>
+					email: <input type="text" class="email">
+				</div>
+				<div>
+					Password: <input type="text" class="password">
+				</div>
+				<input type="submit" value="Login">
+			</form>
+		</div>
+
+		<div id="error-page">
+			<h1>Error</h1>
+			<p>Oups, something went wrong ^^'</p>
+		</div>
+
+	</main>
+
+	<footer>
+		Petto |
+		Copyright 2020 Peter L-G |
+		<a href="/about">About</a>
+	</footer>
+
+</body>
+
+</html>

@@ -17,6 +17,12 @@ services:
     #environment:
       #- MYSQL_ROOT_PASSWORD=user
       #- MYSQL_DATABASE=database
+  spa:
+    build: "./SPA/"
+    ports:
+      - "3000:80"
+    volumes:
+      - "./SPA/src/:/usr/local/apache2/htdocs/"
   database:
     build: ./databaseORM
     ports:
@@ -33,3 +39,4 @@ services:
       - REDIS_PASSWORD=user
       # The code below makes it so that someone can't remove all of the files. Check with teacher if it's important:
       # - DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+  
