@@ -62,7 +62,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                             if (accountId) {
                                 const errors = []
                                 try {
-                                    groupManager.getActiveGroups(accountId, function (error, activeGroups) {
+                                    groupManager.getActiveGroupIds(accountId, function (error, activeGroups) {
                                         if (error) {
                                             throw (error)
                                         }
@@ -164,7 +164,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
         const accountId = request.session.accountId
 
-        groupManager.getActiveGroups(accountId, function (error, groupIds) {
+        groupManager.getActiveGroupIds(accountId, function (error, groupIds) {
             var databaseErrors = []
             if (error) {
                 const model = {

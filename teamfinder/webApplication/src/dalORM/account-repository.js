@@ -4,7 +4,6 @@ module.exports = function ({ dbPostgres }) {
 
         createAccount: function (hash, account, callback) {
             const dbAccount = dbPostgres.model("account")
-            console.log("ACCOUNT: ", account)
             dbAccount.create({
                 firstName: account.firstName,
                 lastName: account.lastName,
@@ -14,11 +13,10 @@ module.exports = function ({ dbPostgres }) {
                 city: account.city,
                 gender: account.gender
             }).then(function (createdAccount) {
-                console.log("created account: ", createdAccount)
-                callback(null, createdAccount)
+                callback(null, createdAccount.dataValues.accountId)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong inserting data. Contact admin."
+                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
                 callback(databaseError, null)
             })
         },
@@ -30,7 +28,7 @@ module.exports = function ({ dbPostgres }) {
                 callback(null, account)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Something went wrong inserting data. Contact admin."
+                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
                 callback(databaseError, null)
             })
         },
@@ -52,7 +50,7 @@ module.exports = function ({ dbPostgres }) {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "error when updating account"
+                const databaseError = "DatabaseError: error when updating account"
                 callback(databaseError)
             })
         },
@@ -65,7 +63,7 @@ module.exports = function ({ dbPostgres }) {
             }).then(function (account) {
                 
                 if (account.length == 0) {
-                    databaseError = "no result found"
+                    databaseError = "DatabaseError: no result found"
                     callback(databaseError, null)
                 }
                 else {
@@ -86,7 +84,7 @@ module.exports = function ({ dbPostgres }) {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "error when deleting account"
+                const databaseError = "DatabaseError: error when deleting account"
                 callback(databaseError)
             })
         }

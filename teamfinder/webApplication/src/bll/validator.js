@@ -96,10 +96,6 @@ module.exports = function () {
                     validationErrors.push("You're not allowed to join this group. It's restricted to " + group.allowedGender)
                 }
             }
-
-            if (group.city.toLowerCase() != account.city.toLowerCase()) {
-                validationErrors.push("You need to be in the same city as the group.")
-            }
             return validationErrors
 
         },
