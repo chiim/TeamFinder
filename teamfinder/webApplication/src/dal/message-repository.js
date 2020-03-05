@@ -4,7 +4,7 @@ module.exports = function ({ dbMySQL }) {
 
         createMessage: function (message, callback) {
 
-            const query = "INSERT INTO Messages (GroupId, AccountId, Text, AuthorName) VALUES (?, ?, ?, ?)"
+            const query = "INSERT INTO Messages (groupId, accountId, text, authorName) VALUES (?, ?, ?, ?)"
 
             const values = [
                 message.groupId,
@@ -28,7 +28,7 @@ module.exports = function ({ dbMySQL }) {
 
         getMessagesByGroupId: function (groupId, callback) {
 
-            const query = "SELECT * FROM Messages WHERE GroupId = ? ORDER BY MessageId DESC"
+            const query = "SELECT * FROM Messages WHERE groupId = ? ORDER BY messageId DESC"
             const values = [groupId]
 
             dbMySQL.query(query, values, function (error, messages) {
@@ -47,7 +47,7 @@ module.exports = function ({ dbMySQL }) {
 
         deleteMessageById: function (messageId, callback) {
 
-            const query = "DELETE FROM Messages WHERE MessageId = ?"
+            const query = "DELETE FROM Messages WHERE messageId = ?"
             const values = [
                 messageId
             ]
@@ -69,7 +69,7 @@ module.exports = function ({ dbMySQL }) {
 
         updateMessageById: function (message, callback) {
 
-            const query = "UPDATE Messages SET Text = ? WHERE MessageId = ?"
+            const query = "UPDATE Messages SET text = ? WHERE messageId = ?"
             const values = [
                 message.messageText,
                 message.messageId

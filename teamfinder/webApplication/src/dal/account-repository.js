@@ -5,7 +5,7 @@ module.exports = function ({ dbMySQL }) {
     return {
         createAccount: function (account, callback) {
 
-            const query = "INSERT INTO Accounts (FirstName, LastName, Email, Password, Age, City, Gender) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            const query = "INSERT INTO Accounts (firstName, lastName, email, password, age, city, gender) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
             const values = [
                 account.firstName,
@@ -31,7 +31,7 @@ module.exports = function ({ dbMySQL }) {
         },
 
         getAccountById: function (accountId, callback) {
-            const query = "Select * FROM Accounts WHERE AccountId = ? LIMIT 1"
+            const query = "Select * FROM Accounts WHERE accountId = ? LIMIT 1"
             const values = [accountId]
             dbMySQL.query(query, values, function (error, account) {
 
@@ -50,7 +50,7 @@ module.exports = function ({ dbMySQL }) {
 
         updateAccount: function (account, callback) {
 
-            const query = "UPDATE Accounts SET FirstName = ?, LastName = ?, Email = ?, Age = ?, City = ?, Gender = ? WHERE AccountId = ?"
+            const query = "UPDATE Accounts SET firstName = ?, lastName = ?, email = ?, age = ?, city = ?, gender = ? WHERE accountId = ?"
 
             const values = [
                 account.firstName,
@@ -77,7 +77,7 @@ module.exports = function ({ dbMySQL }) {
 
         loginAccount: function (email, callback) {
 
-            const query = "SELECT * FROM Accounts WHERE Email = ? LIMIT 1"
+            const query = "SELECT * FROM Accounts WHERE email = ? LIMIT 1"
             const values = [
                 email
             ]
@@ -102,7 +102,7 @@ module.exports = function ({ dbMySQL }) {
 
         deleteAccount: function (accountId, callback) {
 
-            const query = "DELETE FROM Accounts WHERE AccountId = ?"
+            const query = "DELETE FROM Accounts WHERE accountId = ?"
             const values = [
                 accountId
             ]

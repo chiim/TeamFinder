@@ -8,7 +8,7 @@ module.exports = function ({dbMySQL}) {
             //date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
 
 
-            const query = "INSERT INTO Groups (`Name`, Image, Sport, NrOfMembers, MemberSlots, City, MaxAge, MinAge, SkillLevel, AllowedGender, AuthorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            const query = "INSERT INTO Groups (`name`, image, sport, nrOfMembers, memberSlots, city, maxAge, minAge, skillLevel, allowedGender, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
             const values = [
                 groupCredentials.groupName,
@@ -52,7 +52,7 @@ module.exports = function ({dbMySQL}) {
         },
 
         getActiveGroups: function (accountId, callback) {
-            const query = "SELECT GroupId FROM GroupMembers WHERE AccountId = ?"
+            const query = "SELECT groupId FROM GroupMembers WHERE accountId = ?"
             const values = [accountId]
 
             dbMySQL.query(query, values, function (error, result) {
@@ -69,7 +69,7 @@ module.exports = function ({dbMySQL}) {
         },
 
         getAllGroupIds: function (callback) {
-            const query = "SELECT GroupId FROM Groups"
+            const query = "SELECT groupId FROM Groups"
             dbMySQL.query(query, function (error, result) {
                 if (error) {
                     console.log(error)
@@ -84,7 +84,7 @@ module.exports = function ({dbMySQL}) {
         ,
         getGroupById: function (id, callback) {
 
-            const query = "SELECT * FROM Groups WHERE GroupId = ? LIMIT 1"
+            const query = "SELECT * FROM Groups WHERE groupId = ? LIMIT 1"
             const values = [id]
             dbMySQL.query(query, values, function (error, result) {
                 if (error) {
@@ -101,7 +101,7 @@ module.exports = function ({dbMySQL}) {
 
         deleteGroupById: function (groupId, callback) {
 
-            const query = "DELETE FROM Groups WHERE GroupId = ?"
+            const query = "DELETE FROM Groups WHERE groupId = ?"
             const values = [
                 groupId
             ]
@@ -123,7 +123,7 @@ module.exports = function ({dbMySQL}) {
 
             // no where clause??
 
-            const query = "UPDATE Groups SET Image = ?, Sport = ?, MemberSlots = ?, City = ?, MinAge = ?, MaxAge = ?, SkillLevel = ?, AllowedGender = ?"
+            const query = "UPDATE Groups SET image = ?, sport = ?, memberSlots = ?, city = ?, minAge = ?, maxAge = ?, skillLevel = ?, allowedGender = ?"
             const values = [
                 group.image,
                 group.sport,

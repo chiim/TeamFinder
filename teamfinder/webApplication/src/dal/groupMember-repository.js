@@ -3,7 +3,7 @@ module.exports = function ({ dbMySQL }) {
     return {
 
         createGroupMemberLink: function (accountId, groupId, callback) {
-            const query = "INSERT INTO GroupMembers (AccountId, GroupId) VALUES (?, ?)"
+            const query = "INSERT INTO GroupMembers (accountId, groupId) VALUES (?, ?)"
             const values = [accountId, groupId]
             dbMySQL.query(query, values, function (error, result) {
                 if (error) {
@@ -18,7 +18,7 @@ module.exports = function ({ dbMySQL }) {
         },
 
         getNrOfMembersInGroup: function (groupId, callback) {
-            const query = "UPDATE Groups SET NrOfMembers = (SELECT COUNT(AccountId) FROM GroupMembers WHERE GroupId = ?) WHERE GroupId = ?"
+            const query = "UPDATE Groups SET nrOfMembers = (SELECT COUNT(accountId) FROM GroupMembers WHERE groupId = ?) WHERE groupId = ?"
             const values = [groupId, groupId]
 
             dbMySQL.query(query, values, function (error, result) {
@@ -33,7 +33,7 @@ module.exports = function ({ dbMySQL }) {
         },
 
         getGroupMembers: function (groupId, callback) {
-            const query = "SELECT AccountId FROM GroupMembers WHERE GroupId = ?"
+            const query = "SELECT accountId FROM GroupMembers WHERE groupId = ?"
             const values = [groupId]
 
             dbMySQL.query(query, values, function (error, result) {
