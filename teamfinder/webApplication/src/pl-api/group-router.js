@@ -2,15 +2,6 @@ const express = require('express')
 
 module.exports = function ({ groupManager, groupMemberManager, accountManager }) {
 
-    //FRÅGOR: 
-
-    // rad 109
-    // rad 115
-    // rad 125
-    // rad 138
-    // rad 153: Update updaterar inte
-    // rad 195
-
     const router = express.Router()
 
     router.get('/', function (request, response) {
@@ -106,23 +97,22 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager })
                         response.status(500).json(error)
                     }
                     else if (account.length == 0) {
-                        // Borde det läggas till en sträng som skickas med som fel?
-                        // const noAccountFound = "Couldn't fetch the account"
-                        response.status(204).end()
+                        response.status(404).end() // Not Found - Couldn't fetch the account
                     }
                     else {
                         groupMemberManager.createGroupMemberLink(account, group, function (errors) {
-                            if (errors.includes("DatabaseError")) { // Den kommer hit även om det inte blir fel i databasen
+
+                            if (errors && errors.includes("DatabaseError")) {
                                 response.setHeader("Content-Type", "application/json")
                                 response.status(500).json(errors)
                             }
-                            else if (errors.length > 0) {
+                            else if (errors && errors.length > 0) {
                                 response.setHeader("Content-Type", "application/json")
                                 response.status(400).json(errors)
                             }
                             else {
                                 response.setHeader("Location", "/groups/" + groupId)
-                                response.status(201).end() // Ska detta va 201 eller 200? Skapar en länk i groupMembers
+                                response.status(201).end() // created new row
                             }
                         })
                     }
@@ -177,25 +167,20 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager })
         }
         console.log("Group: ", group)
         groupManager.updateGroup(group, function (errors) {
-            if (errors) {
-                if (errors.includes("DatabaseError")) {
-                    response.setHeader("Content-Type", "application/json")
-                    response.status(500).json(errors)
-                }
-                else {
-                    console.log("Kommer jag hit?")
-                    response.setHeader("Content-Type", "application/json")
-                    response.status(204).json(errors) // No content
-                }
+            if (errors && errors.includes("DatabaseError")) {
+                response.setHeader("Content-Type", "application/json")
+                response.status(500).json(errors)
             }
+            else if (errors && errors.length > 0) {
+                response.setHeader("Content-Type", "application/json")
+                response.status(204).json(errors) // No content
+            }
+
             else {
                 response.setHeader("Location", "/groups/" + id)
                 response.status(204).end()  // No content
-
-                // Ska man ta med queryn updated=true nedan i api'n eller hanteras det i den applikationen?
-                //response.redirect('/groups/' + id + '/?updated=true')
-
             }
+
         })
     })
 
