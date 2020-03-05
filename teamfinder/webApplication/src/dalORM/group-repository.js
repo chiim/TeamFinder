@@ -45,7 +45,7 @@ module.exports = function ({dbPostgres}) {
             })
         },
 
-        getActiveGroups: function (accountId, callback) {
+        getActiveGroupIds: function (accountId, callback) {
 
             const dbGroupMembers = dbPostgres.model("groupMember")
 
@@ -55,8 +55,8 @@ module.exports = function ({dbPostgres}) {
                     accountId: accountId
                 },                
                 raw: true
-            }).then(function (groups) {
-                callback(null, groups)
+            }).then(function (groupIds) {
+                callback(null, groupIds)
             }).catch(function (error) {
                 console.log(error)
                 const databaseError = "DatabaseError: Something went wrong retrieving groups"

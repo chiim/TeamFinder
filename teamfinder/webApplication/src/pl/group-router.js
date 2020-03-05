@@ -144,7 +144,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
         const accountId = request.session.accountId
 
-        groupManager.getActiveGroups(accountId, function (error, groupIds) {
+        groupManager.getActiveGroupIds(accountId, function (error, groupIds) {
             var databaseErrors = []
             if (error) {
                 const model = {

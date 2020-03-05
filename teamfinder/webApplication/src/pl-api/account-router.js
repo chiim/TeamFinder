@@ -5,8 +5,7 @@ module.exports = function ({ accountManager }) {
 
     const router = express.Router()
 
-    router.post('/', function (request, response) {
-        console.log("Testar att logga?")
+    router.post('/sign-up', function (request, response) {
         const firstName = request.body.firstName
         const lastName = request.body.lastName
         const email = request.body.email
@@ -23,19 +22,70 @@ module.exports = function ({ accountManager }) {
             city,
             gender
         }
-        console.log("Kolla account innan repo: ", account)
-        accountManager.createAccount(account, function (error, id) {
-            if (errors.includes("databaseError")) {
+        accountManager.createAccount(account, function (errors, id) {
+            if (errors && errors.includes("databaseError")) {
                 response.status(500).end()
-            } else if (0 < errors.length) {
-                response.status(400).json(error)
+            } else if (errors && 0 < errors.length) {
+                response.status(400).json(errors)
             } else {
                 response.setHeader("Location", "/accounts/" + id)
                 response.status(201).end()
             }
         })
 
-    })
+    }),
+
+
+
+        router.post("/tokens", function (request, response) {
+
+            const serverSecret = "sdfkjdslkfjslkfd"
+
+
+            const grantType = request.body.grant_type
+            const email = request.body.email
+            const password = request.body.password
+
+            console.log(grantType)
+
+            if (grantType != "password") {
+                console.log("im here")
+                response.status(400).json({ error: "unsupported_grant_type" })
+                return
+            }
+
+            accountManager.loginAccount(email, password, function (errors, account) {
+
+                
+                if (errors && errors.includes("DatabaseError")) {
+                    response.status(500).end()
+                } else if (errors && 0 < errors.length) {
+                    console.log(errors)
+                    response.status(400).json({ errors: "some error?" })
+                } else {
+
+                    const payload = { id: account.accountId }
+
+                    const accessToken = jwt.sign(payload, serverSecret)
+
+
+                    /*
+                    const idToken = jwt.sign(
+                        { sub: account.accountId, email: account.email },
+                        "lkjlkjlkjljlk"
+                    )
+                    */
+
+                    response.status(200).json({
+                        access_token: accessToken,
+                        //id_token: idToken
+                    })
+                }
+
+            })
+
+
+        })
 
     return router
 

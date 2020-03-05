@@ -22,8 +22,8 @@ module.exports = function ({groupRepository, validator}) {
 
         },
 
-        getActiveGroups: function (accountId, callback) {
-            groupRepository.getActiveGroups(accountId, callback)
+        getActiveGroupIds: function (accountId, callback) {
+            groupRepository.getActiveGroupIds(accountId, callback)
         },
 
         getAllGroupIds: function (callback) {

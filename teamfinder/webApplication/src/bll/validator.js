@@ -96,7 +96,6 @@ module.exports = function () {
                     validationErrors.push("You're not allowed to join this group. It's restricted to " + group.allowedGender)
                 }
             }
-            
             return validationErrors
 
         },

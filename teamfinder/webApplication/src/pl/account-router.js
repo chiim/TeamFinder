@@ -92,7 +92,6 @@ module.exports = function ({ accountManager, middleware }) {
             city,
             gender
         }
-        console.log("Kolla account innan repo: ", account)
         accountManager.createAccount(account, function (error) {
 
             if (error) {
