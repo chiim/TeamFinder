@@ -4,7 +4,12 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
     const router = express.Router()
 
+
     router.get('/', function (request, response) {
+
+        console.log("REEEEEEEEEEEEEEEEE")
+
+
         const accountId = request.session.accountId
         groupManager.getAllGroupIds(function (error, groupIds) {
             if (error) {

@@ -1,7 +1,11 @@
 // TODO: Don't write all JS code in the same file.
 document.addEventListener("DOMContentLoaded", function(){
-	
-	changeToPage(location.pathname)
+    
+    console.log("inside fetchallgroupsssssssssssssssss")
+
+    changeToPage(location.pathname)
+    console.log("inside fetchallgroupsssssssssssssssss")
+
 	
 	if(localStorage.accessToken){
 		login(localStorage.accessToken)
@@ -102,16 +106,19 @@ function changeToPage(url){
 	if(url == "/"){
 		document.getElementById("home-page").classList.add("current-page")
 	}else if(url == "/groups"){
-		document.getElementById("groups-page").classList.add("current-page")
+        console.log("inside fetchallgroupsssssssssssssssss")
+
+        document.getElementById("groups-page").classList.add("current-page")
+        fetchAllGroups()
 	}else if(url == "/sign-up"){
 		document.getElementById("sign-up-page").classList.add("current-page")
-		fetchAllPets()
 	}else if(url == "/login"){
-		document.getElementById("login-page").classList.add("current-page")
+        document.getElementById("login-page").classList.add("current-page")
+        
 	}else if(new RegExp("^/group/[0-9]+$").test(url)){
 		document.getElementById("group-page").classList.add("current-page")
 		const id = url.split("/")[2]
-		fetchPet(id)
+		fetchGroup(id)
 	}else if(url == "/create-pet"){
 		document.getElementById("create-pet-page").classList.add("current-page")
 	}else{
@@ -120,10 +127,12 @@ function changeToPage(url){
 }
 
 function fetchAllGroups(){
-	
+    console.log("inside fetchallgroupsssssssssssssssss")
+
 	fetch(
-		"http://localhost:8080/groups/"
+		"http://192.168.99.100:8080/pl-api/groups/"
 	).then(function(response){
+        console.log("inside fetchallgroupsssssssssssssssss")
 		// TODO: Check status code to see if it succeeded. Display errors if it failed.
 		return response.json()
 	}).then(function(groups){
