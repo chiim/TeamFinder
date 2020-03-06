@@ -61,9 +61,9 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         else {
                             if (accountId) {
                                 const errors = []
-                                groupManager.getActiveGroups(accountId, function (error, activeGroups) {
+                                groupManager.getActiveGroupIds(accountId, function (error, activeGroupIds) {
                                     if (error) {
-                                        
+
                                         const model = {
                                             errors,
                                             csrfToken: request.csrfToken()
@@ -71,11 +71,14 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                         response.render('group-finder.hbs', model)
                                     }
                                     else {
-                                        const groupIds = getGroupIds(groups)
-                                        const activeGroupIds = getGroupIds(activeGroups)
-                                        console.log("SUUUUUUUUUREEEEE", groupIds, activeGroupIds)
-                                        for (var i = groupIds.length; i >= 0; i--) {
-                                            if (activeGroupIds.includes(groupIds[i])) {
+                                        const groupIds = getGroupIdsFromGroups(groups)
+                                        const extractedActiveGroupIds = []
+                                        for (var i = 0; i < activeGroupIds.length; i++) {
+                                            extractedActiveGroupIds.push(activeGroupIds[i].groupId)
+                                        }
+
+                                        for (var i = groupIds.length - 1; i >= 0; i--) {
+                                            if (extractedActiveGroupIds.includes(groupIds[i])) {
                                                 groups.splice(i, 1) // pop specific element
                                             }
                                         }
@@ -84,7 +87,9 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                             csrfToken: request.csrfToken()
                                         }
                                         response.render('group-finder.hbs', model)
+
                                     }
+
                                 })
                             }
                             else {
@@ -100,6 +105,14 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             }
         })
     })
+
+    getGroupIdsFromGroups = function (groups) {
+        const groupIds = []
+        for (var i = 0; i < groups.length; i++) {
+            groupIds.push(groups[i].groupId)
+        }
+        return groupIds
+    }
 
     router.post('/finder', function (request, response) {
         const groupId = request.body.groupId
@@ -122,18 +135,18 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         response.render('group-finder.hbs', model)
                     }
                     else {
-                            groupMemberManager.createGroupMemberLink(account, group, function (error) {
-                                if (error) {
-                                    const model = {
-                                        error,
-                                        csrfToken: request.csrfToken()
-                                    }
-                                    response.render('group-finder.hbs', model)
+                        groupMemberManager.createGroupMemberLink(account, group, function (error) {
+                            if (error) {
+                                const model = {
+                                    error,
+                                    csrfToken: request.csrfToken()
                                 }
-                                else {
-                                    response.redirect('/groups/' + groupId)
-                                }
-                            })
+                                response.render('group-finder.hbs', model)
+                            }
+                            else {
+                                response.redirect('/groups/' + groupId)
+                            }
+                        })
                     }
                 })
             }

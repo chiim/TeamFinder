@@ -51,7 +51,7 @@ module.exports = function ({dbMySQL}) {
             })
         },
 
-        getActiveGroups: function (accountId, callback) {
+        getActiveGroupIds: function (accountId, callback) {
             const query = "SELECT groupId FROM GroupMembers WHERE accountId = ?"
             const values = [accountId]
 
