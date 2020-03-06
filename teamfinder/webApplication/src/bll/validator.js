@@ -91,6 +91,12 @@ module.exports = function () {
                     validationErrors.push("You're too old to join this group.")
                 }
             }
+
+            if(group.minAge && group.maxAge){
+                if(parseInt(group.minAge) > parseInt(group.maxAge)){
+                    validationErrors.push("minAge cant be lower than maxAge")
+                }
+            }
             if (group.allowedGender != 'Any') {
                 if (account.gender != group.allowedGender) {
                     validationErrors.push("You're not allowed to join this group. It's restricted to " + group.allowedGender)
