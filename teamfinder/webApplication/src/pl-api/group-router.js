@@ -49,25 +49,32 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                         }
                         else {
                             if (accountId) {
-                                groupManager.getActiveGroups(accountId, function (error, activeGroups) {
+                                groupManager.getActiveGroups(accountId, function (error, activeGroupIds) {
                                     if (error) {
                                         console.log(error)
                                         response.status(500).json(error)
                                         response.header("Content-Type", "application/json")
                                     }
                                     else {
-                                        const groupIds = getGroupIds(groups)
-                                        const activeGroupIds = getGroupIds(activeGroups)
-                                        for (var i = groupIds.length; i >= 0; i--) {
-                                            if (activeGroupIds.includes(groupIds[i])) {
+                                        const groupIds = getGroupIdsFromGroups(groups)
+
+                                        const extractedActiveGroupIds = []
+                                        for (var i = 0; i < activeGroupIds.length; i++) {
+                                            extractedActiveGroupIds.push(activeGroupIds[i].groupId)
+                                        }
+
+                                        for (var i = groupIds.length - 1; i >= 0; i--) {
+                                            if (extractedActiveGroupIds.includes(groupIds[i].groupId)) {
                                                 groups.splice(i, 1) // pop specific element
                                             }
                                         }
                                         response.setHeader("Content-Type", "application/json")
                                         response.status(200).json(groups)
+
                                     }
                                 })
                             }
+
                             else {
                                 response.setHeader("Content-Type", "application/json")
                                 response.status(200).json(groups)
@@ -79,9 +86,17 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         })
     })
 
+    getGroupIdsFromGroups = function (groups) {
+        const groupIds = []
+        for (var i = 0; i < groups.length; i++) {
+            groupIds.push(groups[i].groupId)
+        }
+        return groupIds
+    }
+
     router.get("/:id", function (request, response) {
         const accountId = 1 // VALIDATE USER WITH TOKEN
-        
+
         const groupId = request.params.id
         var isAuthor = false
         const updated = request.query.updated
@@ -113,7 +128,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                 }
                                 response.render("group-specific.hbs", model)*/
                             }
-                            else if(messages.length == 0){
+                            else if (messages.length == 0) {
                                 response.status(404).end() // Not found
                             }
                             else {
@@ -139,7 +154,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                     printUpdatedText = "You successfully updated the group information"
                                 }
                                 response.header("Content-Type", "application/json")
-                                response.status(200).json({group})
+                                response.status(200).json({ group })
                                 // Skicka med mer data????
 
                                 /*const model = {

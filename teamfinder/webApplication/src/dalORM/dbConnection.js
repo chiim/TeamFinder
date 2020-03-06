@@ -12,13 +12,14 @@ module.exports = function ({ initPostgres }) {
         database: 'databaseORM'
     })
 
-    sequelize
+    //tryToAuth = function(sequelize){
+        sequelize
         .authenticate()
         .then(() => {
-
             initPostgres.initDb(sequelize, Sequelize).then(function (tables) {
-
                 console.log('Connection has been established successfully.');
+                //clearInterval(stopInterval)
+                //getConnection = sequelize
                 return sequelize
             })
         })
@@ -26,7 +27,12 @@ module.exports = function ({ initPostgres }) {
             console.error('Unable to connect to the database:', err);
             return sequelize
         });    
-        return sequelize
+        //return sequelize
+    //}
+    //var getConnection = null
+
+    //var stopinterval = setInterval(tryToAuth, 1000, sequelize)
 
 
+    return sequelize
 }
