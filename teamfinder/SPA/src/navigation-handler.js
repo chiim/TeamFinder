@@ -88,8 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			// TODO: Check status code to see if it succeeded. Display errors if it failed.
             // TODO: Update the view somehow.
             goToPage(response.headers.get("Location"))
-            //goToPage(response.headers)
-            //goToPage("/groups")
 		}).catch(function(error){
 			// TODO: Update the view and display error.
 			console.log(error)
