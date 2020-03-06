@@ -51,6 +51,13 @@ body.isLoggedIn .showIfLoggedOut{
 	display: none;
 }
 
+body.isAuthor{
+    display: none;
+}
+body.isAuthor{
+    display: none;
+}
+
 footer{
 	border-top: 1px solid black;
 	width: 80%;

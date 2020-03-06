@@ -46,25 +46,28 @@ module.exports = function ({ accountManager }) {
             const email = request.body.email
             const password = request.body.password
 
-            console.log(grantType)
+            console.log(email)
 
             if (grantType != "password") {
-                console.log("im here")
                 response.status(400).json({ error: "unsupported_grant_type" })
                 return
             }
 
             accountManager.loginAccount(email, password, function (errors, account) {
 
-                
+                if(errors){
+                    console.log(errors)
+                }
+
                 if (errors && errors.includes("DatabaseError")) {
+                    console.log("databaseError")
                     response.status(500).end()
                 } else if (errors && 0 < errors.length) {
                     console.log(errors)
                     response.status(400).json({ errors: "some error?" })
                 } else {
 
-                    const payload = { id: account.accountId }
+                    const payload = { accountId: account.accountId }
 
                     const accessToken = jwt.sign(payload, serverSecret)
 
@@ -77,7 +80,7 @@ module.exports = function ({ accountManager }) {
                     */
 
                     response.status(200).json({
-                        access_token: accessToken,
+                        access_token: accessToken
                         //id_token: idToken
                     })
                 }

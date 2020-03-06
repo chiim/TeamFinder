@@ -117,6 +117,15 @@ app.use(function (request, response, next) {
   next()
 })
 
+app.use(function(request, response, next){
+	response.setHeader("Access-Control-Allow-Origin", "*")
+	response.setHeader("Access-Control-Allow-Methods", "*")
+	response.setHeader("Access-Control-Allow-Headers", "*")
+	response.setHeader("Access-Control-Expose-Headers", "*")
+	next()
+})
+
+
 app.use('/groups', csrf({ cookie: true }), theGroupRouter)
 app.use('/accounts', csrf({ cookie: true }), theAccountRouter)
 app.use('/messages', csrf({ cookie: true }), theMessageRouter)

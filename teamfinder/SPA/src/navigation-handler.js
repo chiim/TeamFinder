@@ -1,15 +1,15 @@
 // TODO: Don't write all JS code in the same file.
 document.addEventListener("DOMContentLoaded", function(){
     
-    console.log("inside fetchallgroupsssssssssssssssss")
-
     changeToPage(location.pathname)
-    console.log("inside fetchallgroupsssssssssssssssss")
 
+    console.log(localStorage.accessToken)
 	
 	if(localStorage.accessToken){
+        console.log("finns accestoken? ")
 		login(localStorage.accessToken)
 	}else{
+        console.log("else logout")
 		logout()
 	}
 	
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			goToPage(url)
 		}
 	})
-	
+	/*
 	// TODO: Avoid using this long lines of code.
 	document.querySelector("#create-pet-page form").addEventListener("submit", function(event){
 		event.preventDefault()
@@ -52,28 +52,35 @@ document.addEventListener("DOMContentLoaded", function(){
 		})
 		
 	})
-	
+    
+    */
 	document.querySelector("#login-page form").addEventListener("submit", function(event){
-		event.preventDefault()
+       
+        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        event.preventDefault()
+        
+        console.log("inside login listener")
 		
-		const username = document.querySelector("#login-page .username").value
+		const email = document.querySelector("#login-page .email").value
 		const password = document.querySelector("#login-page .password").value
 		
 		fetch(
-			"http://localhost:8080/tokens", {
+			"http://192.168.99.100:8080/pl-api/accounts/tokens", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/x-www-form-urlencoded"
 				}, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
-				body: "grant_type=password&username="+username+"&password="+password
+				body: "grant_type=password&email="+email+"&password="+password
 			}
 			).then(function(response){
+                console.log("first then() ")
 				// TODO: Check status code to see if it succeeded. Display errors if it failed.
 				return response.json()
 			}).then(function(body){
 				// TODO: Read out information about the user account from the id_token.
-				login(body.access_token)
-				console.log(accessToken)
+                login(body.access_token)   
+                console.log(body.access_token)
+                changeToPage("/")
 		}).catch(function(error){
 			console.log(error)
 		})
@@ -107,27 +114,29 @@ function changeToPage(url){
 		document.getElementById("home-page").classList.add("current-page")
 	}else if(url == "/groups"){
         console.log("inside fetchallgroupsssssssssssssssss")
-
         document.getElementById("groups-page").classList.add("current-page")
         fetchAllGroups()
 	}else if(url == "/sign-up"){
 		document.getElementById("sign-up-page").classList.add("current-page")
 	}else if(url == "/login"){
         document.getElementById("login-page").classList.add("current-page")
-        
-	}else if(new RegExp("^/group/[0-9]+$").test(url)){
+    }
+    else if(new RegExp("^/group/[0-9]+$").test(url)){
 		document.getElementById("group-page").classList.add("current-page")
-		const id = url.split("/")[2]
+        const id = url.split("/")[2]
 		fetchGroup(id)
 	}else if(url == "/create-pet"){
 		document.getElementById("create-pet-page").classList.add("current-page")
-	}else{
+    }else if(url == "/logout"){
+        logout()
+		document.getElementById("home-page").classList.add("current-page")
+    }else{
 		document.getElementById("error-page").classList.add("current-page")
 	}
 }
 
+
 function fetchAllGroups(){
-    console.log("inside fetchallgroupsssssssssssssssss")
 
 	fetch(
 		"http://192.168.99.100:8080/pl-api/groups/"
@@ -146,7 +155,7 @@ function fetchAllGroups(){
             pSport.innerText = group.sport
             pCity.innerText = group.city
 			anchor.innerText = group.name
-			anchor.setAttribute("href", '/groups/'+ group.id)
+			anchor.setAttribute("href", '/group/'+ group.groupId)
             li.appendChild(anchor)
             li.append(pSport)
             li.append(pCity)
@@ -159,6 +168,7 @@ function fetchAllGroups(){
 }
 
 function fetchGroup(id){
+
 	
 	fetch(
 		"http://localhost:8080/pl-api/groups/"+id
@@ -185,6 +195,21 @@ function fetchGroup(id){
         minAgeSpan.innerText = group.minAgeSpan
         skillLevelSpan.innerText = group.skillLevel
         allowedGenderSpan.innerText = group.allowedGender
+
+        
+        const payload = jwt.verify(localStorage.accessToken, serverSecret)
+
+        if(payload.accountId == group.authorId){
+        
+            const deleteButton = document.querySelector("#group-page .delete-button")
+            const updateButton = document.querySelector("#group-page .update-button")
+
+            deleteButton.classList.remove("showIfAuthor")
+            deleteButton.classList.add("isAuthor")
+            updateButton.classList.remove("showIfAuthor")
+            updateButton.classList.add("isAuthor")
+            
+        }
 
         
 	}).catch(function(error){
