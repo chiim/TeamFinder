@@ -14,8 +14,8 @@ module.exports = function ({dbPostgres}) {
                 nrOfMembers: groupCredentials.nrOfMembers,
                 memberSlots: groupCredentials.memberSlots,
                 city: groupCredentials.city,
-                maxAge: groupCredentials.minAge,
-                minAge: groupCredentials.maxAge,
+                maxAge: groupCredentials.maxAge,
+                minAge: groupCredentials.minAge,
                 skillLevel: groupCredentials.skillLevel,
                 allowedGender: groupCredentials.allowedGender,
                 authorId: groupCredentials.accountId

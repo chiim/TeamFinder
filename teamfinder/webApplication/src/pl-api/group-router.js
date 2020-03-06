@@ -176,6 +176,79 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
 
     router.post('/', function (request, response) {
+
+        const groupName = request.body.groupName
+        const image = request.body.image
+        const sport = request.body.sport
+        const nrOfMembers = 1
+        const memberSlots = request.body.memberSlots
+        const city = request.body.city
+        const minAge = request.body.minAge
+        const maxAge = request.body.maxAge
+        const skillLevel = request.body.skillLevel
+        const allowedGender = request.body.allowedGender
+
+        const accountId = 1
+        const groupCredentials = {
+            groupName,
+            image,
+            sport,
+            nrOfMembers,
+            memberSlots,
+            city,
+            minAge,
+            maxAge,
+            skillLevel,
+            allowedGender,
+            accountId
+        }
+        console.log(groupCredentials)
+        groupManager.createGroup(groupCredentials, function (errors, groupId) {
+            if (errors && errors.includes("DatabaseError")) {
+                response.header("Content-Type", "application/json")
+                response.status(500).json(errors)
+            }
+            else if (errors && errors.length() > 0) {
+                response.header("Content-Type", "application/json")
+                response.status(400).json(errors)
+            }
+            else {
+                accountManager.getAccountById(accountId, function (error, account) {
+                    if (error) {
+                        response.header("Content-Type", "application/json")
+                        response.status(400).json(error)
+                    }
+                    else {
+                        console.log(accountId, groupId)
+                        groupManager.getGroupById(groupId, function (error, group) {
+                            if (error) {
+                                response.header("Content-Type", "application/json")
+                                response.status(400).json(error)
+                            }
+                            else {
+                                console.log("account: ", account)
+                                console.log("group: ", group)
+                                groupMemberManager.createGroupMemberLink(account, group, function (error) {
+                                    if (error) {
+                                        console.log("errors: ", error)
+                                        console.log("Är jag här?")
+                                        response.header("Content-Type", "application/json")
+                                        response.status(500).json(error)
+                                    }
+                                    else {
+                                        response.header("Location", "/groups/" + groupId)
+                                        response.status(201).end()
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    })
+
+    /*router.post('/', function (request, response) { // Join a group
         const groupId = request.body.groupId
 
         //TODO: Ersätt med token
@@ -220,7 +293,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 })
             }
         })
-    })
+    })*/
 
     router.delete('/:id', function (request, response) {
 
