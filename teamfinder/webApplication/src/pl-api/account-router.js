@@ -35,8 +35,6 @@ module.exports = function ({ accountManager }) {
 
     }),
 
-
-
         router.post("/tokens", function (request, response) {
 
             const serverSecret = "sdfkjdslkfjslkfd"

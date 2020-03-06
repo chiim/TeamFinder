@@ -17,9 +17,11 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 response.status(500).end() // Internal server error
             }
             else if (groupIds.length == 0) {
+                console.log("Kommer jag hit??")
                 response.status(204).end()  // No content
             }
             else {
+                console.log("GroupIds: ", groupIds)
                 var databaseErrors = []
                 try {
                     for (var i = 0; i < groupIds.length; i++) {
@@ -116,18 +118,14 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                         response.status(500).json(error)
                     }
                     else {
+                        /*
                         messageManager.getMessagesByGroupId(groupId, function (error, messages) {
                             if (error) {
                                 response.header("Content-Type", "application/json")
-                                response.status(500).json(error)
-                                // Skicka med group med. Hur?
-                                /*const model = {
-                                    csrfToken: request.csrfToken(),
-                                    error,
-                                    group
-                                }
-                                response.render("group-specific.hbs", model)*/
+                                response.status(500).json({group, error})
+
                             }
+
                             else if (messages.length == 0) {
                                 response.status(404).end() // Not found
                             }
@@ -144,36 +142,38 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         editMessage = messages[i]
                                     }
                                 }
+                                */
+                        var isAuthor = false
+                        if (group.authorId == accountId) {
+                            isAuthor = true
+                        }
+                        /*
+                        var printUpdatedText = ""
+                        if (updated) {
+                            printUpdatedText = "You successfully updated the group information"
+                        }
+                        */
+                        response.header("Content-Type", "application/json")
+                        response.status(200).json({ group, isAuthor })
+                        // Skicka med mer data????
 
-                                var isAuthor = false
-                                if (group.authorId == accountId) {
-                                    isAuthor = true
-                                }
-                                var printUpdatedText = ""
-                                if (updated) {
-                                    printUpdatedText = "You successfully updated the group information"
-                                }
-                                response.header("Content-Type", "application/json")
-                                response.status(200).json({ group })
-                                // Skicka med mer data????
-
-                                /*const model = {
-                                    csrfToken: request.csrfToken(),
-                                    group,
-                                    messages,
-                                    accountId,
-                                    isAuthor,
-                                    printUpdatedText,
-                                    editMessage
-                                }
-                                response.render("group-specific.hbs", model)*/
-                            }
-                        })
+                        /*const model = {
+                            csrfToken: request.csrfToken(),
+                            group,
+                            messages,
+                            accountId,
+                            isAuthor,
+                            printUpdatedText,
+                            editMessage
+                        }
+                        response.render("group-specific.hbs", model)*/
                     }
                 })
             }
         })
+
     })
+
 
     router.post('/', function (request, response) {
         const groupId = request.body.groupId

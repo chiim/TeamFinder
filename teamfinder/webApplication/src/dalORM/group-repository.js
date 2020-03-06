@@ -73,6 +73,7 @@ module.exports = function ({dbPostgres}) {
                 attributes: ['groupId'],
                 raw: true
             }).then(function (groupIds) {
+                console.log("groupIds: ", groupIds)
                 callback(null, groupIds)
             }).catch(function (error) {
                 console.log(error)

@@ -120,6 +120,7 @@ module.exports = function () {
                         }
                     ]
                     ).then(function () {
+                        console.log("CREATE GROUPSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                         Group.bulkCreate(
                             [
                                 {
