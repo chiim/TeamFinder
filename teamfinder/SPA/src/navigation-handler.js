@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	// TODO: Avoid using this long lines of code.
 	document.querySelector("#create-group-page form").addEventListener("submit", function(event){
 		event.preventDefault()
-		
-        const name = document.querySelector("#create-group-page .name").value
+		console.log("Kommer vi hit???")
+        const groupName = document.querySelector("#create-group-page .name").value
         const sport = document.querySelector("#create-group-page .sport").value
 		const memberSlots = document.querySelector("#create-group-page .memberSlots").value
 		const city = document.querySelector("#create-group-page .city").value
@@ -34,9 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		const skillLevel = document.querySelector("#create-group-page .skillLevel").value
 		const allowedGender = document.querySelector("#create-group-page .allowedGender").value
 
+        console.log(groupName)
 		
 		const group = {
-            name,
+            groupName,
             sport,
             memberSlots,
             city,
@@ -44,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
             minAge,
             skillLevel,
             allowedGender
-		}
-		
+        }
+        console.log(group)
 		// TODO: Build an SDK (e.g. a separate JS file)
 		// handling the communication with the backend.
 		fetch(
@@ -59,8 +60,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		).then(function(response){
 			// TODO: Check status code to see if it succeeded. Display errors if it failed.
-			// TODO: Update the view somehow.
-			console.log(response)
+            // TODO: Update the view somehow.
+            console.log("Response?????")
+            goToPage(response.headers.get("Location"))
 		}).catch(function(error){
 			// TODO: Update the view and display error.
 			console.log(error)
@@ -112,8 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		).then(function(response){
 			// TODO: Check status code to see if it succeeded. Display errors if it failed.
             // TODO: Update the view somehow.
-            
-			console.log(response)
+            goToPage(response.headers.get("Location"))
 		}).catch(function(error){
 			// TODO: Update the view and display error.
 			console.log(error)

@@ -176,9 +176,9 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
 
     router.post('/', function (request, response) {
-
+        console.log(request.body)
         const groupName = request.body.groupName
-        const image = request.body.image
+        const image = "Volleyball" // Hard coded because you shouldnt be able to choose image here.
         const sport = request.body.sport
         const nrOfMembers = 1
         const memberSlots = request.body.memberSlots
@@ -236,7 +236,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         response.status(500).json(error)
                                     }
                                     else {
-                                        response.header("Location", "/groups/" + groupId)
+                                        response.header("Location", "/group/" + groupId)
                                         response.status(201).end()
                                     }
                                 })
