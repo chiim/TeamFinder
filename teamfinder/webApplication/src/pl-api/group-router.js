@@ -351,7 +351,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             }
 
             else {
-                response.setHeader("Location", "/groups/" + id)
+                response.setHeader("Location", "/group/" + id)
                 response.status(204).end()  // No content
             }
 

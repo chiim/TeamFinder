@@ -36,7 +36,6 @@ module.exports = function ({ accountManager }) {
     }),
 
         router.post("/tokens", function (request, response) {
-
             const serverSecret = "sdfkjdslkfjslkfd"
 
 
@@ -44,7 +43,6 @@ module.exports = function ({ accountManager }) {
             const email = request.body.email
             const password = request.body.password
 
-            console.log(email)
 
             if (grantType != "password") {
                 response.status(400).json({ error: "unsupported_grant_type" })

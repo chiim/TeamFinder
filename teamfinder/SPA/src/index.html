@@ -53,9 +53,7 @@
 			<div>Skill: <span class="skillLevel"></span></div>
 			<div>Gender: <span class="allowedGender"></span></div>
 
-			<form action="" class="update-button showIfAuthor">
-				<input type="hidden" name="update" class="update-id-field">
-				<input type="submit" value="Update">
+				<button> <a href="/group-page/update">Update</a></button>
 			</form>
 			<form action="" class="delete-button showIfAuthor">
 				<input type="hidden" name="delete" class="delete-id-field">
@@ -90,7 +88,8 @@
 				<div>Min Age: <input type="text" class="minAge"></div>
 				<div>Skill: <input type="text" class="skillLevel"></div>
 				<div>Genders: <input type="text" class="allowedGender"></div>
-				<input type="submit" value="Create">
+				<input type="hidden" name="update" class="update-id-field" value=1> <!-- Kan man ta in id utan handlebars? -->
+				<input type="submit" value="Update">
 			</form>
 		</div>
 
