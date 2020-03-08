@@ -1,16 +1,26 @@
+const jwt = require('jsonwebtoken')
 const express = require('express')
 
 module.exports = function ({ groupManager, groupMemberManager, accountManager, messageManager }) {
 
     const router = express.Router()
 
+    function getAccountId(accessToken) {
+        const serverSecret = "sdfkjdslkfjslkfd"
+
+        if (accessToken) {
+            const payload = jwt.verify(accessToken, serverSecret)
+            return payload.accountId
+        }
+        else {
+            return null
+        }
+    }
 
     router.get('/', function (request, response) {
+        const accessToken = request.body.accessToken // Hämta lokalt istället. Minns ej hur
+        const accountId = getAccountId(accessToken)
 
-        console.log("REEEEEEEEEEEEEEEEE")
-
-
-        const accountId = request.session.accountId
         groupManager.getAllGroupIds(function (error, groupIds) {
             if (error) {
                 console.log(error)
@@ -50,6 +60,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                             response.status(204) // No content
                         }
                         else {
+                            console.log("show accountId: ", accountId)
                             if (accountId) {
                                 groupManager.getActiveGroups(accountId, function (error, activeGroupIds) {
                                     if (error) {
@@ -96,15 +107,21 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         return groupIds
     }
 
-    router.get("/:id", function (request, response) {
-        const accountId = 1 // VALIDATE USER WITH TOKEN
+    getAccountIds = function (dict) {
+        const accountIds = []
+        for (var i = 0; i < dict.length; i++) {
+            accountIds.push(dict[i].accountId)
+        }
+        return accountIds
+    }
 
+
+    router.get("/:id", function (request, response) {
+        const accountId = 1
+        //const accessToken = request.body.accessToken
+        //const accountId = getAccountId(accessToken)
         const groupId = request.params.id
         var isAuthor = false
-        const updated = request.query.updated
-
-        const messageIdEdit = request.query.editMessage
-        var editMessage = null
 
         groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
             if (error) {
@@ -112,61 +129,34 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 response.status(500).json(error)
             }
             else {
-                groupManager.getGroupById(groupId, function (error, group) {
+                groupMemberManager.getGroupMembers(groupId, function (error, dictOfAccountIds) {
+                    const accountIds = getAccountIds(dictOfAccountIds)
+
                     if (error) {
-                        response.header("Content-Type", "application/json")
+                        response.setHeader("Content-Type", "application/json")
                         response.status(500).json(error)
                     }
+                    else if (!accountIds.includes(accountId)) {
+                        const error = "You are not a member of this group"
+                        response.setHeader("Content-Type", "application/json")
+                        response.setHeader("Location", "/groups")
+                        response.status(401).json(error)
+                    }
                     else {
-                        /*
-                        messageManager.getMessagesByGroupId(groupId, function (error, messages) {
+                        groupManager.getGroupById(groupId, function (error, group) {
                             if (error) {
-                                response.header("Content-Type", "application/json")
-                                response.status(500).json({group, error})
-
-                            }
-
-                            else if (messages.length == 0) {
-                                response.status(404).end() // Not found
+                                response.setHeader("Content-Type", "application/json")
+                                response.status(500).json(error)
                             }
                             else {
-                                for (i = 0; i < messages.length; i++) {
-
-                                    if (messages[i].accountId == accountId) {
-                                        messages[i]['isAuthor'] = true;
-                                    }
-                                    else {
-                                        messages[i]['isAuthor'] = false;
-                                    }
-                                    if (messages[i].messageId == messageIdEdit) {
-                                        editMessage = messages[i]
-                                    }
+                                var isAuthor = false
+                                if (group.authorId == accountId) {
+                                    isAuthor = true
                                 }
-                                */
-                        var isAuthor = false
-                        if (group.authorId == accountId) {
-                            isAuthor = true
-                        }
-                        /*
-                        var printUpdatedText = ""
-                        if (updated) {
-                            printUpdatedText = "You successfully updated the group information"
-                        }
-                        */
-                        response.header("Content-Type", "application/json")
-                        response.status(200).json({ group, isAuthor })
-                        // Skicka med mer data????
-
-                        /*const model = {
-                            csrfToken: request.csrfToken(),
-                            group,
-                            messages,
-                            accountId,
-                            isAuthor,
-                            printUpdatedText,
-                            editMessage
-                        }
-                        response.render("group-specific.hbs", model)*/
+                                response.setHeader("Content-Type", "application/json")
+                                response.status(200).json({ group, isAuthor })
+                            }
+                        })
                     }
                 })
             }
@@ -189,71 +179,81 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         const allowedGender = request.body.allowedGender
 
         const accountId = 1
-        const groupCredentials = {
-            groupName,
-            image,
-            sport,
-            nrOfMembers,
-            memberSlots,
-            city,
-            minAge,
-            maxAge,
-            skillLevel,
-            allowedGender,
-            accountId
+        //const accessToken = request.body.accessToken
+        //const accountId = getAccountId(accessToken)
+        if (accountId) {
+            const groupCredentials = {
+                groupName,
+                image,
+                sport,
+                nrOfMembers,
+                memberSlots,
+                city,
+                minAge,
+                maxAge,
+                skillLevel,
+                allowedGender,
+                accountId
+            }
+            console.log(groupCredentials)
+            groupManager.createGroup(groupCredentials, function (errors, groupId) {
+                if (errors && errors.includes("DatabaseError")) {
+                    response.header("Content-Type", "application/json")
+                    response.status(500).json(errors)
+                }
+                else if (errors && errors.length() > 0) {
+                    response.header("Content-Type", "application/json")
+                    response.status(400).json(errors)
+                }
+                else {
+                    accountManager.getAccountById(accountId, function (error, account) {
+                        if (error) {
+                            response.header("Content-Type", "application/json")
+                            response.status(400).json(error)
+                        }
+                        else {
+                            console.log(accountId, groupId)
+                            groupManager.getGroupById(groupId, function (error, group) {
+                                if (error) {
+                                    response.header("Content-Type", "application/json")
+                                    response.status(400).json(error)
+                                }
+                                else {
+                                    console.log("account: ", account)
+                                    console.log("group: ", group)
+                                    groupMemberManager.createGroupMemberLink(account, group, function (error) {
+                                        if (error) {
+                                            console.log("errors: ", error)
+                                            console.log("Är jag här?")
+                                            response.header("Content-Type", "application/json")
+                                            response.status(500).json(error)
+                                        }
+                                        else {
+                                            response.header("Location", "/group/" + groupId)
+                                            response.status(201).end()
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+
+            })
         }
-        console.log(groupCredentials)
-        groupManager.createGroup(groupCredentials, function (errors, groupId) {
-            if (errors && errors.includes("DatabaseError")) {
-                response.header("Content-Type", "application/json")
-                response.status(500).json(errors)
-            }
-            else if (errors && errors.length() > 0) {
-                response.header("Content-Type", "application/json")
-                response.status(400).json(errors)
-            }
-            else {
-                accountManager.getAccountById(accountId, function (error, account) {
-                    if (error) {
-                        response.header("Content-Type", "application/json")
-                        response.status(400).json(error)
-                    }
-                    else {
-                        console.log(accountId, groupId)
-                        groupManager.getGroupById(groupId, function (error, group) {
-                            if (error) {
-                                response.header("Content-Type", "application/json")
-                                response.status(400).json(error)
-                            }
-                            else {
-                                console.log("account: ", account)
-                                console.log("group: ", group)
-                                groupMemberManager.createGroupMemberLink(account, group, function (error) {
-                                    if (error) {
-                                        console.log("errors: ", error)
-                                        console.log("Är jag här?")
-                                        response.header("Content-Type", "application/json")
-                                        response.status(500).json(error)
-                                    }
-                                    else {
-                                        response.header("Location", "/group/" + groupId)
-                                        response.status(201).end()
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
-        })
+        else {
+            const error = "You must be logged in to create a group"
+            response.setHeader("Content-Type", "application/json")
+            response.status(401).json(error)
+        }
     })
 
     /*router.post('/', function (request, response) { // Join a group
         const groupId = request.body.groupId
-
+    
         //TODO: Ersätt med token
         const accountId = 3
-
+    
         groupManager.getGroupById(groupId, function (error, group) {
             if (error) {
                 console.log(error)
@@ -275,7 +275,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     }
                     else {
                         groupMemberManager.createGroupMemberLink(account, group, function (errors) {
-
+    
                             if (errors && errors.includes("DatabaseError")) {
                                 response.setHeader("Content-Type", "application/json")
                                 response.status(500).json(errors)
@@ -317,47 +317,60 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     router.put('/:id', function (request, response) {
         const id = request.params.id
 
-        console.log("Do I get into update in group-router")
+        //const accessToken = request.body.accessToken
+        //const accountId = getAccountId(accessToken)
 
-        const groupName = request.body.groupName
-        const image = request.body.image
-        const sport = request.body.sport
-        const memberSlots = request.body.memberSlots
-        const city = request.body.city
-        const minAge = request.body.minAge
-        const maxAge = request.body.maxAge
-        const skillLevel = request.body.skillLevel
-        const gender = request.body.allowedGender
+        groupManager.getGroupById(id, function (error, group) { // Används för att verifiera att kontot är från grupp skaparen
 
-        const group = {
-            id,
-            groupName,
-            image,
-            sport,
-            memberSlots,
-            city,
-            minAge,
-            maxAge,
-            skillLevel,
-            gender
-        }
-        console.log("Group: ", group)
-        groupManager.updateGroup(group, function (errors) {
-            if (errors && errors.includes("DatabaseError")) {
-                response.setHeader("Content-Type", "application/json")
-                response.status(500).json(errors)
+            //if(group.authorId == accountId){
+
+            const groupName = request.body.groupName
+            const image = request.body.image
+            const sport = request.body.sport
+            const memberSlots = request.body.memberSlots
+            const city = request.body.city
+            const minAge = request.body.minAge
+            const maxAge = request.body.maxAge
+            const skillLevel = request.body.skillLevel
+            const gender = request.body.allowedGender
+
+            const updatedGroup = {
+                id,
+                groupName,
+                image,
+                sport,
+                memberSlots,
+                city,
+                minAge,
+                maxAge,
+                skillLevel,
+                gender
             }
-            else if (errors && errors.length > 0) {
-                response.setHeader("Content-Type", "application/json")
-                response.status(204).json(errors) // No content
-            }
+            console.log("Group: ", updatedGroup)
+            groupManager.updateGroup(updatedGroup, function (errors) {
+                if (errors && errors.includes("DatabaseError")) {
+                    response.setHeader("Content-Type", "application/json")
+                    response.status(500).json(errors)
+                }
+                else if (errors && errors.length > 0) {
+                    response.setHeader("Content-Type", "application/json")
+                    response.status(204).json(errors) // No content
+                }
 
-            else {
-                response.setHeader("Location", "/group/" + id)
-                response.status(204).end()  // No content
-            }
+                else {
+                    response.setHeader("Location", "/group/" + id)
+                    response.status(204).end()
+                }
 
+            })
+            /*}
+            else{
+                response.setHeader("content-Type", "application/json")
+                response.setHeader("Location", "/groups/" + id)
+                response.status(401).json(error) // Unauthorized
+            }*/
         })
+
     })
 
     return router

@@ -1,7 +1,6 @@
 // TODO: Don't write all JS code in the same file.
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("location: ", location.pathname)
     changeToPage(location.pathname)
 
     console.log(localStorage.accessToken)
@@ -87,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		const skillLevel = document.querySelector("#update-group-page .skillLevel").value
 		const allowedGender = document.querySelector("#update-group-page .allowedGender").value
         const groupId = document.querySelector("#update-group-page .update-id-field").value
-        console.log(groupName)
 		
 		const group = {
             groupName,
@@ -100,7 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
             allowedGender,
             groupId
         }
-        console.log(group)
 		// TODO: Build an SDK (e.g. a separate JS file)
 		// handling the communication with the backend.
 		fetch(
@@ -150,10 +147,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			console.log(error)
 		})
 		
-    })
-    
-    document.querySelector("#login-page form").addEventListener("submit", function (event) {
-        
     })
     
     document.querySelector("#login-page form").addEventListener("submit", function (event) {

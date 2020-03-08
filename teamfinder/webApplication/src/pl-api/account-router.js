@@ -38,7 +38,6 @@ module.exports = function ({ accountManager }) {
         router.post("/tokens", function (request, response) {
             const serverSecret = "sdfkjdslkfjslkfd"
 
-
             const grantType = request.body.grant_type
             const email = request.body.email
             const password = request.body.password
