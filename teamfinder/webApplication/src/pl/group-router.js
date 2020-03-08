@@ -71,7 +71,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                         response.render('group-finder.hbs', model)
                                     }
                                     else {
-                                        const groupIds = getGroupIdsFromGroups(groups)
+                                        const groupIds = getGroupIds(groups)
                                         const extractedActiveGroupIds = []
                                         for (var i = 0; i < activeGroupIds.length; i++) {
                                             extractedActiveGroupIds.push(activeGroupIds[i].groupId)
@@ -106,13 +106,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         })
     })
 
-    getGroupIdsFromGroups = function (groups) {
-        const groupIds = []
-        for (var i = 0; i < groups.length; i++) {
-            groupIds.push(groups[i].groupId)
-        }
-        return groupIds
-    }
+
 
     router.post('/finder', function (request, response) {
         const groupId = request.body.groupId

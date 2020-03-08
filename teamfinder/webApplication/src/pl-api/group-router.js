@@ -317,6 +317,8 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     router.put('/:id', function (request, response) {
         const id = request.params.id
 
+        console.log("Do I get into update in group-router")
+
         const groupName = request.body.groupName
         const image = request.body.image
         const sport = request.body.sport
