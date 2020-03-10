@@ -143,16 +143,21 @@ async function createGroup(group) {
             },
             body: JSON.stringify(group)
         })
+        console.log("after fetch create group")
         switch(response.status){
+            
             case 201:
                 goToPage(response.headers.get("Location"))
                 break
             case 400:
                 errors = await response.json()
+                console.log(errors)
                 showErrors(errors)
                 break
             case 500:
                 errors = await response.json()
+                console.log(errors)
+
                 showErrors(errors)
         }
     }catch(error){

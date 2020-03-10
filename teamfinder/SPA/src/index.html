@@ -72,13 +72,35 @@
 			<h1>Create Group</h1>
 			<form action="">
 				<div>Name: <input type="text" class="name"></div>
-				<div>Sport: <input type="text" class="sport"></div>
+				<div>Sport:
+					<label for="selectSport">*Select Sport</label>
+                <select class="sport" name="sport">
+                    <option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
+                    <option>Volleyball</option>
+                    <option>Padel</option>
+                </select></div>
 				<div>Memberslots: <input type="text" class="memberSlots"></div>
 				<div>City: <input type="text" class="city"></div>
 				<div>Max Age: <input type="text" class="maxAge"></div>
 				<div>Min Age: <input type="text" class="minAge"></div>
-				<div>Skill: <input type="text" class="skillLevel"></div>
-				<div>Genders: <input type="text" class="allowedGender"></div>
+				<div>Skill: 
+					<label for="selectSport">*Skill level</label>
+                <select class="skillLevel" name="skillLevel">
+                    <option>Select a skill level</option> <!-- Validate that this is not selected when submitting. -->
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Semi-pro</option>
+                    <option>Pro</option>
+                    <option>Expert</option>
+                    <option>Master</option>
+                </select></div>
+				<div>Genders: 
+					<label for="selectGender">Gender restriction</label>
+                <select class="allowedGender" name="allowedGender">
+                    <option>Any</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select></div>
 				<input type="submit" value="Create">
 			</form>
 		</div>

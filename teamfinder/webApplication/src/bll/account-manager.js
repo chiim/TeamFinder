@@ -36,7 +36,7 @@ module.exports = function ({ accountRepository, validator }) {
             //validering
 
             const errors = []
-            MAX_PASSWORD_LENGTH = 10
+            MAX_PASSWORD_LENGTH = 15
             MIN_PASSWORD_LENGTH = 2
 
             // Validate username.
@@ -46,7 +46,7 @@ module.exports = function ({ accountRepository, validator }) {
                 errors.push("lastNameMissing")
             } else if (!account.hasOwnProperty("email")) {
                 errors.push("emailMissing")
-            } else if (!account.hasOwnProperty("age")) {
+            } else if (account.hasOwnProperty("age")) {
                 errors.push("ageMissing")
             } else if (!account.hasOwnProperty("city")) {
                 errors.push("cityMissing")
@@ -54,13 +54,23 @@ module.exports = function ({ accountRepository, validator }) {
                 errors.push("genderMissing")
             }
 
-
+            /*
+            if(!accountRepository.isEmailIsUnique(email,function(error, exist){
+            errors.push("email already exists")
+            */
+            
             if (0 < errors.length) {
 
-                callback(errors)
-                return
-            }
-            accountRepository.updateAccount(account, callback)
+                            callback(errors)
+                            return
+                        }
+                        accountRepository.updateAccount(account, callback)
+            //} )){
+                
+            //}
+
+
+            
         },
 
         loginAccount: function (email, password, callback) {
@@ -69,9 +79,8 @@ module.exports = function ({ accountRepository, validator }) {
                 if(error){
                     callback(error, null)
                 }
-                else{//FRÅGA LINUS
-                    compareAccount(account, password, callback)
-                    
+                else{
+                    compareAccount(account, password, callback)                    
                 }
             })
 

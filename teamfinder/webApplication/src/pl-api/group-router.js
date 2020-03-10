@@ -198,7 +198,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 if (errors && errors.includes("DatabaseError")) {
                     response.status(500).json(errors)
                 }
-                else if (errors && errors.length() > 0) {
+                else if (errors && errors.length > 0) {
                     response.status(400).json(errors)
                 }
                 else {
