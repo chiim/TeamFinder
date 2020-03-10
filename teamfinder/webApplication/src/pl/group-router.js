@@ -18,7 +18,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
     router.get('/finder', function (request, response) {
         const accountId = request.session.accountId
-        groupManager.getAllGroupIds(function (error, groupIds) {
+        groupManager.getAllGroups(function (error, groups) {
             if (error) {
                 const model = {
                     error,
@@ -28,12 +28,49 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             }
             else {
                 var databaseErrors = []
+                const memberGroupCount = []
                 try {
-                    for (var i = 0; i < groupIds.length; i++) {
-                        groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
+                    for (var i = 0; i < groups.length; i++) {
+                        groupMemberManager.getNrOfMembersInGroup(groups[i].groupId, function (error, nrOfMembers) {
+                            console.log("log nrOfMembers: ", nrOfMembers)
                             if (error) {
                                 console.log(error)
                                 throw (error)
+                            }
+                            else {
+                                memberGroupCount.push(nrOfMembers)
+                                console.log("memberGroupCount after push: ", memberGroupCount)
+                            }
+
+                            if (memberGroupCount.length == groups.length) {
+                                if (accountId) {
+
+                                    const errors = removeActiveGroups(accountId, groups)
+
+                                    if (errors) {
+                                        const model = {
+                                            groups,
+                                            csrfToken: request.csrfToken()
+                                        }
+                                        response.render('group-finder.hbs', model)
+                                    }
+                                    else {
+                                        groups = addMemberCountToGroups(memberGroupCount, groups)
+                                        const model = {
+                                            groups,
+                                            csrfToken: request.csrfToken()
+                                        }
+                                        response.render('group-finder.hbs', model)
+                                    }
+                                }
+                                else {
+                                    groups = addMemberCountToGroups(memberGroupCount, groups)
+                                    const model = {
+                                        groups,
+                                        csrfToken: request.csrfToken()
+                                    }
+                                    response.render('group-finder.hbs', model)
+                                }
                             }
                         })
                     }
@@ -48,65 +85,45 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                     }
                     response.render('group-finder.hbs', model)
                 }
-                else {
-                    groupManager.getAllGroups(function (error, groups) {
-                        if (error) {
-                            const model = {
-                                error,
-                                groups,
-                                csrfToken: request.csrfToken()
-                            }
-                            response.render('group-finder.hbs', model)
-                        }
-                        else {
-                            if (accountId) {
-                                const errors = []
-                                groupManager.getActiveGroupIds(accountId, function (error, activeGroupIds) {
-                                    if (error) {
-
-                                        const model = {
-                                            errors,
-                                            csrfToken: request.csrfToken()
-                                        }
-                                        response.render('group-finder.hbs', model)
-                                    }
-                                    else {
-                                        const groupIds = getGroupIds(groups)
-                                        const extractedActiveGroupIds = []
-                                        for (var i = 0; i < activeGroupIds.length; i++) {
-                                            extractedActiveGroupIds.push(activeGroupIds[i].groupId)
-                                        }
-
-                                        for (var i = groupIds.length - 1; i >= 0; i--) {
-                                            if (extractedActiveGroupIds.includes(groupIds[i])) {
-                                                groups.splice(i, 1) // pop specific element
-                                            }
-                                        }
-                                        const model = {
-                                            groups,
-                                            csrfToken: request.csrfToken()
-                                        }
-                                        response.render('group-finder.hbs', model)
-
-                                    }
-
-                                })
-                            }
-                            else {
-                                const model = {
-                                    groups,
-                                    csrfToken: request.csrfToken()
-                                }
-                                response.render('group-finder.hbs', model)
-                            }
-                        }
-                    })
-                }
             }
         })
     })
 
+    removeActiveGroups = function (accountId, groups) {
+        const errors = []
+        groupManager.getActiveGroupIds(accountId, function (error, activeGroupIds) {
+            if (error) {
+                const model = {
+                    errors,
+                    csrfToken: request.csrfToken()
+                }
+                return errors
+                response.render('group-finder.hbs', model)
+            }
+            else {
+                const groupIds = getGroupIds(groups)
+                const extractedActiveGroupIds = []
+                for (var i = 0; i < activeGroupIds.length; i++) {
+                    extractedActiveGroupIds.push(activeGroupIds[i].groupId)
+                }
 
+                for (var i = groupIds.length - 1; i >= 0; i--) {
+                    if (extractedActiveGroupIds.includes(groupIds[i])) {
+                        groups.splice(i, 1) // pop specific element
+                    }
+                }
+            }
+        })
+    }
+
+    addMemberCountToGroups = function (memberGroupCount, groups) {
+
+        for (var i = 0; i < groups.length; i++) {
+            groups[i]['nrOfMembers'] = memberGroupCount[i]
+        }
+        return groups
+
+    }
 
     router.post('/finder', function (request, response) {
         const groupId = request.body.groupId

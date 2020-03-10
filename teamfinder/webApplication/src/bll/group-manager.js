@@ -1,18 +1,31 @@
 
-module.exports = function ({groupRepository, validator}) {
+module.exports = function ({ groupRepository, validator, accountManager }) {
 
     return {
 
         createGroup: function (groupCredentials, callback) {
 
-            const validationErrors = validator.validateGroup(groupCredentials)
-
-            if (validationErrors.length > 0) {
-                callback(validationErrors, null)
+            const groupValidationErrors = validator.validateGroup(groupCredentials)
+            if (groupValidationErrors.length > 0) {
+                callback(groupValidationErrors, null)
             }
 
             else {
-                groupRepository.createGroup(groupCredentials, callback)
+                accountManager.getAccountById(groupCredentials.accountId, function (error, account) {
+                    if (error) {
+                        callback(error, null)
+                    }
+                    else {
+                        const validateAuthorErrors = validator.validateRequirements(account, groupCredentials)
+                        if (validateAuthorErrors.length > 0) {
+                            const error = "The group requirements need to match your account info"
+                            callback(error, null)
+                        }
+                        else {
+                            groupRepository.createGroup(groupCredentials, callback)
+                        }
+                    }
+                })
             }
         },
 
@@ -53,9 +66,9 @@ module.exports = function ({groupRepository, validator}) {
             }
         },
 
-        validateRequirements: function(account, group){
+        validateRequirements: function (account, group) {
             return validator.validateRequirements(account, group)
         }
-        
+
     }
 }

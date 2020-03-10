@@ -22,23 +22,21 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         // Get id from params and verify. Id from params is read from id token
         const accountId = getAccountId(accessToken)
 
-        groupManager.getAllGroupIds(function (error, groupIds) {
+        groupManager.getAllGroups(function (error, groups) {
             if (error) {
                 console.log(error)
                 response.status(500).end() // Internal server error
             }
-            else if (groupIds.length == 0) {
+            else if (groups.length == 0) {
                 console.log("Kommer jag hit??")
                 response.status(204).end()  // No content
             }
             else {
-                console.log("GroupIds: ", groupIds)
                 var databaseErrors = []
                 var memberGroupCount = []
                 try {
-                    for (var i = 0; i < groupIds.length; i++) {
-                        // Gör om så den skickar tillbaka antalet medlemmar i varje grupp. Ta bort NrOfMembers
-                        groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error, nrOfMembers) {
+                    for (var i = 0; i < groups.length; i++) {
+                        groupMemberManager.getNrOfMembersInGroup(groups[i].groupId, function (error, nrOfMembers) {
                             if (error) {
                                 console.log(error)
                                 throw (error)
@@ -57,56 +55,44 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     response.status(500).end()
                 }
                 else {
-                    groupManager.getAllGroups(function (error, groups) {
-                        if (error) {
-                            console.log(error)
-                            response.status(500).end()
-                        }
-                        else if (groups.length == 0) {
-                            response.status(204) // No content
-                        }
-                        else {
-                            console.log("show accountId: ", accountId)
-                            if (accountId) {
-                                groupManager.getActiveGroups(accountId, function (error, activeGroupIds) {
-                                    if (error) {
-                                        console.log(error)
-                                        response.status(500).json(error)
-                                    }
-                                    else {
-                                        const groupIds = getGroupIdsFromGroups(groups)
-
-                                        const extractedActiveGroupIds = []
-                                        for (var i = 0; i < activeGroupIds.length; i++) {
-                                            extractedActiveGroupIds.push(activeGroupIds[i].groupId)
-                                        }
-
-                                        for (var i = groupIds.length - 1; i >= 0; i--) {
-                                            if (extractedActiveGroupIds.includes(groupIds[i].groupId)) {
-                                                groups.splice(i, 1) // pop specific element
-                                            }
-                                        }
-                                        groups = addMemberCountToGroups(memberGroupCount, groups)
-                                        response.status(200).json(groups)
-
-                                    }
-                                })
+                    console.log("show accountId: ", accountId)
+                    if (accountId) {
+                        groupManager.getActiveGroups(accountId, function (error, activeGroupIds) {
+                            if (error) {
+                                console.log(error)
+                                response.status(500).json(error)
                             }
-
                             else {
+                                const groupIds = getGroupIdsFromGroups(groups)
+
+                                const extractedActiveGroupIds = []
+                                for (var i = 0; i < activeGroupIds.length; i++) {
+                                    extractedActiveGroupIds.push(activeGroupIds[i].groupId)
+                                }
+
+                                for (var i = groupIds.length - 1; i >= 0; i--) {
+                                    if (extractedActiveGroupIds.includes(groupIds[i].groupId)) {
+                                        groups.splice(i, 1) // pop specific element
+                                    }
+                                }
                                 groups = addMemberCountToGroups(memberGroupCount, groups)
                                 response.status(200).json(groups)
+
                             }
-                        }
-                    })
+                        })
+                    }
+                    else {
+                        groups = addMemberCountToGroups(memberGroupCount, groups)
+                        response.status(200).json(groups)
+                    }
                 }
             }
         })
     })
 
-    addMemberCountToGroups = function(memberGroupCount, groups){
-        
-        for(var i = 0; i < groups.length; i++){
+    addMemberCountToGroups = function (memberGroupCount, groups) {
+
+        for (var i = 0; i < groups.length; i++) {
             groups[i]['nrOfMembers'] = memberGroupCount[i]
         }
         return groups
