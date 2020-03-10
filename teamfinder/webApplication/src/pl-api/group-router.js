@@ -125,7 +125,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
         groupMemberManager.getNrOfMembersInGroup(groupId, function (error) {
             if (error) {
-                response.header("Content-Type", "application/json")
                 response.status(500).json(error)
             }
             else {
@@ -133,13 +132,11 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     const accountIds = getAccountIds(dictOfAccountIds)
 
                     if (error) {
-                        response.setHeader("Content-Type", "application/json")
                         response.status(500).json(error)
                     }
                     else if (!accountIds.includes(accountId)) {
                         const error = "You are not a member of this group"
-                        response.setHeader("Content-Type", "application/json")
-                        response.setHeader("Location", "/groups")
+                        //response.setHeader("Location", "/groups")
                         response.status(401).json(error)
                     }
                     else {
@@ -198,25 +195,21 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             console.log(groupCredentials)
             groupManager.createGroup(groupCredentials, function (errors, groupId) {
                 if (errors && errors.includes("DatabaseError")) {
-                    response.header("Content-Type", "application/json")
                     response.status(500).json(errors)
                 }
                 else if (errors && errors.length() > 0) {
-                    response.header("Content-Type", "application/json")
                     response.status(400).json(errors)
                 }
                 else {
                     accountManager.getAccountById(accountId, function (error, account) {
                         if (error) {
-                            response.header("Content-Type", "application/json")
-                            response.status(400).json(error)
+                            response.status(500).json(error)
                         }
                         else {
                             console.log(accountId, groupId)
                             groupManager.getGroupById(groupId, function (error, group) {
                                 if (error) {
-                                    response.header("Content-Type", "application/json")
-                                    response.status(400).json(error)
+                                    response.status(500).json(error)
                                 }
                                 else {
                                     console.log("account: ", account)
@@ -225,7 +218,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         if (error) {
                                             console.log("errors: ", error)
                                             console.log("Är jag här?")
-                                            response.header("Content-Type", "application/json")
                                             response.status(500).json(error)
                                         }
                                         else {

@@ -6,6 +6,8 @@ module.exports = function ({ accountManager }) {
     const router = express.Router()
 
     router.post('/sign-up', function (request, response) {
+
+        console.log("inside sign-up router")
         const firstName = request.body.firstName
         const lastName = request.body.lastName
         const email = request.body.email
@@ -22,6 +24,7 @@ module.exports = function ({ accountManager }) {
             city,
             gender
         }
+        console.log("accccccccccc", account)
         accountManager.createAccount(account, function (errors, id) {
             if (errors && errors.includes("databaseError")) {
                 response.status(500).end()
@@ -63,7 +66,6 @@ module.exports = function ({ accountManager }) {
                 } else {
 
                     const payload = { accountId: account.accountId }
-
                     const accessToken = jwt.sign(payload, serverSecret)
 
 
