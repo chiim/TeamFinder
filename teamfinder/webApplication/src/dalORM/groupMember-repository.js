@@ -40,18 +40,18 @@ module.exports = function () {
                         groupId: groupId
                     }
                 }).then(function () {
-
-                    callback(null)
+                    
+                    callback(null, numberOfMembers)
                 }).catch(function (error) {
                     console.log(error)
                     const databaseError = "DatabaseError: Something went wrong updating groupMembers. inside update"
-                    callback(databaseError)
+                    callback(databaseError, null)
                 })
 
             }).catch(function (error) {
                 console.log(error)
                 const databaseError = "DatabaseError: Something went wrong updating groupMembers. with count"
-                callback(databaseError)
+                callback(databaseError, null)
             })
 
             /*

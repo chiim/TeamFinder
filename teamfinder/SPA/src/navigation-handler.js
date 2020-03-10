@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
         // handling the communication with the backend.
 
 		fetch(
-            //"http://localhost:8080/pl-api/groups", {
-			"http://192.168.99.100:8080/pl-api/groups/", {
+            "http://localhost:8080/pl-api/groups", {
+			//"http://192.168.99.100:8080/pl-api/groups/", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -101,8 +101,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		// TODO: Build an SDK (e.g. a separate JS file)
 		// handling the communication with the backend.
 		fetch(
-            //"http://localhost:8080/pl-api/groups/" + groupId, {
-			"http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
+            "http://localhost:8080/pl-api/groups/" + groupId, {
+			//"http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -130,8 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		// TODO: Build an SDK (e.g. a separate JS file)
 		// handling the communication with the backend.
 		fetch(
-            //"http://localhost:8080/pl-api/groups/" + id, {
-			"http://192.168.99.100:8080/pl-api/groups/" + id, {
+            "http://localhost:8080/pl-api/groups/" + id, {
+			//"http://192.168.99.100:8080/pl-api/groups/" + id, {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
@@ -160,8 +160,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = document.querySelector("#login-page .password").value
 
         fetch(
-            //"http://localhost:8080/pl-api/accounts/tokens", {
-            "http://192.168.99.100:8080/pl-api/accounts/tokens", {
+            "http://localhost:8080/pl-api/accounts/tokens", {
+            //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -208,6 +208,7 @@ function changeToPage(url) {
     // TODO: Optimally this information can be put in an array instead of having a long list of if-else if statements.
     // TODO: Factor out common code in all branches.
     if (url == "/") {
+        console.log("Hallåå??")
         document.getElementById("home-page").classList.add("current-page")
     } else if (url == "/groups") {
         console.log("inside fetchallgroupsssssssssssssssss")
@@ -241,8 +242,8 @@ function changeToPage(url) {
 function fetchAllGroups() {
 
     fetch(
-        //"http://localhost:8080/pl-api/groups/"
-        "http://192.168.99.100:8080/pl-api/groups" // fors: ?accountId=" + accountId
+        "http://localhost:8080/pl-api/groups/"
+        //"http://192.168.99.100:8080/pl-api/groups" // fors: ?accountId=" + accountId
     ).then(function (response) {
         console.log("inside fetchallgroupsssssssssssssssss")
         console.log("response: ", response)
@@ -275,8 +276,8 @@ function fetchGroup(id) {
 
 
     fetch(
-        //"http://localhost:8080/pl-api/groups/" + id
-        "http://192.168.99.100:8080/pl-api/groups/" + id
+        "http://localhost:8080/pl-api/groups/" + id
+        //"http://192.168.99.100:8080/pl-api/groups/" + id
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         return response.json()
@@ -334,8 +335,8 @@ function fetchGroup(id) {
 
 function updateGroup(id){
     fetch(
-        //"http://localhost:8080/pl-api/groups/" + id
-        "http://192.168.99.100:8080/pl-api/groups/" + id
+        "http://localhost:8080/pl-api/groups/" + id
+        //"http://192.168.99.100:8080/pl-api/groups/" + id
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         return response.json()

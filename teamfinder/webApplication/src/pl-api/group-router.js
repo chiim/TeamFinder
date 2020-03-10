@@ -34,13 +34,17 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             else {
                 console.log("GroupIds: ", groupIds)
                 var databaseErrors = []
+                var memberGroupCount = []
                 try {
                     for (var i = 0; i < groupIds.length; i++) {
                         // Gör om så den skickar tillbaka antalet medlemmar i varje grupp. Ta bort NrOfMembers
-                        groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
+                        groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error, nrOfMembers) {
                             if (error) {
                                 console.log(error)
                                 throw (error)
+                            }
+                            else {
+                                memberGroupCount.push(nrOfMembers)
                             }
                         })
                     }
@@ -82,7 +86,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                                 groups.splice(i, 1) // pop specific element
                                             }
                                         }
-                                        response.setHeader("Content-Type", "application/json")
+                                        groups = addMemberCountToGroups(memberGroupCount, groups)
                                         response.status(200).json(groups)
 
                                     }
@@ -90,7 +94,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                             }
 
                             else {
-                                response.setHeader("Content-Type", "application/json")
+                                groups = addMemberCountToGroups(memberGroupCount, groups)
                                 response.status(200).json(groups)
                             }
                         }
@@ -99,6 +103,15 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             }
         })
     })
+
+    addMemberCountToGroups = function(memberGroupCount, groups){
+        
+        for(var i = 0; i < groups.length; i++){
+            groups[i]['nrOfMembers'] = memberGroupCount[i]
+        }
+        return groups
+
+    }
 
     getGroupIdsFromGroups = function (groups) {
         const groupIds = []
