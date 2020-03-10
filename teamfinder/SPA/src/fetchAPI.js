@@ -2,7 +2,7 @@ function fetchAllGroups() {
 
     fetch(
         //"http://localhost:8080/pl-api/groups/"
-        "http://192.168.99.100:8080/pl-api/groups/"
+        "http://192.168.99.100:8080/pl-api/groups/" // fors: ?accountId=" + accountId
     ).then(function (response) {
         console.log("inside fetchallgroupsssssssssssssssss")
         console.log("response: ", response)

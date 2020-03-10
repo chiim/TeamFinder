@@ -19,6 +19,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
     router.get('/', function (request, response) {
         const accessToken = request.body.accessToken // Hämta lokalt istället. Minns ej hur
+        // Get id from params and verify. Id from params is read from id token
         const accountId = getAccountId(accessToken)
 
         groupManager.getAllGroupIds(function (error, groupIds) {
@@ -35,6 +36,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 var databaseErrors = []
                 try {
                     for (var i = 0; i < groupIds.length; i++) {
+                        // Gör om så den skickar tillbaka antalet medlemmar i varje grupp. Ta bort NrOfMembers
                         groupMemberManager.getNrOfMembersInGroup(groupIds[i].groupId, function (error) {
                             if (error) {
                                 console.log(error)
@@ -66,7 +68,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                     if (error) {
                                         console.log(error)
                                         response.status(500).json(error)
-                                        response.header("Content-Type", "application/json")
                                     }
                                     else {
                                         const groupIds = getGroupIdsFromGroups(groups)

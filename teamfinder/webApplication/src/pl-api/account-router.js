@@ -65,7 +65,8 @@ module.exports = function ({ accountManager }) {
                     response.status(400).json({ errors: "some error?" })
                 } else {
 
-                    const payload = { accountId: account.accountId }
+                    const payload = { accountId: account.accountId } // ifAdmin
+
                     const accessToken = jwt.sign(payload, serverSecret)
 
 
