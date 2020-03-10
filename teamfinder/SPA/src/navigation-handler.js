@@ -94,6 +94,7 @@ function changeToPage(url) {
     } else if (url == "/groups") {
         console.log("inside fetchallgroupsssssssssssssssss")
         document.getElementById("groups-page").classList.add("current-page")
+        
         fetchAllGroups()
     } else if (url == "/sign-up") {
         document.getElementById("sign-up-page").classList.add("current-page")
@@ -123,14 +124,16 @@ function changeToPage(url) {
     }
 }
 
-function login(accessToken) {
+function login(accessToken, idToken) {
     localStorage.accessToken = accessToken
+    localStorage.idToken = idToken
     document.body.classList.remove("isLoggedOut")
     document.body.classList.add("isLoggedIn")
 }
 
 function logout() {
     localStorage.accessToken = ""
+    localStorage.idToken = ""
     document.body.classList.remove("isLoggedIn")
     document.body.classList.add("isLoggedOut")
 }

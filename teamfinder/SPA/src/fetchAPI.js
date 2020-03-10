@@ -1,5 +1,5 @@
 function fetchAllGroups() {
-
+    
     fetch(
         "http://localhost:8080/pl-api/groups/"
         //"http://192.168.99.100:8080/pl-api/groups/" // fors: ?accountId=" + accountId
@@ -205,8 +205,8 @@ async function authenticateUser(email, password) {
         switch (response.status) {
             case 200:
                 const body = await response.json()
-                login(body.access_token)
-                console.log(body.access_token)
+                login(body.access_token, body.id_token)
+                console.log(body.access_token, body.id_token)
                 changeToPage("/")
                 break
             case 400://bad validation(email, felmeddelande)
