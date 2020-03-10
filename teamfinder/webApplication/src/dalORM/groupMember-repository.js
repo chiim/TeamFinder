@@ -1,5 +1,6 @@
+const dbPostgres = require('../dalORM/dbConnection')
 
-module.exports = function ({ dbPostgres }) {
+module.exports = function () {
 
     return {
 
