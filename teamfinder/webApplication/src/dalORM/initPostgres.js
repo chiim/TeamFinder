@@ -1,8 +1,5 @@
-module.exports = function () {
 
-    return {
-
-        initDb: function (sequelize, Sequelize) {
+        module.exports = function (sequelize, Sequelize) {
             const Account = sequelize.define('account', {
                 accountId: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
                 firstName: { type: Sequelize.TEXT, allowNull: false },
@@ -217,9 +214,6 @@ module.exports = function () {
             })
         }
 
-    }
-
-}
                     /*Account.create({
 firstName: 'admin',
 lastName: 'admin',

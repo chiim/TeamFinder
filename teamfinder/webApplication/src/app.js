@@ -30,8 +30,6 @@ const groupMemberManager = require('./bll/groupMember-manager')
 const middlewareRouter = require('./pl/middleware-router')
 const validator = require('./bll/validator')
 const dbMySQL = require('./dal/dbConnection')
-const dbPostgres = require('./dalORM/dbConnection')
-const initPostgres = require('./dalORM/initPostgres')
 
 const apiAccountRouter = require('./pl-api/account-router')
 const apiGroupRouter = require('./pl-api/group-router')
@@ -67,8 +65,6 @@ else{
   container.register('groupMemberRepository', awilix.asFunction(groupMemberRepository))
   container.register('accountRepository', awilix.asFunction(accountRepository))
   container.register('messageRepository', awilix.asFunction(messageRepository))
-  container.register('initPostgres', awilix.asFunction(initPostgres))
-  container.register('dbPostgres', awilix.asFunction(dbPostgres))
 }
 
 
