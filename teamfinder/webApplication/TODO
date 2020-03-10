@@ -4,7 +4,11 @@ get old dal to work
 
 leave group
 
-function to connect to the database just once. recursive
+better validation on create account
+
+we can create a group, which we cant join because of the requirements => a group gets created without any member/admin
+
+name of group has to be unique, this throws a database error and doesnt show validation error to the user.
 
 --------------- HIGHER GRADE ------------
 

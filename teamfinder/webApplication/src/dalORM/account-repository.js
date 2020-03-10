@@ -23,6 +23,27 @@ module.exports = function () {
             })
         },
 
+        isEmailIsUnique: function(email, callback){
+
+            const dbAccount = dbPostgres.model("account")
+
+            dbAccount.count({
+                where : {
+                    email :email
+                }
+            }).then(function(count){
+                if(count != 0){
+                    callback(true)
+                }else{
+                    callback(false)
+                }                
+            }).catch(function(error){
+                console.log(error)
+                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
+                callback(databaseError, null)
+            })
+        },
+
         getAccountById: function (accountId, callback) {
             const dbAccount = dbPostgres.model("account")
 
