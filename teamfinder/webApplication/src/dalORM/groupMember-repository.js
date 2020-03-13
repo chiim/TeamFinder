@@ -14,7 +14,7 @@ module.exports = function () {
                 console.log("Then funkar")
                 callback(null)
                 return
-            }).catch(function (error) { // Med postman kommer den alltid hit? Via hemsidan gör den inte det.
+            }).catch(function (error) {
                     const databaseError = "DatabaseError: You're already part of the group"
                     console.log("Database error logged here: ", databaseError)
                     console.log("Error from catch logged here: ", error)
