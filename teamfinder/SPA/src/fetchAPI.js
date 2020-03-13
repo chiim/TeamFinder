@@ -1,7 +1,24 @@
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    // Below row decodes the string
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
 function fetchAllGroups() {
-    
+
+    const payload = parseJwt(localStorage.idToken)
+    console.log("payload: ", payload)
+
+    const accountId = payload.sub
+
+
     fetch(
-        "http://localhost:8080/pl-api/groups/"
+        "http://localhost:8080/pl-api/groups?accountId="+accountId
         //"http://192.168.99.100:8080/pl-api/groups/" // fors: ?accountId=" + accountId
     ).then(function (response) {
         console.log("inside fetchallgroupsssssssssssssssss")
@@ -35,7 +52,14 @@ function fetchGroup(id) {
 
 
     fetch(
-        "http://localhost:8080/pl-api/groups/" + id
+        "http://localhost:8080/pl-api/groups/" + id, {          
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+ localStorage.accessToken
+        },
+        body: JSON.stringify(group)
+    }
         //"http://192.168.99.100:8080/pl-api/groups/" + id
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.

@@ -5,12 +5,13 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
     const router = express.Router()
 
-    function getAccountId(accessToken) {
+    function getAccountId(token) {
         const serverSecret = "sdfkjdslkfjslkfd"
 
-        if (accessToken) {
-            const payload = jwt.verify(accessToken, serverSecret)
-            return payload.accountId
+        console.log("IdToken in accountId: ", token)
+        if (token) {
+            const payload = jwt.verify(token, serverSecret)
+            return payload.sub
         }
         else {
             return null
@@ -18,10 +19,10 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     }
 
     router.get('/', function (request, response) {
-        const accessToken = request.body.accessToken // Hämta lokalt istället. Minns ej hur
+        const accountId = request.query.accountId
+        //const accessToken = request.body.accessToken // Hämta lokalt istället. Minns ej hur
         // Get id from params and verify. Id from params is read from id token
-        const accountId = getAccountId(accessToken)
-
+        console.log("accountId: ", accountId)
         groupManager.getAllGroups(function (error, groups) {
             if (error) {
                 console.log(error)
@@ -57,24 +58,27 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 else {
                     console.log("show accountId: ", accountId)
                     if (accountId) {
-                        groupManager.getActiveGroups(accountId, function (error, activeGroupIds) {
+                        groupManager.getActiveGroupIds(accountId, function (error, activeGroupIds) {
                             if (error) {
                                 console.log(error)
                                 response.status(500).json(error)
                             }
                             else {
                                 const groupIds = getGroupIdsFromGroups(groups)
-
+                                console.log("GroupIds: ", groupIds)
                                 const extractedActiveGroupIds = []
                                 for (var i = 0; i < activeGroupIds.length; i++) {
                                     extractedActiveGroupIds.push(activeGroupIds[i].groupId)
                                 }
 
                                 for (var i = groupIds.length - 1; i >= 0; i--) {
-                                    if (extractedActiveGroupIds.includes(groupIds[i].groupId)) {
+                                    console.log("Current id in loop: ", groupIds[i])
+                                    if (!extractedActiveGroupIds.includes(groupIds[i])) {
                                         groups.splice(i, 1) // pop specific element
                                     }
                                 }
+                                console.log("ActiveGroupIds: ", activeGroupIds)
+                                console.log("All groups: ", groups)
                                 groups = addMemberCountToGroups(memberGroupCount, groups)
                                 response.status(200).json(groups)
 
@@ -117,9 +121,11 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
 
     router.get("/:id", function (request, response) {
-        const accountId = 1
-        //const accessToken = request.body.accessToken
-        //const accountId = getAccountId(accessToken)
+
+        const accessToken = request.headers.authorization.split(" ")[1]
+        console.log("AccessToken: ", accessToken)
+
+        const accountId = getAccountId(accessToken)
         const groupId = request.params.id
         var isAuthor = false
 
