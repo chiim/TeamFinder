@@ -4,6 +4,8 @@ get old dal to work
 
 leave group
 
+"created at" i group-specific funkar inte. Fixa datumet?
+
 better validation on create account
 
 we can create a group, which we cant join because of the requirements => a group gets created without any member/admin

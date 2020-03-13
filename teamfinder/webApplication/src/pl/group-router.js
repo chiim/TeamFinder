@@ -437,7 +437,36 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         response.redirect('/groups/' + id + '/manageMembers')
     })
 
+    router.post('/:id/leave', function(request, response){
 
+        const groupId = request.params.id
+        const accountId = request.session.accountId
+
+        groupManager.getGroupById(groupId, function(error, group){
+            if(error){
+                const model = {
+                    error,
+                    csrfToken: request.csrfToken()
+                }
+                response.render('group-specific.hbs', model)
+            }
+            else{
+                groupMemberManager.removeGroupMemberLink(accountId, group, function(error){
+                    if(error){
+                        const model = {
+                            error,
+                            csrfToken: request.csrfToken()
+                        }
+                        response.render('group-specific.hbs', model)
+                    }
+                    else{
+                        response.redirect('/groups/active')
+                    }
+                })
+            }
+        })
+
+    })
 
     router.get('/:id/manageMembers', function (request, response) {
         const accountId = request.session.accountId
@@ -530,7 +559,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             }
             else {
                 if (group.authorId == authorId) {
-                    groupMemberManager.removeGroupMemberLink(accountId, groupId, function (error) {
+                    groupMemberManager.removeGroupMemberLink(accountId, group, function (error) {
                         if (error) {
                             const model = {
                                 error,
