@@ -387,8 +387,9 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                         editMessage = messages[i]
                                     }
                                 }
-
-                                var isAuthor = false
+                                console.log("AuthorId: ", group.authorId)
+                                console.log("AccountId: ", accountId)
+                                
                                 if (group.authorId == accountId) {
                                     isAuthor = true
                                 }

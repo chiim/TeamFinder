@@ -60,9 +60,9 @@ INSERT INTO `Accounts` (`firstName`, `lastName`, `email`, `password`, `age`, `ci
 INSERT INTO `Accounts` (`firstName`, `lastName`, `email`, `password`, `age`, `city`, `gender`) VALUES ('Knugen', 'Axelsson', 'b@b', '$2b$10$4CgUwazdNHL0bZBmhaRUGunNf27fMZby7O3I6BioBhfyhk3SgClzO', '28', 'Jkpg', 'male');
 INSERT INTO `Accounts` (`firstName`, `lastName`, `email`, `password`, `age`, `city`, `gender`) VALUES ('Bulten', 'Axelsson', 'w@w', '$2b$10$qAxwACTHOEK.zZAli6SBvuyfmy4FcBO6NMUBKqz6/hdGNo3jhb4Qe', '5', 'Jkpg', 'male');
 
-INSERT INTO `Groups` (`name`, `image`, `sport`, `nrOfMembers`, `memberSlots`, `city`, `minAge`, `maxAge`, `skillLevel`, `allowedGender`, `authorId`) VALUES ('grupp1', 'Volleyball', 'Volleyball', '0', '10', 'Jkpg', '2', '100', 'Beginner', 'Any', '1');
-INSERT INTO `Groups` (`name`, `image`, `sport`, `nrOfMembers`, `memberSlots`, `city`, `minAge`, `maxAge`, `skillLevel`, `allowedGender`, `authorId`) VALUES ('grupp2', 'Volleyball', 'Volleyball', '0', '10', 'Jkpg', '2', '100', 'Beginner', 'Any', '1');
-INSERT INTO `Groups` (`name`, `image`, `sport`, `nrOfMembers`, `memberSlots`, `city`, `minAge`, `maxAge`, `skillLevel`, `allowedGender`, `authorId`) VALUES ('grupp3', 'Volleyball', 'Volleyball', '0', '10', 'Jkpg', '2', '100', 'Beginner', 'Any', '1');
+INSERT INTO `Groups` (`name`, `image`, `sport`, `nrOfMembers`, `memberSlots`, `city`, `minAge`, `maxAge`, `skillLevel`, `allowedGender`, `authorId`) VALUES ('trash', 'Volleyball', 'Volleyball', '0', '10', 'Jkpg', '2', '100', 'Beginner', 'Any', '1');
+INSERT INTO `Groups` (`name`, `image`, `sport`, `nrOfMembers`, `memberSlots`, `city`, `minAge`, `maxAge`, `skillLevel`, `allowedGender`, `authorId`) VALUES ('champ', 'Volleyball', 'Volleyball', '0', '10', 'Jkpg', '2', '100', 'Beginner', 'Any', '2');
+INSERT INTO `Groups` (`name`, `image`, `sport`, `nrOfMembers`, `memberSlots`, `city`, `minAge`, `maxAge`, `skillLevel`, `allowedGender`, `authorId`) VALUES ('fanclub', 'Volleyball', 'Volleyball', '0', '10', 'Jkpg', '2', '100', 'Beginner', 'Any', '1');
 
 INSERT INTO `Messages` (`groupId`, `accountId`, `text`, `authorName`) VALUES ('1', '1', 'first message wohooo', 'Knugen');
 INSERT INTO `Messages` (`groupId`, `accountId`, `text`, `authorName`) VALUES ('1', '2', 'woof woof', 'Bulten');
