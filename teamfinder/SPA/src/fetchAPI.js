@@ -1,25 +1,18 @@
-function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    // Below row decodes the string
-    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
+const parseJwt = function(token) {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
 }
 
 function fetchAllGroups() {
-
     const payload = parseJwt(localStorage.idToken)
-    console.log("payload: ", payload)
-
     const accountId = payload.sub
 
-
     fetch(
-        "http://localhost:8080/pl-api/groups?accountId="+accountId
-        //"http://192.168.99.100:8080/pl-api/groups/" // fors: ?accountId=" + accountId
+        //"http://localhost:8080/pl-api/groups?accountId="+accountId
+        "http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
     ).then(function (response) {
         console.log("inside fetchallgroupsssssssssssssssss")
         console.log("response: ", response)
@@ -50,17 +43,17 @@ function fetchAllGroups() {
 
 function fetchGroup(id) {
 
+    console.log("id: ", id)
 
     fetch(
-        "http://localhost:8080/pl-api/groups/" + id, {          
-        method: "POST",
+        //"http://localhost:8080/pl-api/groups/" + id, { 
+        "http://192.168.99.100:8080/pl-api/groups/" + id, {
+          
         headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer "+ localStorage.accessToken
         },
-        body: JSON.stringify(group)
     }
-        //"http://192.168.99.100:8080/pl-api/groups/" + id
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         return response.json()
@@ -117,9 +110,15 @@ function fetchGroup(id) {
 }
 
 function getGroupForUpdate(id) {
+    console.log("id: ", id)
     fetch(
-        "http://localhost:8080/pl-api/groups/" + id
-        //"http://192.168.99.100:8080/pl-api/groups/" + id
+        //"http://localhost:8080/pl-api/groups/" + id
+        "http://192.168.99.100:8080/pl-api/groups/" + id, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+ localStorage.accessToken
+            },
+        }
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         return response.json()
@@ -158,12 +157,12 @@ async function createGroup(group) {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/pl-api/groups", {
-            //"http://192.168.99.100:8080/pl-api/groups/", {
+            //"http://localhost:8080/pl-api/groups", {
+            "http://192.168.99.100:8080/pl-api/groups/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                //"Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer "+ localStorage.accessToken
             },
             body: JSON.stringify(group)
         })
@@ -194,12 +193,12 @@ async function createGroup(group) {
 //wait with this one
 function deleteGroup(id) {
     fetch(
-        "http://localhost:8080/pl-api/groups/" + id, {
-        //"http://192.168.99.100:8080/pl-api/groups/" + id, {
+        //"http://localhost:8080/pl-api/groups/" + id, {
+        "http://192.168.99.100:8080/pl-api/groups/" + id, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            //"Authorization": "Bearer "+ localStorage.accessToken
+            "Authorization": "Bearer "+ localStorage.accessToken
         }
     }
     ).then(function (response) {
@@ -218,8 +217,8 @@ async function authenticateUser(email, password) {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/pl-api/accounts/tokens", {
-            //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
+            //"http://localhost:8080/pl-api/accounts/tokens", {
+            "http://192.168.99.100:8080/pl-api/accounts/tokens", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -253,8 +252,8 @@ async function signUp(account) {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/pl-api/accounts/sign-up", {
-            //"http://192.168.99.100:8080/pl-api/accounts/sign-up", {
+            //"http://localhost:8080/pl-api/accounts/sign-up", {
+            "http://192.168.99.100:8080/pl-api/accounts/sign-up", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -287,12 +286,12 @@ async function signUp(account) {
 
 function updateGroup(group) {
     fetch(
-        "http://localhost:8080/pl-api/groups/" + group.groupId, {
-        //"http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
+        //"http://localhost:8080/pl-api/groups/" + group.groupId, {
+        "http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            //"Authorization": "Bearer "+ localStorage.accessToken
+            "Authorization": "Bearer "+ localStorage.accessToken
         },
         body: JSON.stringify(group)
     }
