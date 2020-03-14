@@ -116,21 +116,35 @@ app.use(function (request, response, next) {
   next()
 })
 
-app.use(function(request, response, next){
-	response.setHeader("Access-Control-Allow-Origin", "*")
-	response.setHeader("Access-Control-Allow-Methods", "*")
-	response.setHeader("Access-Control-Allow-Headers", "*")
-	response.setHeader("Access-Control-Expose-Headers", "*")
-	next()
-})
+// app.use(function(request, response, next){
+// 	response.setHeader("Access-Control-Allow-Origin", "*")
+// 	response.setHeader("Access-Control-Allow-Methods", "*")
+// 	response.setHeader("Access-Control-Allow-Headers", "*")
+// 	response.setHeader("Access-Control-Expose-Headers", "*")
+// 	next()
+// })
+
+accessControl = function(request, response, next){
+  response.setHeader("Access-Control-Allow-Origin", "*")
+  response.setHeader("Access-Control-Allow-Methods", "*")
+  response.setHeader("Access-Control-Allow-Headers", "*")
+  response.setHeader("Access-Control-Expose-Headers", "*")
+  next()
+  // app.use(function(request, response){
+  //   response.setHeader("Access-Control-Allow-Origin", "*")
+  //   response.setHeader("Access-Control-Allow-Methods", "*")
+  //   response.setHeader("Access-Control-Allow-Headers", "*")
+  //   response.setHeader("Access-Control-Expose-Headers", "*")
+  // })
+}
 
 
 app.use('/groups', csrf({ cookie: true }), theGroupRouter)
 app.use('/accounts', csrf({ cookie: true }), theAccountRouter)
 app.use('/messages', csrf({ cookie: true }), theMessageRouter)
 
-app.use('/pl-api/groups', theApiGroupRouter)
-app.use('/pl-api/accounts', theApiAccountRouter)
+app.use('/pl-api/groups', accessControl, theApiGroupRouter)
+app.use('/pl-api/accounts', accessControl, theApiAccountRouter)
 
 // app.use("/groups", groupRouter)
 // app.use("/accounts", accountRouter)
