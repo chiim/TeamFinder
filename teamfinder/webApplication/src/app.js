@@ -124,18 +124,14 @@ app.use(function (request, response, next) {
 // 	next()
 // })
 
+ // We use middleware instead of specifying links below because we use different docker versions making this a simpler solution for us
+ // Could otherwise keep it in an app.use() and replace "*" with localhost:8080 (or 192.168.99.100:8080)
 accessControl = function(request, response, next){
-  response.setHeader("Access-Control-Allow-Origin", "*")
+  response.setHeader("Access-Control-Allow-Origin", "*") 
   response.setHeader("Access-Control-Allow-Methods", "*")
   response.setHeader("Access-Control-Allow-Headers", "*")
   response.setHeader("Access-Control-Expose-Headers", "*")
   next()
-  // app.use(function(request, response){
-  //   response.setHeader("Access-Control-Allow-Origin", "*")
-  //   response.setHeader("Access-Control-Allow-Methods", "*")
-  //   response.setHeader("Access-Control-Allow-Headers", "*")
-  //   response.setHeader("Access-Control-Expose-Headers", "*")
-  // })
 }
 
 
