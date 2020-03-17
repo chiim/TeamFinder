@@ -116,21 +116,31 @@ app.use(function (request, response, next) {
   next()
 })
 
-app.use(function(request, response, next){
-	response.setHeader("Access-Control-Allow-Origin", "*")
-	response.setHeader("Access-Control-Allow-Methods", "*")
-	response.setHeader("Access-Control-Allow-Headers", "*")
-	response.setHeader("Access-Control-Expose-Headers", "*")
-	next()
-})
+// app.use(function(request, response, next){
+// 	response.setHeader("Access-Control-Allow-Origin", "*")
+// 	response.setHeader("Access-Control-Allow-Methods", "*")
+// 	response.setHeader("Access-Control-Allow-Headers", "*")
+// 	response.setHeader("Access-Control-Expose-Headers", "*")
+// 	next()
+// })
+
+ // We use middleware instead of specifying links below because we use different docker versions making this a simpler solution for us
+ // Could otherwise keep it in an app.use() and replace "*" with localhost:8080 (or 192.168.99.100:8080)
+accessControl = function(request, response, next){
+  response.setHeader("Access-Control-Allow-Origin", "*") 
+  response.setHeader("Access-Control-Allow-Methods", "*")
+  response.setHeader("Access-Control-Allow-Headers", "*")
+  response.setHeader("Access-Control-Expose-Headers", "*")
+  next()
+}
 
 
 app.use('/groups', csrf({ cookie: true }), theGroupRouter)
 app.use('/accounts', csrf({ cookie: true }), theAccountRouter)
 app.use('/messages', csrf({ cookie: true }), theMessageRouter)
 
-app.use('/pl-api/groups', theApiGroupRouter)
-app.use('/pl-api/accounts', theApiAccountRouter)
+app.use('/pl-api/groups', accessControl, theApiGroupRouter)
+app.use('/pl-api/accounts', accessControl, theApiAccountRouter)
 
 // app.use("/groups", groupRouter)
 // app.use("/accounts", accountRouter)

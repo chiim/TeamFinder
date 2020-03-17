@@ -24,7 +24,7 @@ module.exports = function () {
                 validationErrors.push("Group name is too long.")
             }
             if (!groupCredentials.groupName.match(lettersOnly)) {
-                validationErrors.push("Only characters a-z allowed.")
+                validationErrors.push("GroupName: Only characters a-z allowed.")
             }
 
             if (groupCredentials.sport == "Select a sport") {

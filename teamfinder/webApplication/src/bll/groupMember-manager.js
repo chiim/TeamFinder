@@ -20,8 +20,14 @@ module.exports = function ({ groupMemberRepository, groupManager }) {
             groupMemberRepository.getGroupMembers(groupId, callback)
         },
 
-        removeGroupMemberLink: function (accountId, groupId, callback) {
-            groupMemberRepository.removeGroupMemberLink(accountId, groupId, callback)
+        removeGroupMemberLink: function (accountId, group, callback) {
+            if(accountId == group.authorId){
+                const error = "The group owner can't be removed from a group"
+                callback(error)
+            }
+            else{
+                groupMemberRepository.removeGroupMemberLink(accountId, group.groupId, callback)
+            }
         }
 
     }

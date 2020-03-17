@@ -70,16 +70,16 @@ module.exports = function ({ accountManager }) {
                     const accessToken = jwt.sign(payload, serverSecret)
 
 
-                    /*
+                    
                     const idToken = jwt.sign(
-                        { sub: account.accountId, email: account.email },
-                        "lkjlkjlkjljlk"
-                    )*/
+                        { sub: account.accountId },
+                        serverSecret
+                    )
                     
 
                     response.status(200).json({
-                        access_token: accessToken
-                        //id_token: idToken
+                        access_token: accessToken,
+                        id_token: idToken
                     })
                 }
 

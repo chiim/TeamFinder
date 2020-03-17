@@ -1,9 +1,18 @@
+const parseJwt = function(token) {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+}
+
+
 async function fetchAllGroups() {
 
     try {
         const response = await fetch(
             //"http://localhost:8080/pl-api/groups/"
-            "http://192.168.99.100:8080/pl-api/groups/" // fors: ?accountId=" + accountId
+            "http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
         )
 
         switch (response.status) {
@@ -28,6 +37,7 @@ async function fetchAllGroups() {
                     li.append(pSport)
                     li.append(pCity)
                     ul.append(li)
+
                 }
                 break
             case 400:
@@ -41,9 +51,11 @@ async function fetchAllGroups() {
 
                 showErrors(errors)
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
         console.log(error)
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }
 
 }
@@ -54,12 +66,18 @@ async function fetchGroup(id) {
 
         const response = await fetch(
             //"http://localhost:8080/pl-api/groups/" + id
-            "http://192.168.99.100:8080/pl-api/groups/" + id
+            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+          
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer "+ localStorage.accessToken
+                },
+            }
         )
 
         switch (response.status) {
 
-            case 201:
+            case 200:
 
                 const response = await response.json()
 
@@ -108,7 +126,7 @@ async function fetchGroup(id) {
                 deleteButton.classList.add("isAuthor")
                 updateButton.classList.remove("showIfAuthor")
                 updateButton.classList.add("isAuthor")
-                goToPage(response.headers.get("Location"))
+                //goToPage(response.headers.get("Location"))
                 break
             case 400:
                 errors = await response.json()
@@ -122,9 +140,11 @@ async function fetchGroup(id) {
                 showErrors(errors)
         }
 
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
         console.log(error)
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }
 }
 
@@ -134,11 +154,16 @@ async function getGroupForUpdate(id) {
 
         const response = await fetch(
             //"http://localhost:8080/pl-api/groups/" + id
-            "http://192.168.99.100:8080/pl-api/groups/" + id
+            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer "+ localStorage.accessToken
+                },
+            }
         )
         switch (response.status) {
 
-            case 201:
+            case 200:
                 const group = response.group
                 const isAuthor = response.isAuthor
 
@@ -178,8 +203,11 @@ async function getGroupForUpdate(id) {
                 showErrors(errors)
         }
 
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
     } catch (error) {
         console.log(error)
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }
 }
 
@@ -192,7 +220,7 @@ async function createGroup(group) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                //"Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer "+ localStorage.accessToken
             },
             body: JSON.stringify(group)
         })
@@ -215,7 +243,7 @@ async function createGroup(group) {
         }
     } catch (error) {
         console.log(error)
-        goToPage("/error-connection")
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }
 
 }
@@ -230,12 +258,12 @@ async function deleteGroup(id) {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                //"Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer "+ localStorage.accessToken
             }
         })
         switch (response.status) {
 
-            case 201:
+            case 200:
                 goToPage(response.headers.get("Location"))//where should we go?
                 break
             case 400:
@@ -250,8 +278,12 @@ async function deleteGroup(id) {
                 showErrors(errors)
         }
 
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
+
     } catch (error) {
         // TODO: Update the view and display error.
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
     }
 }
@@ -272,8 +304,8 @@ async function authenticateUser(email, password) {
         switch (response.status) {
             case 200:
                 const body = await response.json()
-                login(body.access_token)
-                console.log(body.access_token)
+                login(body.access_token, body.id_token)
+                console.log(body.access_token, body.id_token)
                 changeToPage("/")
                 break
             case 400://bad validation(email, felmeddelande)
@@ -282,12 +314,12 @@ async function authenticateUser(email, password) {
                 goToPage("/error")
 
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
-
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
         goToPage("/error")
-
     }
 }
 
@@ -296,7 +328,7 @@ async function signUp(account) {
 
     try {
         const response = await fetch(
-            //"http://localhost:8080/pl-api/accounts/sign-up, {
+            //"http://localhost:8080/pl-api/accounts/sign-up", {
             "http://192.168.99.100:8080/pl-api/accounts/sign-up", {
             method: "POST",
             headers: {
@@ -319,8 +351,10 @@ async function signUp(account) {
                 goToPage("/login")
                 break
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
         goToPage("/error")
     }
@@ -338,7 +372,7 @@ async function updateGroup(group) {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                //"Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer "+ localStorage.accessToken
             },
             body: JSON.stringify(group)
         })
@@ -358,9 +392,12 @@ async function updateGroup(group) {
 
                 showErrors(errors)
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
 
     } catch (error) {
         // TODO: Update the view and display error.
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
     }
 }

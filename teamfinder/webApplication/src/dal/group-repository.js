@@ -21,7 +21,7 @@ module.exports = function ({dbMySQL}) {
                 groupCredentials.maxAge,
                 groupCredentials.skillLevel,
                 groupCredentials.allowedGender,
-                accountId
+                groupCredentials.accountId
             ]
 
             dbMySQL.query(query, values, function (error, result) {
@@ -55,14 +55,14 @@ module.exports = function ({dbMySQL}) {
             const query = "SELECT groupId FROM GroupMembers WHERE accountId = ?"
             const values = [accountId]
 
-            dbMySQL.query(query, values, function (error, activeGroups) {
+            dbMySQL.query(query, values, function (error, activeGroupIds) {
                 if (error) {
                     console.log(error)
                     const databaseError = "Something went wrong fetching active groups."
                     callback(databaseError, null)
                 }
                 else {
-                    callback(null, activeGroups)
+                    callback(null, activeGroupIds)
                 }
             })
 
@@ -133,7 +133,7 @@ module.exports = function ({dbMySQL}) {
                 group.maxAge,
                 group.skillLevel,
                 group.gender,
-                group.id
+                group.groupId
             ]
 
             dbMySQL.query(query, values, function (error, updatedGroup) {
