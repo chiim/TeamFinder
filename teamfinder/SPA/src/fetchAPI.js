@@ -61,8 +61,16 @@ function fetchGroup(id) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         return response.json()
     }).then(function (response) {
+
+
         const group = response.group
         const isAuthor = response.isAuthor
+
+        const deleteButton = document.querySelector("#group-page .delete-button")
+        const updateButton = document.querySelector("#group-page .update-button")
+
+        deleteButton.classList.remove("showIfAuthor")
+        updateButton.classList.remove("showIfAuthor")
 
         const nameSpan = document.querySelector("#group-page .name")
         const sportSpan = document.querySelector("#group-page .sport")
@@ -89,12 +97,10 @@ function fetchGroup(id) {
 
         deleteIdField.value = group.groupId
         //updateIdField.value = group.groupId
+        console.log("isAuthor: ", isAuthor)
+        if(isAuthor){
 
-        //if(isAuthor)
-
-        const deleteButton = document.querySelector("#group-page .delete-button")
-        const updateButton = document.querySelector("#group-page .update-button")
-
+        
         updateButton.setAttribute("href", "/group/" + group.groupId + "/update")
 
         //const updateButton = document.getElementById("update-button")
@@ -102,11 +108,9 @@ function fetchGroup(id) {
         //updateButton.action = "/group/" + group.groupId + "/update"
 
         //console.log("action after: ", updateButton.action)
-        deleteButton.classList.remove("showIfAuthor")
-        deleteButton.classList.add("isAuthor")
-        updateButton.classList.remove("showIfAuthor")
-        updateButton.classList.add("isAuthor")
-
+        deleteButton.classList.add("showIfAuthor")
+        updateButton.classList.add("showIfAuthor")
+        }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }).catch(function (error) {
         console.log(error)

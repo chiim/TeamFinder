@@ -598,8 +598,9 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 }
                 response.render('group-edit.hbs', model)
             }
-            else {
+            else {                    
                 if (accountId == group.authorId) {
+
                     const model = {
                         group,
                         csrfToken: request.csrfToken()

@@ -31,16 +31,18 @@
                 <input type="text" class="form-control" name="groupName" placeholder="Group Name" value="{{group.name}}" readonly="true">
             </div>
             <div class="form-group">
-                <label for="selectImage">Select Image</label>
+                <label for="selectImage">Select Image</label> 
                 <select class="form-control" name="image">
+                    <option value="{{group.image}}" hidden="hidden" selected="selected">{{group.image}}</option> <!-- Displays the option from the past -->
                     <option>Volleyball</option>
                     <option>PadelArena</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="selectSport">*Select Sport</label>
-                <select class="form-control" name="sport">
-                    <option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
+                <select class="form-control" name="sport"> 
+                    {{!-- <option>Select a sport</option> <!-- Validate that this is not selected when submitting. --> --}}
+                    <option value="{{group.sport}}" hidden="hidden" selected="selected">{{group.sport}}</option>
                     <option>Volleyball</option>
                     <option>Padel</option>
                 </select>
@@ -64,9 +66,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="selectSport">*Skill level</label>
-                <select class="form-control" name="skillLevel">
-                    <option>Select a skill level</option> <!-- Validate that this is not selected when submitting. -->
+                <label for="selectSkillLevel">*Skill level</label>
+                <select class="form-control" name="skillLevel"> 
+                    <option value="{{group.skillLevel}}" hidden="hidden" selected="selected">{{group.skillLevel}}</option>
                     <option>Beginner</option>
                     <option>Intermediate</option>
                     <option>Semi-pro</option>
@@ -78,6 +80,7 @@
             <div class="form-group">
                 <label for="selectGender">Gender restriction</label>
                 <select class="form-control" name="allowedGender">
+                    <option value="{{group.allowedGender}}" hidden="hidden" selected="selected">{{group.allowedGender}}</option>
                     <option>Any</option>
                     <option>Male</option>
                     <option>Female</option>
