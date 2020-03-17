@@ -35,8 +35,11 @@ function fetchAllGroups() {
             li.append(pCity)
             ul.append(li)
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
     }).catch(function (error) {
         console.log(error)
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     })
 
 }
@@ -104,8 +107,10 @@ function fetchGroup(id) {
         updateButton.classList.remove("showIfAuthor")
         updateButton.classList.add("isAuthor")
 
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }).catch(function (error) {
         console.log(error)
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     })
 }
 
@@ -148,8 +153,11 @@ function getGroupForUpdate(id) {
 
         updateIdField.value = group.groupId
 
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
     }).catch(function (error) {
         console.log(error)
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     })
 }
 
@@ -183,8 +191,10 @@ async function createGroup(group) {
 
                 showErrors(errors)
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }catch(error){
         console.log(error)
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         goToPage("/error-connection")
     }
 
@@ -204,10 +214,12 @@ function deleteGroup(id) {
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         // TODO: Update the view somehow.
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         goToPage(response.headers.get("Location"))
 
     }).catch(function (error) {
         // TODO: Update the view and display error.
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
     })
 }
@@ -238,12 +250,12 @@ async function authenticateUser(email, password) {
                 goToPage("/error")
 
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
-
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
         goToPage("/error")
-
     }
 }
 
@@ -275,8 +287,10 @@ async function signUp(account) {
                 goToPage("/login")
                 break
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
         goToPage("/error")
     }
@@ -298,9 +312,12 @@ function updateGroup(group) {
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         // TODO: Update the view somehow.
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")        
+
         goToPage(response.headers.get("Location"))
     }).catch(function (error) {
         // TODO: Update the view and display error.
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
     })
 }

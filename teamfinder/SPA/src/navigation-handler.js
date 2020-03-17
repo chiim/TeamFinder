@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log(location.pathname)
 
-    hideErrors()//is it okey to hide errors here????
+    hideDivs()//is it okey to hide errors here????
     changeToPage(location.pathname)
 
     if (localStorage.accessToken) {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // TODO: Avoid using this long lines of code.
     document.querySelector("#create-group-page form").addEventListener("submit", function (event) {
         event.preventDefault()
-
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
         const group = createdGroupInput()
         console.log(group)
         createGroup(group)
@@ -33,14 +33,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelector("#update-group-page form").addEventListener("submit", function (event) {
         event.preventDefault()
-
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
         const group = updatedGroupInput()
         console.log(group)
         updateGroup(group)
+
     })
 
     document.querySelector("#group-page .delete-button").addEventListener("submit", function (event) {
         event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
 
         const id = document.querySelector("#group-page .delete-id-field").value
 
@@ -49,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelector("#login-page form").addEventListener("submit", function (event) {
         event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
 
         const email = document.querySelector("#login-page .email").value
         const password = document.querySelector("#login-page .password").value
@@ -58,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelector("#sign-up-page form").addEventListener("submit", function (event) {
         event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
 
         const account = signupInput()
 
@@ -79,7 +83,7 @@ function goToPage(url) {
 
 function changeToPage(url) {
 
-    hideErrors()
+    hideDivs()
 
     const currentPageDiv = document.getElementsByClassName("current-page")[0]
     if (currentPageDiv) {
@@ -92,6 +96,7 @@ function changeToPage(url) {
         console.log("Hallåå??")
         document.getElementById("home-page").classList.add("current-page")
     } else if (url == "/groups") {
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
         console.log("inside fetchallgroupsssssssssssssssss")
         document.getElementById("groups-page").classList.add("current-page")
         fetchAllGroups()
@@ -100,12 +105,15 @@ function changeToPage(url) {
     } else if (url == "/login") {
         document.getElementById("login-page").classList.add("current-page")
     } else if (new RegExp("^/group/[0-9]+/update$").test(url)) {
-        console.log("Do I get here? :)")
+
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
         document.getElementById("update-group-page").classList.add("current-page")
         const id = url.split("/")[2]
         getGroupForUpdate(id)
     }
     else if (new RegExp("^/group/[0-9]+$").test(url)) {
+
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
         document.getElementById("group-page").classList.add("current-page")
         const id = url.split("/")[2]
         fetchGroup(id)
@@ -220,12 +228,15 @@ function showErrors(errors){
 
         const liError = document.createElement("li")
         ulWithErrors.appendChild(liError)
-        liError.innerText = errors[0]
+        liError.innerText = errors[i]
     }
 
     document.getElementById("error-div").classList.add("current-page")
 }
 
-function hideErrors(){
+function hideDivs(){
     document.getElementById("error-div").classList.remove("current-page")
+    document.getElementById("loadingIndicator").classList.remove("loadingIndicatorHide")
+    document.getElementById("loadingIndicator").classList.remove("loadingIndicatorShow")
+    console.log("Nu har den tagit bort")
 }
