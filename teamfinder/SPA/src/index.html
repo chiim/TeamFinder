@@ -30,7 +30,20 @@
 
 	<main>
 
-		<div class="lds-default" id="loadingIndicator"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+		<div class="lds-default" id="loadingIndicator">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
 
 
 		<div id="home-page">
@@ -58,7 +71,8 @@
 			<div>Skill: <span class="skillLevel"></span></div>
 			<div>Gender: <span class="allowedGender"></span></div>
 
-			<a class="update-button showIfAuthor" href="/">Update</a> <!-- Something went wrong if redirected to home. href is edited in navigation-handler -->
+			<a class="update-button showIfAuthor" href="/">Update</a>
+			<!-- Something went wrong if redirected to home. href is edited in navigation-handler -->
 
 			<!-- <form action="" class="update-button showIfAuthor" id="update-button">
 				<input type="hidden" name="update" class="update-id-field">
@@ -78,33 +92,34 @@
 				<div>Name: <input type="text" class="name"></div>
 				<div>Sport:
 					<label for="selectSport">*Select Sport</label>
-                <select class="sport" name="sport">
-                    <option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
-                    <option>Volleyball</option>
-                    <option>Padel</option>
-                </select></div>
+					<select class="sport" name="sport">
+						<option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
+						<option>Volleyball</option>
+						<option>Padel</option>
+					</select></div>
 				<div>Memberslots: <input type="text" class="memberSlots"></div>
 				<div>City: <input type="text" class="city"></div>
 				<div>Max Age: <input type="text" class="maxAge"></div>
 				<div>Min Age: <input type="text" class="minAge"></div>
-				<div>Skill: 
+				<div>Skill:
 					<label for="selectSport">*Skill level</label>
-                <select class="skillLevel" name="skillLevel">
-                    <option>Select a skill level</option> <!-- Validate that this is not selected when submitting. -->
-                    <option>Beginner</option>
-                    <option>Intermediate</option>
-                    <option>Semi-pro</option>
-                    <option>Pro</option>
-                    <option>Expert</option>
-                    <option>Master</option>
-                </select></div>
-				<div>Genders: 
+					<select class="skillLevel" name="skillLevel">
+						<option>Select a skill level</option>
+						<!-- Validate that this is not selected when submitting. -->
+						<option>Beginner</option>
+						<option>Intermediate</option>
+						<option>Semi-pro</option>
+						<option>Pro</option>
+						<option>Expert</option>
+						<option>Master</option>
+					</select></div>
+				<div>Genders:
 					<label for="selectGender">Gender restriction</label>
-                <select class="allowedGender" name="allowedGender">
-                    <option>Any</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                </select></div>
+					<select class="allowedGender" name="allowedGender">
+						<option>Any</option>
+						<option>Male</option>
+						<option>Female</option>
+					</select></div>
 				<input type="submit" value="Create">
 			</form>
 		</div>
@@ -113,14 +128,37 @@
 			<h1>Update Group</h1>
 			<form action="">
 				<div>Name: <input type="text" class="name" disabled></div>
-				<div>Sport: <input type="text" class="sport"></div>
+				<div>
+					<label for="selectSport">*Select Sport</label>
+					<select class="sport" name="sport">
+						<option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
+						<option>Volleyball</option>
+						<option>Padel</option>
+					</select></div>
 				<div>Memberslots: <input type="text" class="memberSlots"></div>
 				<div>City: <input type="text" class="city"></div>
 				<div>Max Age: <input type="text" class="maxAge"></div>
 				<div>Min Age: <input type="text" class="minAge"></div>
-				<div>Skill: <input type="text" class="skillLevel"></div>
-				<div>Genders: <input type="text" class="allowedGender"></div>
-				 <input type="hidden" name="update" class="update-id-field">
+				<div>
+					<label for="selectSport">*Skill level</label>
+					<select class="skillLevel" name="skillLevel">
+						<option>Select a skill level</option>
+						<!-- Validate that this is not selected when submitting. -->
+						<option>Beginner</option>
+						<option>Intermediate</option>
+						<option>Semi-pro</option>
+						<option>Pro</option>
+						<option>Expert</option>
+						<option>Master</option>
+					</select></div>
+				<div>
+					<label for="selectGender">Gender restriction</label>
+					<select class="allowedGender" name="allowedGender">
+						<option>Any</option>
+						<option>Male</option>
+						<option>Female</option>
+					</select></div>
+				<input type="hidden" name="update" class="update-id-field">
 				<input type="submit" value="Update">
 			</form>
 		</div>
@@ -131,7 +169,7 @@
 				<div>First name: <input type="text" class="firstName"></div>
 				<div>Last name: <input type="text" class="lastName"></div>
 				<div>Email: <input type="text" class="email"></div>
-				<div>Password: <input type="text" class="password"></div>
+				<div>Password: <input type="password" class="password"></div>
 				<div>Age: <input type="text" class="age"></div>
 				<div>City: <input type="text" class="city"></div>
 				<div>Gender: <input type="text" class="gender"></div>
@@ -146,7 +184,7 @@
 					email: <input type="text" class="email">
 				</div>
 				<div>
-					Password: <input type="text" class="password">
+					Password: <input type="password" class="password">
 				</div>
 				<input type="submit" value="Login">
 			</form>
