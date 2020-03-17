@@ -82,7 +82,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                                 groups.splice(i, 1) // pop specific element
                                             }
                                         }
-                                        response.setHeader("Content-Type", "application/json")
                                         response.status(200).json(groups)
 
                                     }
@@ -90,7 +89,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                             }
 
                             else {
-                                response.setHeader("Content-Type", "application/json")
                                 response.status(200).json(groups)
                             }
                         }
@@ -137,13 +135,11 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     }
                     else if (!accountIds.includes(accountId)) {
                         const error = "You are not a member of this group"
-                        //response.setHeader("Location", "/groups")
                         response.status(401).json(error)
                     }
                     else {
                         groupManager.getGroupById(groupId, function (error, group) {
                             if (error) {
-                                response.setHeader("Content-Type", "application/json")
                                 response.status(500).json(error)
                             }
                             else {
@@ -151,7 +147,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                 if (group.authorId == accountId) {
                                     isAuthor = true
                                 }
-                                response.setHeader("Content-Type", "application/json")
                                 response.status(200).json({ group, isAuthor })
                             }
                         })

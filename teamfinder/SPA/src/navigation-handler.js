@@ -216,7 +216,7 @@ function showErrors(errors){
 
         const liError = document.createElement("li")
         ulWithErrors.appendChild(liError)
-        liError.innerText = errors[0]
+        liError.innerText = errors[i]
     }
 
     document.getElementById("error-div").classList.add("current-page")

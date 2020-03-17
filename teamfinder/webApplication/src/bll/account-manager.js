@@ -6,33 +6,30 @@ module.exports = function ({ accountRepository, validator }) {
 
         createAccount: function (account, callback) {
 
-            //validering
-
             const errors = validator.validateAccount(account)
             const saltRounds = 10
             const password = account.password.toString()
 
+            accountRepository.isEmailIsUnique(account.email, function (exists) {
 
-
-            if (!accountRepository.isEmailIsUnique(email, function (error, exist) {
-                if (error) {
-
-                }
-                else if()
-
-                }
-                errors.push("email already exists")
-            }
-
-            if (0 < errors.length) {
+                if (!exists) {
+                    bcrypt.hash(password, saltRounds, function (error, hash) {
+                        //här borde if error finnas
+                        if (error) {
+                            console.log(error)
+                            const hashError = "error when creating account"
+                            callback(hashError, null)
+                        } else {
+                            console.log("oh it succedeed, going to hash now")
+                            accountRepository.createAccount(hash, account, callback)
+                        }
+                    })
+                } else {
+                    console.log("inside exists else statement")
+                    errors.push("email already exists")
                     callback(errors, null)
-                    return
                 }
 
-
-            bcrypt.hash(password, saltRounds, function (err, hash) {
-                //här borde if error finnas
-                accountRepository.createAccount(hash, account, callback)
             })
         },
 
