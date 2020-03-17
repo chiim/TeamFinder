@@ -26,13 +26,16 @@ function fetchAllGroups() {
             const anchor = document.createElement("a")
             const pSport = document.createElement("p")
             const pCity = document.createElement("p")
+            const lineBreak = document.createElement("p")
             pSport.innerText = group.sport
             pCity.innerText = group.city
+            lineBreak.innerText = "______________________________"
             anchor.innerText = group.name
             anchor.setAttribute("href", '/group/' + group.groupId)
             li.appendChild(anchor)
             li.append(pSport)
             li.append(pCity)
+            li.append(lineBreak)
             ul.append(li)
         }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
@@ -133,7 +136,6 @@ function getGroupForUpdate(id) {
         return response.json()
     }).then(function (response) {
         const group = response.group
-        const isAuthor = response.isAuthor
 
         const nameSpan = document.querySelector("#update-group-page .name")
         const sportSpan = document.querySelector("#update-group-page .sport")

@@ -240,3 +240,14 @@ function hideDivs(){
     document.getElementById("loadingIndicator").classList.remove("loadingIndicatorShow")
     console.log("Nu har den tagit bort")
 }
+
+function start() {
+    gapi.load('auth2', function() {
+      auth2 = gapi.auth2.init({
+        client_id: '978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com.apps.googleusercontent.com',
+        scope: "openid"
+        // Scopes to request in addition to 'profile' and 'email'
+        //scope: 'additional_scope'
+      });
+    });
+  }
