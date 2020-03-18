@@ -241,7 +241,7 @@ async function authenticateUser(email, password) {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
-            body: "grant_type=password&email=" + email + "&password=" + password
+            body: "grant_type=password&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password)
         })
         switch (response.status) {
             case 200:

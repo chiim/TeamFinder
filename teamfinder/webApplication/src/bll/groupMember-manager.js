@@ -4,6 +4,7 @@ module.exports = function ({ groupMemberRepository, groupManager }) {
     return {
         createGroupMemberLink: function (account, group, callback) {
             const validationErrors = groupManager.validateRequirements(account, group)
+            console.log("validationErrors: ", validationErrors)
             if (validationErrors.length > 0) {
                 callback(validationErrors)
             }

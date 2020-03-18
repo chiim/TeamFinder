@@ -74,8 +74,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         groups.splice(i, 1) // pop specific element
                                     }
                                 }
-                                console.log("ActiveGroupIds: ", activeGroupIds)
-                                console.log("All groups: ", groups)
                                 groups = addMemberCountToGroups(memberGroupCount, groups)
                                 response.status(200).json(groups)
 
@@ -162,7 +160,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
 
     router.post('/', function (request, response) {
-        console.log(request.body)
         const groupName = request.body.groupName
         const image = "Volleyball" // Hard coded because you shouldnt be able to choose image here.
         const sport = request.body.sport
