@@ -52,43 +52,44 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     console.log(databaseErrors)
                     response.status(500).end()
                 }
-                else {console.log("show accountId: ", accountId)
-                if (accountId) {
-                    groupManager.getActiveGroupIds(accountId, function (error, activeGroupIds) {
-                        if (error) {
-                            console.log(error)
-                            response.status(500).json(error)
-                        }
-                        else {
-                            const groupIds = getGroupIdsFromGroups(groups)
-                            console.log("GroupIds: ", groupIds)
-                            const extractedActiveGroupIds = []
-                            for (var i = 0; i < activeGroupIds.length; i++) {
-                                extractedActiveGroupIds.push(activeGroupIds[i].groupId)
-                            }
-
-                            for (var i = groupIds.length - 1; i >= 0; i--) {
-                                console.log("Current id in loop: ", groupIds[i])
-                                if (!extractedActiveGroupIds.includes(groupIds[i])) {
-                                    groups.splice(i, 1) // pop specific element
-                                }
-                            }
-                            console.log("ActiveGroupIds: ", activeGroupIds)
-                            console.log("All groups: ", groups)
-                            groups = addMemberCountToGroups(memberGroupCount, groups)
-                            response.status(200).json(groups)
-
-                        }
-                    })
-                }
                 else {
-                    groups = addMemberCountToGroups(memberGroupCount, groups)
-                    response.status(200).json(groups)
+                    console.log("show accountId: ", accountId)
+                    if (accountId) {
+                        groupManager.getActiveGroupIds(accountId, function (error, activeGroupIds) {
+                            if (error) {
+                                console.log(error)
+                                response.status(500).json(error)
+                            }
+                            else {
+                                const groupIds = getGroupIdsFromGroups(groups)
+                                console.log("GroupIds: ", groupIds)
+                                const extractedActiveGroupIds = []
+                                for (var i = 0; i < activeGroupIds.length; i++) {
+                                    extractedActiveGroupIds.push(activeGroupIds[i].groupId)
+                                }
+
+                                for (var i = groupIds.length - 1; i >= 0; i--) {
+                                    console.log("Current id in loop: ", groupIds[i])
+                                    if (!extractedActiveGroupIds.includes(groupIds[i])) {
+                                        groups.splice(i, 1) // pop specific element
+                                    }
+                                }
+                                console.log("ActiveGroupIds: ", activeGroupIds)
+                                console.log("All groups: ", groups)
+                                groups = addMemberCountToGroups(memberGroupCount, groups)
+                                response.status(200).json(groups)
+
+                            }
+                        })
+                    }
+                    else {
+                        groups = addMemberCountToGroups(memberGroupCount, groups)
+                        response.status(200).json(groups)
+                    }
                 }
             }
-        }
+        })
     })
-})
 
     addMemberCountToGroups = function (memberGroupCount, groups) {
 
@@ -300,7 +301,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                         response.status(500).json(error)
                     }
                     else {
-                        response.setHeader("Location", "/groups")
                         response.status(204).end()
                     }
                 })

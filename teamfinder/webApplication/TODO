@@ -25,3 +25,31 @@ Make it so users can see each others profiles
 clean up design
 
 remove "for="exampleInputPassword1" and leftover tags etc
+
+
+--------------- questions and improvements in SPA ----------------
+
+is (.length == 0) considered magic number?
+
+fetchAllGroups() i fetchAPI:
+man kommer inte in i 204 om man inte är med i en grupp, (enbart om det inte finns grupper alls i databasen) ska det vara så?
+
+deleting group doesnt show different page. can click delete again. resulting in:
+* d
+* a
+* t 
+* a ...database error
+
+need to check if group can be edited if user isn't author
+
+case 400: validationErrors is logical to display where the user are, so they can try to send in again.
+is the same true for case 500 and catch(error) as well?
+or how to handle case 500:
+catch error:
+
+should unauthorized have it's own page?
+delete, update, view group? create group if not authenticated?
+
+Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
+
+sign up gender should use a select div

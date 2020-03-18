@@ -221,6 +221,8 @@ function signupInput() {
 
 function showErrors(errors){
 
+    console.log(errors)
+
     const ulWithErrors = document.getElementById("ulWithErrors")
     ulWithErrors.innerHTML = "";
 

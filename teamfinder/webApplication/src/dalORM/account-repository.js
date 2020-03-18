@@ -32,10 +32,13 @@ module.exports = function () {
                     email :email
                 }
             }).then(function(count){
-                if(count != 0){
-                    callback(true)
+                var emailAvailable
+                if(count == 0){
+                    emailAvailable = true
+                    callback(emailAvailable)
                 }else{
-                    callback(false)
+                    emailAvailable = false
+                    callback(emailAvailable)
                 }                
             }).catch(function(error){
                 console.log(error)
@@ -84,17 +87,20 @@ module.exports = function () {
                 where: { email: email },
                 raw: true
             }).then(function (account) {
+                console.log("EYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY", account)
                 
-                if (account.length == 0) {
-                    databaseError = "DatabaseError: no result found"
-                    callback(databaseError, null)
+                if (account == null) {
+                    error = "no result found"
+                    callback(error, null)
                 }
                 else {
                     ("Account: ", account)
                     callback(null, account)
                 }
             }).catch(function (error) {
-                callback(error, null)
+                console.log(error)
+                const databaseError = "DatabaseError: error when updating account"
+                callback(databaseError, null)
             })
         },
 

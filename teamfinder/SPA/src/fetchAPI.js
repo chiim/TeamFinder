@@ -9,6 +9,10 @@ const parseJwt = function(token) {
 
 async function fetchAllGroups() {
 
+    const payload = parseJwt(localStorage.idToken)
+    const accountId = payload.sub
+    
+
     try {
         const response = await fetch(
             //"http://localhost:8080/pl-api/groups/"
@@ -17,8 +21,9 @@ async function fetchAllGroups() {
 
         switch (response.status) {
 
-            case 200:
-            case 204:
+            case 204://only get here if there are no groups in database at all
+
+            case 200:   
 
                 const groups = await response.json()
 
@@ -79,10 +84,10 @@ async function fetchGroup(id) {
 
             case 200:
 
-                const response = await response.json()
+                const body = await response.json()
 
-                const group = response.group
-                const isAuthor = response.isAuthor
+                const group = body.group
+                const isAuthor = body.isAuthor
 
                 const nameSpan = document.querySelector("#group-page .name")
                 const sportSpan = document.querySelector("#group-page .sport")
@@ -128,7 +133,7 @@ async function fetchGroup(id) {
                 updateButton.classList.add("isAuthor")
                 //goToPage(response.headers.get("Location"))
                 break
-            case 400:
+            case 401:
                 errors = await response.json()
                 console.log(errors)
                 showErrors(errors)
@@ -164,8 +169,11 @@ async function getGroupForUpdate(id) {
         switch (response.status) {
 
             case 200:
-                const group = response.group
-                const isAuthor = response.isAuthor
+
+                const body = await response.json()
+
+                const group = body.group
+                const isAuthor = body.isAuthor
 
                 const nameSpan = document.querySelector("#update-group-page .name")
                 const sportSpan = document.querySelector("#update-group-page .sport")
@@ -263,15 +271,20 @@ async function deleteGroup(id) {
         })
         switch (response.status) {
 
-            case 200:
-                goToPage(response.headers.get("Location"))//where should we go?
+            case 204:
+                console.log(204)
+                goToPage("/groups")
                 break
-            case 400:
+            case 401:
+                console.log(401)
+
                 errors = await response.json()
                 console.log(errors)
                 showErrors(errors)
                 break
             case 500:
+                console.log(500)
+
                 errors = await response.json()
                 console.log(errors)
 
@@ -309,6 +322,8 @@ async function authenticateUser(email, password) {
                 changeToPage("/")
                 break
             case 400://bad validation(email, felmeddelande)
+                const errors = await response.json()
+                showErrors(errors)
                 break
             case 500:
                 goToPage("/error")
@@ -341,15 +356,16 @@ async function signUp(account) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         console.log("returned from sign up fetch")
         switch (response.status) {
-            case 500:
-                goToPage("/error-database")
+            
+            case 201:
+                goToPage("/login")
+                break
             case 400:
                 errors = await response.json()
                 showErrors(errors)
                 break
-            case 201:
-                goToPage("/login")
-                break
+            case 500:
+                goToPage("/error-database")
         }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
@@ -364,6 +380,7 @@ async function signUp(account) {
 
 async function updateGroup(group) {
 
+    console.log("REEEEEEEEEEEEEEEEEEEEEEEEE")
     try {
 
         const response = await fetch(
@@ -378,14 +395,15 @@ async function updateGroup(group) {
         })
         switch (response.status) {
 
-            case 201:
+            case 204:
                 goToPage(response.headers.get("Location"))
                 break
-            case 400:
+            case 404:
                 errors = await response.json()
                 console.log(errors)
                 showErrors(errors)
                 break
+            case 401: //unauthorized
             case 500:
                 errors = await response.json()
                 console.log(errors)

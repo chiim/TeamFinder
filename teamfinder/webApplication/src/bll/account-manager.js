@@ -10,25 +10,28 @@ module.exports = function ({ accountRepository, validator }) {
             const saltRounds = 10
             const password = account.password.toString()
 
-            accountRepository.isEmailIsUnique(account.email, function (exists) {
+            accountRepository.isEmailIsUnique(account.email, function (emailAvailable) {
 
-                if (!exists) {
-                    bcrypt.hash(password, saltRounds, function (error, hash) {
-                        //här borde if error finnas
-                        if (error) {
-                            console.log(error)
-                            const hashError = "error when creating account"
-                            callback(hashError, null)
-                        } else {
-                            console.log("oh it succedeed, going to hash now")
-                            accountRepository.createAccount(hash, account, callback)
-                        }
-                    })
-                } else {
-                    console.log("inside exists else statement")
+                console.log(emailAvailable)
+                if (!emailAvailable) {
                     errors.push("email already exists")
-                    callback(errors, null)
                 }
+                if (0 < errors.length) {
+
+                    callback(errors, null)
+                    return
+                }
+                bcrypt.hash(password, saltRounds, function (error, hash) {
+                    
+                    if (error) {
+                        console.log(error)
+                        const hashError = "error when creating account"
+                        callback(hashError, null)
+                    } else {
+                        console.log("oh it succedeed, going to hash now")
+                        accountRepository.createAccount(hash, account, callback)
+                    }
+                })
 
             })
         },
@@ -114,7 +117,7 @@ const compareAccount = function (account, password, callback) {
             callback(null, account)
         }
         else {
-            const dbError = "dbError logging in"
+            const dbError = "wrong credentials"
             callback(dbError, null)
         }
     })

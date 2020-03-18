@@ -62,7 +62,7 @@ module.exports = function ({ accountManager }) {
                     response.status(500).end()
                 } else if (errors && 0 < errors.length) {
                     console.log(errors)
-                    response.status(400).json({ errors: "some error?" })
+                    response.status(400).json([errors]) //this looks so scuffed
                 } else {
 
                     const payload = { accountId: account.accountId } // ifAdmin
