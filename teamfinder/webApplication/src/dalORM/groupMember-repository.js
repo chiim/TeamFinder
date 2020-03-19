@@ -44,13 +44,13 @@ module.exports = function () {
                     callback(null, numberOfMembers)
                 }).catch(function (error) {
                     console.log(error)
-                    const databaseError = "DatabaseError: Something went wrong updating groupMembers. inside update"
+                    const databaseError = ["DatabaseError: Something went wrong updating groupMembers. inside update"]
                     callback(databaseError, null)
                 })
 
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong updating groupMembers. with count"
+                const databaseError = ["DatabaseError: Something went wrong updating groupMembers. with count"]
                 callback(databaseError, null)
             })
 
@@ -89,7 +89,7 @@ module.exports = function () {
                 callback(null, accountIds)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong retreiving groupMembers."
+                const databaseError = ["DatabaseError: Something went wrong retreiving groupMembers."]
                 callback(databaseError, null)
             })
         },
@@ -107,7 +107,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong deleting groupMembers."
+                const databaseError = ["DatabaseError: Something went wrong deleting groupMembers."]
                 callback(databaseError)
             })
         }

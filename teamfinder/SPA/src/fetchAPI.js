@@ -1,8 +1,8 @@
-const parseJwt = function(token) {
+const parseJwt = function (token) {
     try {
-      return JSON.parse(atob(token.split('.')[1]));
+        return JSON.parse(atob(token.split('.')[1]));
     } catch (e) {
-      return null;
+        return null;
     }
 }
 
@@ -11,7 +11,7 @@ async function fetchAllGroups() {
 
     const payload = parseJwt(localStorage.idToken)
     const accountId = payload.sub
-    
+
 
     try {
         const response = await fetch(
@@ -21,14 +21,36 @@ async function fetchAllGroups() {
 
         switch (response.status) {
 
-            case 204://only get here if there are no groups in database at all
+/*
+            case 204:  
 
-            case 200:   
-
-                const groups = await response.json()
-
+                
                 const ul = document.querySelector("#groups-page ul")
                 ul.innerText = ""
+                
+                const pStatus = document.querySelector("#groups-page p")
+                pStatus.innerText = "you are not part of any group."
+                
+               console.log("WTFFFFFF")
+               
+               break               
+                */
+            case 200:
+
+            
+                console.log("REEEEEEEEE")
+                const groups = await response.json()
+
+                console.log(groups)
+                const ul = document.querySelector("#groups-page ul")
+                ul.innerText = ""
+                
+                const pStatus = document.querySelector("#groups-page p")
+                pStatus.innerText = ""
+                
+                if(groups == 0){
+                    pStatus.innerText = "you are not part of any group."
+                }
                 for (const group of groups) {
                     const li = document.createElement("li")
                     const anchor = document.createElement("a")
@@ -44,23 +66,24 @@ async function fetchAllGroups() {
                     ul.append(li)
 
                 }
-                break
+
+                
+                
+                break                
             case 400:
                 errors = await response.json()
                 console.log(errors)
                 showErrors(errors)
                 break
             case 500:
-                errors = await response.json()
-                console.log(errors)
-
-                showErrors(errors)
+                goToPage("/error")
         }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
-        console.log(error)
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+        console.log(error)
+        goToPage("/error")
     }
 
 }
@@ -72,12 +95,12 @@ async function fetchGroup(id) {
         const response = await fetch(
             //"http://localhost:8080/pl-api/groups/" + id
             "http://192.168.99.100:8080/pl-api/groups/" + id, {
-          
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer "+ localStorage.accessToken
-                },
-            }
+
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.accessToken
+            },
+        }
         )
 
         switch (response.status) {
@@ -134,22 +157,18 @@ async function fetchGroup(id) {
                 //goToPage(response.headers.get("Location"))
                 break
             case 401:
-                errors = await response.json()
-                console.log(errors)
-                showErrors(errors)
+                goToPage("/unauthorized")
                 break
             case 500:
-                errors = await response.json()
-                console.log(errors)
-
-                showErrors(errors)
+                goToPage("/error")
         }
 
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
-        console.log(error)
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+        console.log(error)
+        goToPage("/error")
     }
 }
 
@@ -160,11 +179,11 @@ async function getGroupForUpdate(id) {
         const response = await fetch(
             //"http://localhost:8080/pl-api/groups/" + id
             "http://192.168.99.100:8080/pl-api/groups/" + id, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer "+ localStorage.accessToken
-                },
-            }
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.accessToken
+            },
+        }
         )
         switch (response.status) {
 
@@ -205,17 +224,15 @@ async function getGroupForUpdate(id) {
                 showErrors(errors)
                 break
             case 500:
-                errors = await response.json()
-                console.log(errors)
-
-                showErrors(errors)
+                goToPage("/error")
         }
 
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
-        console.log(error)
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+        console.log(error)
+        goToPage("/error")
     }
 }
 
@@ -228,7 +245,7 @@ async function createGroup(group) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer " + localStorage.accessToken
             },
             body: JSON.stringify(group)
         })
@@ -244,14 +261,14 @@ async function createGroup(group) {
                 showErrors(errors)
                 break
             case 500:
-                errors = await response.json()
-                console.log(errors)
-
-                showErrors(errors)
+                goToPage("/error")
         }
-    } catch (error) {
-        console.log(error)
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
+    } catch (error) {
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+        console.log(error)
+        goToPage("/error")
     }
 
 }
@@ -266,7 +283,7 @@ async function deleteGroup(id) {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer " + localStorage.accessToken
             }
         })
         switch (response.status) {
@@ -276,28 +293,19 @@ async function deleteGroup(id) {
                 goToPage("/groups")
                 break
             case 401:
-                console.log(401)
-
-                errors = await response.json()
-                console.log(errors)
-                showErrors(errors)
+                goToPage("/unauthorized")
                 break
             case 500:
-                console.log(500)
-
-                errors = await response.json()
-                console.log(errors)
-
-                showErrors(errors)
+                goToPage("/error")
         }
 
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
 
     } catch (error) {
-        // TODO: Update the view and display error.
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
+        goToPage("/error")
     }
 }
 
@@ -356,7 +364,7 @@ async function signUp(account) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         console.log("returned from sign up fetch")
         switch (response.status) {
-            
+
             case 201:
                 goToPage("/login")
                 break
@@ -365,7 +373,7 @@ async function signUp(account) {
                 showErrors(errors)
                 break
             case 500:
-                goToPage("/error-database")
+                goToPage("/error")
         }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
@@ -389,13 +397,13 @@ async function updateGroup(group) {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer " + localStorage.accessToken
             },
             body: JSON.stringify(group)
         })
         switch (response.status) {
 
-            case 204:
+            case 204://??
                 goToPage(response.headers.get("Location"))
                 break
             case 404:
@@ -403,19 +411,18 @@ async function updateGroup(group) {
                 console.log(errors)
                 showErrors(errors)
                 break
-            case 401: //unauthorized
+            case 401:
+                goToPage("/unauthorized")
+                break
             case 500:
-                errors = await response.json()
-                console.log(errors)
-
-                showErrors(errors)
+                goToPage("/error")
         }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
 
     } catch (error) {
-        // TODO: Update the view and display error.
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         console.log(error)
+        goToPage("/error")
     }
 }

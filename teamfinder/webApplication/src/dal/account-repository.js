@@ -3,7 +3,7 @@ const dbPostgres = require('./dbConnection')
 
 module.exports = function ({ dbMySQL }) {
     return {
-        createAccount: function (account, callback) {
+        createAccount: function (hash, account, callback) {
 
             const query = "INSERT INTO Accounts (firstName, lastName, email, password, age, city, gender) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
@@ -11,7 +11,7 @@ module.exports = function ({ dbMySQL }) {
                 account.firstName,
                 account.lastName,
                 account.email,
-                account.password,
+                hash,
                 account.age,
                 account.city,
                 account.gender
@@ -20,7 +20,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong inserting data. Contact admin."
+                    const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
                     callback(databaseError, null)
                 }
                 else {
@@ -30,6 +30,27 @@ module.exports = function ({ dbMySQL }) {
 
         },
 
+        isEmailIsUnique: function (email, callback) {
+
+            const query = "SELECT * FROM Accounts WHERE email = ?"
+            const values = [email]
+
+            dbMySQL.query(query, values, function (error, emailFound) {
+                if (error) {
+                    console.log(error)
+                    const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
+                    callback(databaseError, null)
+                } else {
+                    var emailAvailable = false
+                    console.log("RÄKNAAAAAAAAAAAAAAAAAAAAAAAA", emailFound)
+                    if (emailFound.length == 0) {
+                        emailAvailable = true
+                    }
+                    callback(null, emailAvailable)
+                }
+            })
+        },
+
         getAccountById: function (accountId, callback) {
             const query = "Select * FROM Accounts WHERE accountId = ? LIMIT 1"
             const values = [accountId]
@@ -37,7 +58,7 @@ module.exports = function ({ dbMySQL }) {
 
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong inserting data. Contact admin."
+                    const databaseError = ["DatabaseError: Something went wrong retreiving data. Contact admin."]
                     callback(databaseError, null)
                 }
                 else {
@@ -66,7 +87,7 @@ module.exports = function ({ dbMySQL }) {
 
                 if (error) {
                     console.log(error)
-                    const databaseError = "error when updating account"
+                    const databaseError = ["DatabaseError: error when updating account"]
                     callback(databaseError)
                 }
                 else {
@@ -86,10 +107,10 @@ module.exports = function ({ dbMySQL }) {
 
                 if (error) {
                     console.log(error)
-                    const dbError = "error when retrieving account"
+                    const dbError = ["error when retrieving account"]
                     callback(dbError, null)
                 } else if (account.length == 0) {
-                    const databaseError = "no result found"
+                    const databaseError = ["DatabaseError: no result found"]
                     callback(databaseError, null)
                 }
                 else {
@@ -110,7 +131,7 @@ module.exports = function ({ dbMySQL }) {
 
                 if (error) {
                     console.log(error)
-                    const databaseError = "error when deleting account"
+                    const databaseError = ["DatabaseError: error when deleting account"]
                     callback(databaseError)
 
                 }
@@ -120,6 +141,6 @@ module.exports = function ({ dbMySQL }) {
             })
         }
 
-        
+
     }
 }

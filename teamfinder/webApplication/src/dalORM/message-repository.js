@@ -16,7 +16,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "Could not create message."
+                const databaseError = ["DatabaseError: Could not create message."]
                 callback(databaseError)
             })
         },
@@ -35,7 +35,7 @@ module.exports = function () {
                 callback(null, messages)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "something went wrong getting messages from database"
+                const databaseError = ["DatabaseError: something went wrong getting messages from database"]
                 callback(databaseError, null)
             })
         },
@@ -51,7 +51,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function(error){
                 console.log(error)
-                const databaseError = "Something went wrong deleting your message from the database"
+                const databaseError = ["DatabaseError: Something went wrong deleting your message from the database"]
                 callback(databaseError)
             })
         },
@@ -69,7 +69,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function(error){
                 console.log(error)
-                const databaseError = "Something went wrong updating your message in the database"
+                const databaseError = ["DatabaseError: Something went wrong updating your message in the database"]
                 callback(databaseError)
             })
         }

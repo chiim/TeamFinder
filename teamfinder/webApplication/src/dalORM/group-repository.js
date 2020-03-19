@@ -28,8 +28,32 @@ module.exports = function () {
                 callback(null, group.dataValues.groupId)
             }).catch(function (error) {
                 console.log(error, null)
-                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
+                const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
                 callback(databaseError)
+            })
+        },
+
+        isNameUnique: function(name, callback){
+
+            const dbGroup = dbPostgres.model("group")
+
+            dbGroup.count({
+                where : {
+                    name :name
+                }
+            }).then(function(count){
+                var nameAvailable
+                if(count == 0){
+                    nameAvailable = true
+                    callback(null, nameAvailable)
+                }else{
+                    nameAvailable = false
+                    callback(null, nameAvailable)
+                }                
+            }).catch(function(error){
+                console.log(error)
+                const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
+                callback(databaseError, null)
             })
         },
 
@@ -41,7 +65,7 @@ module.exports = function () {
                 callback(null, groups)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong retrieving groups"
+                const databaseError = ["DatabaseError: Something went wrong retrieving groups"]
                 callback(databaseError, null)
             })
         },
@@ -60,7 +84,7 @@ module.exports = function () {
                 callback(null, groupIds)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong retrieving groups"
+                const databaseError = ["DatabaseError: Something went wrong retrieving groups"]
                 callback(databaseError, null)
             })
         },
@@ -78,7 +102,7 @@ module.exports = function () {
                 callback(null, groupIds)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong retrieving groupsIds"
+                const databaseError = ["DatabaseError: Something went wrong retrieving groupsIds"]
                 callback(databaseError, null)
             })
 
@@ -93,7 +117,7 @@ module.exports = function () {
                 callback(null, group)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong retrieving group"
+                const databaseError = ["DatabaseError: Something went wrong retrieving group"]
                 callback(databaseError, null)
             })
 
@@ -111,7 +135,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong retrieving group"
+                const databaseError = ["DatabaseError: Something went wrong retrieving group"]
                 callback(databaseError)
             })
         },
@@ -141,7 +165,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function(error){
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong updating group"
+                const databaseError = ["DatabaseError: Something went wrong updating group"]
                 callback(databaseError)
             })
         }

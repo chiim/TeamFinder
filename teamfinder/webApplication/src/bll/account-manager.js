@@ -10,28 +10,31 @@ module.exports = function ({ accountRepository, validator }) {
             const saltRounds = 10
             const password = account.password.toString()
 
-            accountRepository.isEmailIsUnique(account.email, function (emailAvailable) {
-
-                console.log(emailAvailable)
-                if (!emailAvailable) {
-                    errors.push("email already exists")
+            accountRepository.isEmailIsUnique(account.email, function (error, emailAvailable) {
+                //IF ERROR?
+                if (error) {
+                    callback(error, null)
                 }
-                if (0 < errors.length) {
-
-                    callback(errors, null)
-                    return
-                }
-                bcrypt.hash(password, saltRounds, function (error, hash) {
-                    
-                    if (error) {
-                        console.log(error)
-                        const hashError = "error when creating account"
-                        callback(hashError, null)
-                    } else {
-                        console.log("oh it succedeed, going to hash now")
-                        accountRepository.createAccount(hash, account, callback)
+                else {
+                    if (!emailAvailable) {
+                        errors.push("email already exists")
                     }
-                })
+                    if (0 < errors.length) {
+
+                        callback(errors, null)
+                        return
+                    }
+                    bcrypt.hash(password, saltRounds, function (error, hash) {
+
+                        if (error) {
+                            console.log(error)
+                            const hashError = ["error when creating account"]
+                            callback(hashError, null)
+                        } else {
+                            accountRepository.createAccount(hash, account, callback)
+                        }
+                    })
+                }
 
             })
         },
@@ -45,7 +48,7 @@ module.exports = function ({ accountRepository, validator }) {
         updateAccount: function (account, callback) {
 
             console.log("Account in manager: ", account)
-            //validering
+
 
             const errors = []
             MAX_PASSWORD_LENGTH = 15
@@ -73,18 +76,12 @@ module.exports = function ({ accountRepository, validator }) {
             }   THIS SHOULD BE ANY IF NOT FEMALE OR MALE ?
             */
 
-
             if (0 < errors.length) {
 
                 callback(errors)
                 return
             }
             accountRepository.updateAccount(account, callback)
-            //} )){
-
-            //}
-
-
 
         },
 
@@ -117,7 +114,7 @@ const compareAccount = function (account, password, callback) {
             callback(null, account)
         }
         else {
-            const dbError = "wrong credentials"
+            const dbError = ["wrong credentials"]
             callback(dbError, null)
         }
     })

@@ -24,11 +24,8 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         groupManager.getAllGroups(function (error, groups) {
             if (error) {
                 console.log(error)
-                response.status(500).end() // Internal server error
-            }
-            else if (groups.length == 0) {
-                response.status(204).end()  // No content
-            }
+                response.status(500).json(error) // Internal server error
+            }            
             else {
                 var databaseErrors = []
                 var memberGroupCount = []
@@ -50,7 +47,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 }
                 if (databaseErrors.length > 0) {
                     console.log(databaseErrors)
-                    response.status(500).end()
+                    response.status(500).json(databaseErrors)
                 }
                 else {
                     console.log("show accountId: ", accountId)
@@ -74,10 +71,15 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         groups.splice(i, 1) // pop specific element
                                     }
                                 }
-                                console.log("ActiveGroupIds: ", activeGroupIds)
-                                console.log("All groups: ", groups)
-                                groups = addMemberCountToGroups(memberGroupCount, groups)
-                                response.status(200).json(groups)
+                                
+                                //if (groups.length == 0) {
+                                //    response.status(204).end()  // No content
+                                //}else{
+                                    groups = addMemberCountToGroups(memberGroupCount, groups)
+                                    response.status(200).json(groups)
+                                //}
+                                
+                                
 
                             }
                         })
@@ -136,8 +138,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                         response.status(500).json(error)
                     }
                     else if (!accountIds.includes(accountId)) {
-                        const error = "You are not a member of this group"
-                        response.status(401).json(error)
+                        response.status(401).json()
                     }
                     else {
                         groupManager.getGroupById(groupId, function (error, group) {
@@ -227,8 +228,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             })
         }
         else { // User shouldnt be able to get here at all
-            const error = "You must be logged in to create a group"
-            response.status(401).json(error)
+            response.status(401).json()
         }
     })
 

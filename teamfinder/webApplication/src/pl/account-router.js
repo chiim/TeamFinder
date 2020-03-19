@@ -91,11 +91,11 @@ module.exports = function ({ accountManager, middleware }) {
             city,
             gender
         }
-        accountManager.createAccount(account, function (error) {
+        wwwaccountManager.createAccount(account, function (errors, newAccount) {
 
-            if (error) {
+            if (errors) {
                 model = {
-                    error,
+                    errors,
                     account,
                     csrfToken: request.csrfToken()
                 }

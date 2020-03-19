@@ -110,8 +110,7 @@ function changeToPage(url) {
         document.getElementById("update-group-page").classList.add("current-page")
         const id = url.split("/")[2]
         getGroupForUpdate(id)
-    }
-    else if (new RegExp("^/group/[0-9]+$").test(url)) {
+    } else if (new RegExp("^/group/[0-9]+$").test(url)) {
 
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
         document.getElementById("group-page").classList.add("current-page")
@@ -122,10 +121,10 @@ function changeToPage(url) {
     } else if (url == "/logout") {
         logout()
         document.getElementById("home-page").classList.add("current-page")
-    } else if (url == "/error-database") {
-        document.getElementById("error-page-database").classList.add("current-page")
-    } else if (url == "/error-server") {
-        document.getElementById("error-page-server").classList.add("current-page")
+    } else if (url == "/unauthorized") {
+        document.getElementById("error-unAuthorized-page").classList.add("current-page")
+    } else if (url == "/error") {
+        document.getElementById("error-page").classList.add("current-page")
     } else {
         document.getElementById("error-page").classList.add("current-page")
     }
@@ -219,14 +218,14 @@ function signupInput() {
     return account
 }
 
-function showErrors(errors){
+function showErrors(errors) {
 
     console.log(errors)
 
     const ulWithErrors = document.getElementById("ulWithErrors")
-    ulWithErrors.innerHTML = "";
+    ulWithErrors.innerText = "";
 
-    for(i = 0; i < errors.length; i++ ){
+    for (i = 0; i < errors.length; i++) {
 
         const liError = document.createElement("li")
         ulWithErrors.appendChild(liError)
@@ -236,7 +235,9 @@ function showErrors(errors){
     document.getElementById("error-div").classList.add("current-page")
 }
 
-function hideDivs(){
+
+function hideDivs() {
+    document.getElementById("unAuthorized-page").classList.remove("current-page")
     document.getElementById("error-div").classList.remove("current-page")
     document.getElementById("loadingIndicator").classList.remove("loadingIndicatorHide")
     document.getElementById("loadingIndicator").classList.remove("loadingIndicatorShow")

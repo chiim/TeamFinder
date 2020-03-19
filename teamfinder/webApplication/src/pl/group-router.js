@@ -304,20 +304,21 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             accountId
         }
 
-        groupManager.createGroup(groupCredentials, function (error, groupId) {
-            if (error) {
+        groupManager.createGroup(groupCredentials, function (errors, groupId) {
+            if (errors) {
                 const model = {
-                    error,
+                    errors,
                     csrfToken: request.csrfToken()
                 }
                 response.render("group-create.hbs", model)
             }
             else {
 
-                groupMemberManager.createGroupMemberLink(accountId, groupId, function (error) {
-                    if (error) {
+                console.log("LÄNKA DÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ", accountId, groupId)
+                groupMemberManager.createGroupMemberLink(accountId, groupId, function (errors) {
+                    if (errors) {
                         const model = {
-                            error,
+                            errors,
                             csrfToken: request.csrfToken()
                         }
                         response.render('group-create.hbs', model)
