@@ -5,12 +5,13 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
     const router = express.Router()
 
-    function getAccountId(accessToken) {
+    function getAccountId(token) {
         const serverSecret = "sdfkjdslkfjslkfd"
 
-        if (accessToken) {
-            const payload = jwt.verify(accessToken, serverSecret)
-            return payload.accountId
+        console.log("IdToken in accountId: ", token)
+        if (token) {
+            const payload = jwt.verify(token, serverSecret)
+            return payload.sub
         }
         else {
             return null
@@ -18,8 +19,9 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     }
 
     router.get('/', function (request, response) {
-        const accountId = request.query.accountId // Retrieved from idToken. If null: Not a user
-
+        const accountId = request.query.accountId
+        //const accessToken = request.body.accessToken // Hämta lokalt istället. Minns ej hur
+        // Get id from params and verify. Id from params is read from id token
         console.log("accountId: ", accountId)
         groupManager.getAllGroups(function (error, groups) {
             if (error) {
@@ -27,6 +29,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 response.status(500).end() // Internal server error
             }
             else if (groups.length == 0) {
+                console.log("Kommer jag hit??")
                 response.status(204).end()  // No content
             }
             else {
@@ -74,6 +77,8 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         groups.splice(i, 1) // pop specific element
                                     }
                                 }
+                                console.log("ActiveGroupIds: ", activeGroupIds)
+                                console.log("All groups: ", groups)
                                 groups = addMemberCountToGroups(memberGroupCount, groups)
                                 response.status(200).json(groups)
 
@@ -116,8 +121,10 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
 
     router.get("/:id", function (request, response) {
-        console.log("Inside get id")
+
         const accessToken = request.headers.authorization.split(" ")[1]
+        console.log("AccessToken: ", accessToken)
+
         const accountId = getAccountId(accessToken)
         const groupId = request.params.id
         var isAuthor = false
@@ -135,19 +142,21 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     }
                     else if (!accountIds.includes(accountId)) {
                         const error = "You are not a member of this group"
-                        console.log(error)
                         //response.setHeader("Location", "/groups")
                         response.status(401).json(error)
                     }
                     else {
                         groupManager.getGroupById(groupId, function (error, group) {
                             if (error) {
+                                response.setHeader("Content-Type", "application/json")
                                 response.status(500).json(error)
                             }
                             else {
+                                var isAuthor = false
                                 if (group.authorId == accountId) {
                                     isAuthor = true
                                 }
+                                response.setHeader("Content-Type", "application/json")
                                 response.status(200).json({ group, isAuthor })
                             }
                         })
@@ -160,6 +169,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
 
     router.post('/', function (request, response) {
+        console.log(request.body)
         const groupName = request.body.groupName
         const image = "Volleyball" // Hard coded because you shouldnt be able to choose image here.
         const sport = request.body.sport
@@ -171,8 +181,9 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         const skillLevel = request.body.skillLevel
         const allowedGender = request.body.allowedGender
 
-        const accessToken = request.headers.authorization.split(" ")[1]
-        const accountId = getAccountId(accessToken)
+        const accountId = 1
+        //const accessToken = request.body.accessToken
+        //const accountId = getAccountId(accessToken)
         if (accountId) {
             const groupCredentials = {
                 groupName,
@@ -187,6 +198,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 allowedGender,
                 accountId
             }
+            console.log(groupCredentials)
             groupManager.createGroup(groupCredentials, function (errors, groupId) {
                 if (errors && errors.includes("DatabaseError")) {
                     response.status(500).json(errors)
@@ -206,10 +218,12 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                     response.status(500).json(error)
                                 }
                                 else {
-
+                                    console.log("account: ", account)
+                                    console.log("group: ", group)
                                     groupMemberManager.createGroupMemberLink(account, group, function (error) {
                                         if (error) {
                                             console.log("errors: ", error)
+                                            console.log("Är jag här?")
                                             response.status(500).json(error)
                                         }
                                         else {
@@ -225,8 +239,9 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
             })
         }
-        else { // User shouldnt be able to get here at all
+        else {
             const error = "You must be logged in to create a group"
+            response.setHeader("Content-Type", "application/json")
             response.status(401).json(error)
         }
     })
@@ -281,91 +296,77 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     router.delete('/:id', function (request, response) {
 
         const groupId = request.params.id
-        const accessToken = request.headers.authorization.split(" ")[1]
-        const accountId = getAccountId(accessToken)
 
         // Lägga till token för verifiering?? Sker ju inte i ett middleware nu
 
-        groupManager.getGroupById(groupId, function (error, group) {
+        groupManager.deleteGroupById(groupId, function (error) {
+
             if (error) {
+                response.setHeader("Content-Type", "application/json")
                 response.status(500).json(error)
             }
-            else if (group.authorId != accountId) {
-                response.status(401).end()
-            }
             else {
-                groupManager.deleteGroupById(groupId, function (error) {
-
-                    if (error) {
-                        response.status(500).json(error)
-                    }
-                    else {
-                        response.setHeader("Location", "/groups")
-                        response.status(204).end()
-                    }
-                })
+                response.setHeader("Location", "/groups")
+                response.status(200).end()
             }
         })
     })
 
     router.put('/:id', function (request, response) {
-        const groupId = request.params.id
-        console.log("Inside update group")
-        const accessToken = request.headers.authorization.split(" ")[1]
-        console.log("accessToken: ", accessToken)
-        const accountId = getAccountId(accessToken)
+        const id = request.params.id
 
-        groupManager.getGroupById(groupId, function (error, group) { // Används för att verifiera att kontot är från grupp skaparen
-            if (error) {
-                response.status(500).json(error)
-            }
-            else if (group.length == 0) {
-                response.status(404).end()
-            }
-            else if (group.authorId != accountId) {
-                response.status(401).end()
-            }
-            else {
+        //const accessToken = request.body.accessToken
+        //const accountId = getAccountId(accessToken)
 
-                const groupName = request.body.groupName
-                const image = "Volleyball" // Hardcoded in SPA
-                const sport = request.body.sport
-                const memberSlots = request.body.memberSlots
-                const city = request.body.city
-                const minAge = request.body.minAge
-                const maxAge = request.body.maxAge
-                const skillLevel = request.body.skillLevel
-                const gender = request.body.allowedGender
+        groupManager.getGroupById(id, function (error, group) { // Används för att verifiera att kontot är från grupp skaparen
 
-                const updatedGroup = {
-                    groupId,
-                    groupName,
-                    image,
-                    sport,
-                    memberSlots,
-                    city,
-                    minAge,
-                    maxAge,
-                    skillLevel,
-                    gender
+            //if(group.authorId == accountId){
+
+            const groupName = request.body.groupName
+            const image = request.body.image
+            const sport = request.body.sport
+            const memberSlots = request.body.memberSlots
+            const city = request.body.city
+            const minAge = request.body.minAge
+            const maxAge = request.body.maxAge
+            const skillLevel = request.body.skillLevel
+            const gender = request.body.allowedGender
+
+            const updatedGroup = {
+                id,
+                groupName,
+                image,
+                sport,
+                memberSlots,
+                city,
+                minAge,
+                maxAge,
+                skillLevel,
+                gender
+            }
+            console.log("Group: ", updatedGroup)
+            groupManager.updateGroup(updatedGroup, function (errors) {
+                if (errors && errors.includes("DatabaseError")) {
+                    response.setHeader("Content-Type", "application/json")
+                    response.status(500).json(errors)
                 }
-                console.log("Group: ", updatedGroup)
-                groupManager.updateGroup(updatedGroup, function (errors) {
-                    if (errors && errors.includes("DatabaseError")) {
-                        console.log("Error: ", errors)
-                        response.status(500).json(errors)
-                    }
-                    else if (errors && errors.length > 0) {
-                        response.status(204).json(errors) // No content
-                    }
+                else if (errors && errors.length > 0) {
+                    response.setHeader("Content-Type", "application/json")
+                    response.status(204).json(errors) // No content
+                }
 
-                    else {
-                        response.setHeader("Location", "/group/" + groupId)
-                        response.status(204).end()
-                    }
+                else {
+                    response.setHeader("Location", "/group/" + id)
+                    response.status(204).end()
+                }
 
-                })
-            }
+            })
+            /*}
+            else{
+                response.setHeader("content-Type", "application/json")
+                response.setHeader("Location", "/groups/" + id)
+                response.status(401).json(error) // Unauthorized
+            }*/
         })
 
     })
