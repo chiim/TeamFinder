@@ -1,50 +1,57 @@
-const parseJwt = function(token) {
+const parseJwt = function (token) {
     try {
-      return JSON.parse(atob(token.split('.')[1]));
+        return JSON.parse(atob(token.split('.')[1]));
     } catch (e) {
-      return null;
+        return null;
     }
 }
 
 function fetchAllGroups() {
     const payload = parseJwt(localStorage.idToken)
-    const accountId = payload.sub
+    if (payload) {
+        const accountId = payload.sub
 
-    fetch(
-        //"http://localhost:8080/pl-api/groups?accountId="+accountId
-        "http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
-    ).then(function (response) {
-        console.log("inside fetchallgroupsssssssssssssssss")
-        console.log("response: ", response)
-        // TODO: Check status code to see if it succeeded. Display errors if it failed.
-        return response.json()
-    }).then(function (groups) {
-        const ul = document.querySelector("#groups-page ul")
-        ul.innerText = ""
-        for (const group of groups) {
-            const li = document.createElement("li")
-            const anchor = document.createElement("a")
-            const pSport = document.createElement("p")
-            const pCity = document.createElement("p")
-            const lineBreak = document.createElement("p")
-            pSport.innerText = group.sport
-            pCity.innerText = group.city
-            lineBreak.innerText = "______________________________"
-            anchor.innerText = group.name
-            anchor.setAttribute("href", '/group/' + group.groupId)
-            li.appendChild(anchor)
-            li.append(pSport)
-            li.append(pCity)
-            li.append(lineBreak)
-            ul.append(li)
-        }
+        fetch(
+            //"http://localhost:8080/pl-api/groups?accountId="+accountId
+            "http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
+        ).then(function (response) {
+            console.log("inside fetchallgroupsssssssssssssssss")
+            console.log("response: ", response)
+            // TODO: Check status code to see if it succeeded. Display errors if it failed.
+            return response.json()
+        }).then(function (groups) {
+            const ul = document.querySelector("#groups-page ul")
+            ul.innerText = ""
+            for (const group of groups) {
+                const li = document.createElement("li")
+                const anchor = document.createElement("a")
+                const pSport = document.createElement("p")
+                const pCity = document.createElement("p")
+                const lineBreak = document.createElement("p")
+                pSport.innerText = group.sport
+                pCity.innerText = group.city
+                lineBreak.innerText = "______________________________"
+                anchor.innerText = group.name
+                anchor.setAttribute("href", '/group/' + group.groupId)
+                li.appendChild(anchor)
+                li.append(pSport)
+                li.append(pCity)
+                li.append(lineBreak)
+                ul.append(li)
+            }
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
+        }).catch(function (error) {
+            console.log(error)
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+        })
+
+    }
+    else{
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
-
-    }).catch(function (error) {
-        console.log(error)
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
-    })
-
+        const error = ["You need to sign in to view your groups"]
+        showErrors(error)
+    }
 }
 
 function fetchGroup(id) {
@@ -54,10 +61,10 @@ function fetchGroup(id) {
     fetch(
         //"http://localhost:8080/pl-api/groups/" + id, { 
         "http://192.168.99.100:8080/pl-api/groups/" + id, {
-          
+
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer "+ localStorage.accessToken
+            "Authorization": "Bearer " + localStorage.accessToken
         },
     }
     ).then(function (response) {
@@ -101,18 +108,18 @@ function fetchGroup(id) {
         deleteIdField.value = group.groupId
         //updateIdField.value = group.groupId
         console.log("isAuthor: ", isAuthor)
-        if(isAuthor){
+        if (isAuthor) {
 
-        
-        updateButton.setAttribute("href", "/group/" + group.groupId + "/update")
 
-        //const updateButton = document.getElementById("update-button")
-        // console.log("action before: ", updateButton.action)
-        //updateButton.action = "/group/" + group.groupId + "/update"
+            updateButton.setAttribute("href", "/group/" + group.groupId + "/update")
 
-        //console.log("action after: ", updateButton.action)
-        deleteButton.classList.add("showIfAuthor")
-        updateButton.classList.add("showIfAuthor")
+            //const updateButton = document.getElementById("update-button")
+            // console.log("action before: ", updateButton.action)
+            //updateButton.action = "/group/" + group.groupId + "/update"
+
+            //console.log("action after: ", updateButton.action)
+            deleteButton.classList.add("showIfAuthor")
+            updateButton.classList.add("showIfAuthor")
         }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
     }).catch(function (error) {
@@ -126,11 +133,11 @@ function getGroupForUpdate(id) {
     fetch(
         //"http://localhost:8080/pl-api/groups/" + id
         "http://192.168.99.100:8080/pl-api/groups/" + id, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer "+ localStorage.accessToken
-            },
-        }
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.accessToken
+        },
+    }
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         return response.json()
@@ -176,13 +183,13 @@ async function createGroup(group) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer "+ localStorage.accessToken
+                "Authorization": "Bearer " + localStorage.accessToken
             },
             body: JSON.stringify(group)
         })
         console.log("after fetch create group")
-        switch(response.status){
-            
+        switch (response.status) {
+
             case 201:
                 goToPage(response.headers.get("Location"))
                 break
@@ -198,7 +205,7 @@ async function createGroup(group) {
                 showErrors(errors)
         }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
-    }catch(error){
+    } catch (error) {
         console.log(error)
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
         goToPage("/error-connection")
@@ -214,7 +221,7 @@ function deleteGroup(id) {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer "+ localStorage.accessToken
+            "Authorization": "Bearer " + localStorage.accessToken
         }
     }
     ).then(function (response) {
@@ -311,14 +318,14 @@ function updateGroup(group) {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer "+ localStorage.accessToken
+            "Authorization": "Bearer " + localStorage.accessToken
         },
         body: JSON.stringify(group)
     }
     ).then(function (response) {
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         // TODO: Update the view somehow.
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")        
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
         goToPage(response.headers.get("Location"))
     }).catch(function (error) {

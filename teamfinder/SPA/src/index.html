@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="http://schema.org/Article">
 
 <head>
 	<meta charset="UTF-8">
@@ -25,7 +25,11 @@
 			<li><a href="/groups">Groups</a></li>
 			<li class="showIfLoggedIn"><a href="/create-group">Create group</a></li>
 			<li class="showIfLoggedOut"><a href="/login">Login</a></li>
-			<li class="showIfLoggedOut"><button id="signinButton">Sign in with Google</button></li>
+			<li class="showIfLoggedOut">
+				<form action="" id="sign-in-button">
+					<button type="submit" id="signinButton">Sign in with Google</button>
+				</form>
+			</li>
 			<li class="showIfLoggedIn"><a href="/logout">Logout</a></li>
 			<li class="showIfLoggedOut"><a href="/sign-up">Sign-up</a></li>
 		</ul>

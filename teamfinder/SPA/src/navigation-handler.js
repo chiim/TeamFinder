@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     hideDivs()//is it okey to hide errors here????
     changeToPage(location.pathname)
-
     if (localStorage.accessToken) {
         login(localStorage.accessToken, localStorage.idToken)
     } else {
@@ -67,6 +66,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         signUp(account)
     })
+    document.querySelector("#sign-in-button").addEventListener("submit", function (event) {
+        event.preventDefault()
+        start()
+        auth2.grantOfflineAccess().then(signInCallback)
+    })
 })
 
 window.addEventListener("popstate", function (event) {
@@ -97,7 +101,6 @@ function changeToPage(url) {
         document.getElementById("home-page").classList.add("current-page")
     } else if (url == "/groups") {
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-        console.log("inside fetchallgroupsssssssssssssssss")
         document.getElementById("groups-page").classList.add("current-page")
         fetchAllGroups()
     } else if (url == "/sign-up") {
@@ -244,10 +247,10 @@ function hideDivs(){
 function start() {
     gapi.load('auth2', function() {
       auth2 = gapi.auth2.init({
-        client_id: '978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com.apps.googleusercontent.com',
+        client_id: '978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com',
         scope: "openid"
         // Scopes to request in addition to 'profile' and 'email'
         //scope: 'additional_scope'
-      });
-    });
+      })
+    })
   }
