@@ -6,7 +6,7 @@ module.exports = function () {
 
         createGroupMemberLink: function (accountId, groupId, callback) {
             const dbGroupMember = dbPostgres.model("groupMember")
-
+            console.log("AccountId: " + accountId + ". GroupId: " + groupId)
             dbGroupMember.create({
                 accountId: accountId,
                 groupId: groupId

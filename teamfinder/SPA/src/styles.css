@@ -22,6 +22,11 @@ nav ul{
 	text-align: center;
 }
 
+ul{
+	padding: 0;
+}
+
+
 nav ul li{
 	display: inline-block;
 }
@@ -38,6 +43,10 @@ main{
 
 main > div{
 	display: none;
+}
+
+main > div > ul{
+	list-style: none;
 }
 
 main > div.loadingIndicatorShow{
@@ -80,7 +89,17 @@ footer a{
 	color: black;
 }
 
+.delete-button{
+	display: none;
+}
 
+.update-button{
+	display: none;
+}
+
+.showIfAuthor{
+	display: block;
+}
 
 
 .lds-default {
