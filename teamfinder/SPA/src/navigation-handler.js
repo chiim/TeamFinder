@@ -73,6 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 })
 
+
+
 window.addEventListener("popstate", function (event) {
     const url = location.pathname
     changeToPage(url)

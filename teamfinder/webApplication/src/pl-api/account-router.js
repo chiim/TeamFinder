@@ -42,6 +42,7 @@ module.exports = function ({ accountManager }) {
             const serverSecret = "sdfkjdslkfjslkfd"
 
             const grantType = request.body.grant_type
+
             const email = request.body.email
             const password = request.body.password
 
@@ -50,42 +51,56 @@ module.exports = function ({ accountManager }) {
                 response.status(400).json({ error: "unsupported_grant_type" })
                 return
             }
+            // Got here from normal login
+            else if (email) {
+                accountManager.loginAccount(email, password, function (errors, account) {
 
-            accountManager.loginAccount(email, password, function (errors, account) {
+                    if (errors) {
+                        console.log(errors)
+                    }
 
-                if(errors){
-                    console.log(errors)
-                }
+                    if (errors && errors.includes("DatabaseError")) {
+                        console.log("databaseError")
+                        response.status(500).end()
+                    } else if (errors && 0 < errors.length) {
+                        console.log(errors)
+                        response.status(400).json({ errors: "some error?" })
+                    } else {
 
-                if (errors && errors.includes("DatabaseError")) {
-                    console.log("databaseError")
-                    response.status(500).end()
-                } else if (errors && 0 < errors.length) {
-                    console.log(errors)
-                    response.status(400).json({ errors: "some error?" })
-                } else {
+                        const payload = { accountId: account.accountId } // ifAdmin
 
-                    const payload = { accountId: account.accountId } // ifAdmin
-
-                    const accessToken = jwt.sign(payload, serverSecret)
-
-
-                    
-                    const idToken = jwt.sign(
-                        { sub: account.accountId },
-                        serverSecret
-                    )
-                    
-
-                    response.status(200).json({
-                        access_token: accessToken,
-                        id_token: idToken
-                    })
-                }
-
-            })
+                        const accessToken = jwt.sign(payload, serverSecret)
 
 
+
+                        const idToken = jwt.sign(
+                            { sub: account.accountId },
+                            serverSecret
+                        )
+
+
+                        response.status(200).json({
+                            access_token: accessToken,
+                            id_token: idToken
+                        })
+                    }
+
+                })
+
+            }
+            else{
+                const authCode = request.body.authCode
+                console.log("authCode: ", authCode)
+
+                accountManager.linkGoogleAccount(authCode, function(error){
+                    if(error){
+                        response.status(500).json(error)
+                    }
+                    else{
+                        
+                    }
+                })
+            }
         })
 
     return router

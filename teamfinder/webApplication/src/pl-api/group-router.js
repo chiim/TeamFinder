@@ -8,10 +8,9 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     function getAccountId(token) {
         const serverSecret = "sdfkjdslkfjslkfd"
 
-        console.log("IdToken in accountId: ", token)
         if (token) {
             const payload = jwt.verify(token, serverSecret)
-            return payload.sub
+            return payload.accountId
         }
         else {
             return null
@@ -142,21 +141,17 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     }
                     else if (!accountIds.includes(accountId)) {
                         const error = "You are not a member of this group"
-                        //response.setHeader("Location", "/groups")
                         response.status(401).json(error)
                     }
                     else {
                         groupManager.getGroupById(groupId, function (error, group) {
                             if (error) {
-                                response.setHeader("Content-Type", "application/json")
                                 response.status(500).json(error)
                             }
                             else {
-                                var isAuthor = false
                                 if (group.authorId == accountId) {
                                     isAuthor = true
                                 }
-                                response.setHeader("Content-Type", "application/json")
                                 response.status(200).json({ group, isAuthor })
                             }
                         })
@@ -241,7 +236,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         }
         else {
             const error = "You must be logged in to create a group"
-            response.setHeader("Content-Type", "application/json")
             response.status(401).json(error)
         }
     })
@@ -302,7 +296,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         groupManager.deleteGroupById(groupId, function (error) {
 
             if (error) {
-                response.setHeader("Content-Type", "application/json")
                 response.status(500).json(error)
             }
             else {
@@ -313,14 +306,22 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     })
 
     router.put('/:id', function (request, response) {
-        const id = request.params.id
+        const groupId = request.params.id
 
-        //const accessToken = request.body.accessToken
-        //const accountId = getAccountId(accessToken)
+        const accessToken = request.headers.authorization.split(" ")[1]
+        const accountId = getAccountId(accessToken)
 
-        groupManager.getGroupById(id, function (error, group) { // Används för att verifiera att kontot är från grupp skaparen
-
-            //if(group.authorId == accountId){
+        groupManager.getGroupById(groupId, function (error, group) { // Används för att verifiera att kontot är från grupp skaparen
+            if(error){
+                response.status(500).json(error)
+            }
+            else if(group.length == 0){
+                response.status(404).end()
+            }
+            else if(group.authorId != accountId){
+                response.status(401).end()
+            }
+            else{
 
             const groupName = request.body.groupName
             const image = request.body.image
@@ -333,7 +334,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             const gender = request.body.allowedGender
 
             const updatedGroup = {
-                id,
+                groupId,
                 groupName,
                 image,
                 sport,
@@ -347,26 +348,19 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             console.log("Group: ", updatedGroup)
             groupManager.updateGroup(updatedGroup, function (errors) {
                 if (errors && errors.includes("DatabaseError")) {
-                    response.setHeader("Content-Type", "application/json")
                     response.status(500).json(errors)
                 }
                 else if (errors && errors.length > 0) {
-                    response.setHeader("Content-Type", "application/json")
                     response.status(204).json(errors) // No content
                 }
 
                 else {
-                    response.setHeader("Location", "/group/" + id)
+                    response.setHeader("Location", "/group/" + groupId)
                     response.status(204).end()
                 }
 
             })
-            /*}
-            else{
-                response.setHeader("content-Type", "application/json")
-                response.setHeader("Location", "/groups/" + id)
-                response.status(401).json(error) // Unauthorized
-            }*/
+        }
         })
 
     })

@@ -157,14 +157,16 @@
 						<option>Pro</option>
 						<option>Expert</option>
 						<option>Master</option>
-					</select></div>
+					</select>
+				</div>
 				<div>
 					<label for="selectGender">Gender restriction</label>
 					<select class="allowedGender" name="allowedGender">
 						<option>Any</option>
 						<option>Male</option>
 						<option>Female</option>
-					</select></div>
+					</select>
+				</div>
 				<input type="hidden" name="update" class="update-id-field">
 				<input type="submit" value="Update">
 			</form>
@@ -179,7 +181,15 @@
 				<div>Password: <input type="password" class="password"></div>
 				<div>Age: <input type="text" class="age"></div>
 				<div>City: <input type="text" class="city"></div>
-				<div>Gender: <input type="text" class="gender"></div>
+				<div>
+					<label for="selectGender">Gender</label>
+					<select class="gender">
+						<option>Any</option>
+						<option>Male</option>
+						<option>Female</option>
+					</select>
+				</div>
+				<!-- <div>Gender: <input type="text" class="gender"></div> -->
 				<input type="submit" value="Create">
 			</form>
 		</div>

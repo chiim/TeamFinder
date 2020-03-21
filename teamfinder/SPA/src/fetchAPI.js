@@ -268,6 +268,32 @@ async function authenticateUser(email, password) {
     }
 }
 
+function signInCallback(authResult) {
+    if (authResult['code']) {
+
+        // Hide the sign-in button now that the user is authorized, for example:
+
+        // Send the code to the server
+        fetch(
+            "http://localhost:8080/pl-api/accounts/tokens", {
+            //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
+            method: 'POST',
+            // Always include an `X-Requested-With` header in every AJAX request,
+            // to protect against CSRF attacks.
+            headers: {
+                //'X-Requested-With': 'XMLHttpRequest',
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "grant_type=password&authCode=" + encodeURIComponent(authResult['code'])
+
+        })
+    }
+    else {
+        console.log("Google auth went wrong. See fetchAPI signInCallback function")
+        // There was an error.
+    }
+}
+
 async function signUp(account) {
 
 
