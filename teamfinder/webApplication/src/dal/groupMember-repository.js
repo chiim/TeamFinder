@@ -8,7 +8,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "DatabaseError: Error linking account to group."
+                    const databaseError = ["DatabaseError: Error linking account to group."]
                     callback(databaseError)
                 }
                 else {
@@ -29,7 +29,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error, numberOfMembers) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "DatabaseError: Error updating number of members"
+                    const databaseError = ["DatabaseError: Error updating number of members"]
                     callback(databaseError, null)
                 }
                 else{
@@ -40,7 +40,7 @@ module.exports = function ({ dbMySQL }) {
                     dbMySQL.query(query, values, function (error) {
                         if (error) {
                             console.log(error)
-                            const databaseError = "DatabaseError: Error updating number of members"
+                            const databaseError = ["DatabaseError: Error updating number of members"]
                             callback(databaseError, null)
                         }
                         else{
@@ -61,7 +61,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error, accountIds) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "DatabaseError: Error fetching group members"
+                    const databaseError = ["DatabaseError: Error fetching group members"]
                     callback(databaseError, null)
                 }
                 else {
@@ -78,7 +78,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "DatabaseError: Error when kicking member"
+                    const databaseError = ["DatabaseError: Error when kicking member"]
                     callback(databaseError)
                 }
                 else {

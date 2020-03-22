@@ -29,7 +29,7 @@ module.exports = function ({ accountManager }) {
         console.log("accccccccccc", account)
         accountManager.createAccount(account, function (errors, id) {
             if (errors && errors.includes("databaseError")) {
-                response.status(500).end()
+                response.status(500).json(errors)
             } else if (errors && 0 < errors.length) {
                 response.status(400).json(errors)
             } else {
@@ -62,10 +62,10 @@ module.exports = function ({ accountManager }) {
 
                 if (errors && errors.includes("DatabaseError")) {
                     console.log("databaseError")
-                    response.status(500).end()
+                    response.status(500).json(errors)
                 } else if (errors && 0 < errors.length) {
                     console.log(errors)
-                    response.status(400).json({ errors: "some error?" })
+                    response.status(400).json(errors) //this looks so scuffed
                 } else {
 
                     const payload = { accountId: account.accountId } // ifAdmin

@@ -5,28 +5,41 @@ module.exports = function ({ groupRepository, validator, accountManager }) {
 
         createGroup: function (groupCredentials, callback) {
 
-            const groupValidationErrors = validator.validateGroup(groupCredentials)
-            if (groupValidationErrors.length > 0) {
-                callback(groupValidationErrors, null)
-            }
+            //why do we need to get account to create a group? we already have a account id in groupCredentials
+            accountManager.getAccountById(groupCredentials.accountId, function (error, account) {
+                if (error) {
+                    callback(error, null)
+                }
+                else {
+                    const validateAuthorErrors = validator.validateRequirements(account, groupCredentials)
+                    const groupValidationErrors = validator.validateGroup(groupCredentials)
+                    const validationErrors = validateAuthorErrors.concat(groupValidationErrors)
+                    console.log(validationErrors)
 
-            else {
-                accountManager.getAccountById(groupCredentials.accountId, function (error, account) {
-                    if (error) {
-                        callback(error, null)
-                    }
-                    else {
-                        const validateAuthorErrors = validator.validateRequirements(account, groupCredentials)
-                        if (validateAuthorErrors.length > 0) {
-                            const error = "The group requirements need to match your account info"
+                    groupRepository.isNameUnique(groupCredentials.groupName, function (error, nameAvailable) {
+
+                        if (error) {
                             callback(error, null)
+                        } else {
+                            console.log(validationErrors)
+                            if (!nameAvailable) {
+                                validationErrors.push("name already exists")
+                            }
+                            if (validationErrors.length > 0) {
+                                callback(validationErrors, null)
+                            }
+                            else {
+                                groupRepository.createGroup(groupCredentials, callback)
+                            }
                         }
-                        else {
-                            groupRepository.createGroup(groupCredentials, callback)
-                        }
-                    }
-                })
-            }
+
+
+                    })
+
+
+                }
+            })
+
         },
 
         getAllGroups: function (callback) {

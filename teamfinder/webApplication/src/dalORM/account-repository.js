@@ -19,7 +19,7 @@ module.exports = function () {
                 callback(null, createdAccount.dataValues.accountId)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
+                const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
                 callback(databaseError, null)
             })
         },
@@ -33,14 +33,17 @@ module.exports = function () {
                     email :email
                 }
             }).then(function(count){
-                if(count != 0){
-                    callback(true)
+                var emailAvailable
+                if(count == 0){
+                    emailAvailable = true
+                    callback(null, emailAvailable)
                 }else{
-                    callback(false)
+                    emailAvailable = false
+                    callback(null, emailAvailable)
                 }                
             }).catch(function(error){
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
+                const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
                 callback(databaseError, null)
             })
         },
@@ -52,7 +55,7 @@ module.exports = function () {
                 callback(null, account)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: Something went wrong inserting data. Contact admin."
+                const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
                 callback(databaseError, null)
             })
         },
@@ -74,7 +77,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: error when updating account"
+                const databaseError = ["DatabaseError: error when updating account"]
                 callback(databaseError)
             })
         },
@@ -86,16 +89,18 @@ module.exports = function () {
                 raw: true
             }).then(function (account) {
                 
-                if (account.length == 0) {
-                    databaseError = "DatabaseError: no result found"
-                    callback(databaseError, null)
+                if (account == null) {
+                    error = ["no result found"]
+                    callback(error, null)
                 }
                 else {
                     ("Account: ", account)
                     callback(null, account)
                 }
             }).catch(function (error) {
-                callback(error, null)
+                console.log(error)
+                const databaseError = ["DatabaseError: error when updating account"]
+                callback(databaseError, null)
             })
         },
 
@@ -108,7 +113,7 @@ module.exports = function () {
                 callback(null)
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = "DatabaseError: error when deleting account"
+                const databaseError = ["DatabaseError: error when deleting account"]
                 callback(databaseError)
             })
         },

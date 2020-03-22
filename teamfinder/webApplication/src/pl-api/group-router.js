@@ -24,11 +24,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         groupManager.getAllGroups(function (error, groups) {
             if (error) {
                 console.log(error)
-                response.status(500).end() // Internal server error
-            }
-            else if (groups.length == 0) {
-                console.log("Kommer jag hit??")
-                response.status(204).end()  // No content
+                response.status(500).json(error) // Internal server error
             }
             else {
                 var databaseErrors = []
@@ -51,7 +47,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 }
                 if (databaseErrors.length > 0) {
                     console.log(databaseErrors)
-                    response.status(500).end()
+                    response.status(500).json(databaseErrors)
                 }
                 else {
                     console.log("show accountId: ", accountId)
@@ -75,11 +71,13 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         groups.splice(i, 1) // pop specific element
                                     }
                                 }
-                                console.log("ActiveGroupIds: ", activeGroupIds)
-                                console.log("All groups: ", groups)
+
+                                //if (groups.length == 0) {
+                                //    response.status(204).end()  // No content
+                                //}else{
                                 groups = addMemberCountToGroups(memberGroupCount, groups)
                                 response.status(200).json(groups)
-
+                                //}
                             }
                         })
                     }
@@ -139,8 +137,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                         response.status(500).json(error)
                     }
                     else if (!accountIds.includes(accountId)) {
-                        const error = "You are not a member of this group"
-                        response.status(401).json(error)
+                        response.status(401).json()
                     }
                     else {
                         groupManager.getGroupById(groupId, function (error, group) {
@@ -233,9 +230,8 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
             })
         }
-        else {
-            const error = "You must be logged in to create a group"
-            response.status(401).json(error)
+        else { // User shouldnt be able to get here at all
+            response.status(401).json()
         }
     })
 
@@ -298,10 +294,10 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 response.status(500).json(error)
             }
             else {
-                response.setHeader("Location", "/groups")
-                response.status(200).end()
+                response.status(204).end()
             }
         })
+
     })
 
     router.put('/:id', function (request, response) {
@@ -311,55 +307,55 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         const accountId = getAccountId(accessToken)
 
         groupManager.getGroupById(groupId, function (error, group) { // Används för att verifiera att kontot är från grupp skaparen
-            if(error){
+            if (error) {
                 response.status(500).json(error)
             }
-            else if(group.length == 0){
+            else if (group.length == 0) {
                 response.status(404).end()
             }
-            else if(group.authorId != accountId){
+            else if (group.authorId != accountId) {
                 response.status(401).end()
             }
-            else{
+            else {
 
-            const groupName = request.body.groupName
-            const image = request.body.image
-            const sport = request.body.sport
-            const memberSlots = request.body.memberSlots
-            const city = request.body.city
-            const minAge = request.body.minAge
-            const maxAge = request.body.maxAge
-            const skillLevel = request.body.skillLevel
-            const gender = request.body.allowedGender
+                const groupName = request.body.groupName
+                const image = request.body.image
+                const sport = request.body.sport
+                const memberSlots = request.body.memberSlots
+                const city = request.body.city
+                const minAge = request.body.minAge
+                const maxAge = request.body.maxAge
+                const skillLevel = request.body.skillLevel
+                const gender = request.body.allowedGender
 
-            const updatedGroup = {
-                groupId,
-                groupName,
-                image,
-                sport,
-                memberSlots,
-                city,
-                minAge,
-                maxAge,
-                skillLevel,
-                gender
+                const updatedGroup = {
+                    groupId,
+                    groupName,
+                    image,
+                    sport,
+                    memberSlots,
+                    city,
+                    minAge,
+                    maxAge,
+                    skillLevel,
+                    gender
+                }
+                console.log("Group: ", updatedGroup)
+                groupManager.updateGroup(updatedGroup, function (errors) {
+                    if (errors && errors.includes("DatabaseError")) {
+                        response.status(500).json(errors)
+                    }
+                    else if (errors && errors.length > 0) {
+                        response.status(204).json(errors) // No content
+                    }
+
+                    else {
+                        response.setHeader("Location", "/group/" + groupId)
+                        response.status(204).end()
+                    }
+
+                })
             }
-            console.log("Group: ", updatedGroup)
-            groupManager.updateGroup(updatedGroup, function (errors) {
-                if (errors && errors.includes("DatabaseError")) {
-                    response.status(500).json(errors)
-                }
-                else if (errors && errors.length > 0) {
-                    response.status(204).json(errors) // No content
-                }
-
-                else {
-                    response.setHeader("Location", "/group/" + groupId)
-                    response.status(204).end()
-                }
-
-            })
-        }
         })
 
     })

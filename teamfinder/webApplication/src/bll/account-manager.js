@@ -6,21 +6,36 @@ module.exports = function ({ accountRepository, validator }) {
 
         createAccount: function (account, callback) {
 
-            //validering
-
             const errors = validator.validateAccount(account)
             const saltRounds = 10
             const password = account.password.toString()
 
-            if (0 < errors.length) {
-                callback(errors, null)
-                return
-            }
+            accountRepository.isEmailIsUnique(account.email, function (error, emailAvailable) {
+                //IF ERROR?
+                if (error) {
+                    callback(error, null)
+                }
+                else {
+                    if (!emailAvailable) {
+                        errors.push("email already exists")
+                    }
+                    if (0 < errors.length) {
 
+                        callback(errors, null)
+                        return
+                    }
+                    bcrypt.hash(password, saltRounds, function (error, hash) {
 
-            bcrypt.hash(password, saltRounds, function (err, hash) {
-                //här borde if error finnas
-                accountRepository.createAccount(hash, account, callback)
+                        if (error) {
+                            console.log(error)
+                            const hashError = ["error when creating account"]
+                            callback(hashError, null)
+                        } else {
+                            accountRepository.createAccount(hash, account, callback)
+                        }
+                    })
+                }
+
             })
         },
 
@@ -31,54 +46,51 @@ module.exports = function ({ accountRepository, validator }) {
         updateAccount: function (account, callback) {
 
             console.log("Account in manager: ", account)
-            //validering
+
 
             const errors = []
             MAX_PASSWORD_LENGTH = 15
             MIN_PASSWORD_LENGTH = 2
+            MIN_NAME_LENGTH = 1
+            MIN_EMAIL_LENGTH = 3
+            MIN_AGE_LENGTH = 1
+            MIN_CITY_LENGTH = 1
 
             // Validate username.
-            if (!account.hasOwnProperty("firstName")) {
+            if (account.firstName.length < MIN_NAME_LENGTH) {
                 errors.push("firstNameMissing")
-            } else if (!account.hasOwnProperty("lastName")) {
+            } else if (account.lastName.length < MIN_NAME_LENGTH) {
                 errors.push("lastNameMissing")
-            } else if (!account.hasOwnProperty("email")) {
+            } else if (account.email.length < MIN_EMAIL_LENGTH) {
                 errors.push("emailMissing")
-            } else if (account.hasOwnProperty("age")) {
+            } else if (!account.email.includes("@")) {
+                errors.push("enter a valid email")
+            } else if (account.age.length < MIN_AGE_LENGTH) {
                 errors.push("ageMissing")
-            } else if (!account.hasOwnProperty("city")) {
+            } else if (account.city.length < MIN_CITY_LENGTH) {
                 errors.push("cityMissing")
-            } else if (!account.hasOwnProperty("gender")) {
+            } /*else if (!account.hasOwnProperty("gender")) {
                 errors.push("genderMissing")
-            }
-
-            /*
-            if(!accountRepository.isEmailIsUnique(email,function(error, exist){
-            errors.push("email already exists")
+            }   THIS SHOULD BE ANY IF NOT FEMALE OR MALE ?
             */
-            
+
             if (0 < errors.length) {
 
-                            callback(errors)
-                            return
-                        }
-                        accountRepository.updateAccount(account, callback)
-            //} )){
-                
-            //}
+                callback(errors)
+                return
+            }
+            accountRepository.updateAccount(account, callback)
 
-
-            
         },
 
         loginAccount: function (email, password, callback) {
 
-            accountRepository.loginAccount(email, function(error, account){
-                if(error){
+            accountRepository.loginAccount(email, function (error, account) {
+                if (error) {
                     callback(error, null)
                 }
-                else{
-                    compareAccount(account, password, callback)                    
+                else {
+                    compareAccount(account, password, callback)
                 }
             })
 
@@ -104,7 +116,7 @@ const compareAccount = function (account, password, callback) {
             callback(null, account)
         }
         else {
-            const dbError = "dbError logging in"
+            const dbError = ["wrong credentials"]
             callback(dbError, null)
         }
     })

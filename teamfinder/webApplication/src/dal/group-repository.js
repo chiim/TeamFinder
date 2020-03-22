@@ -27,7 +27,7 @@ module.exports = function ({dbMySQL}) {
             dbMySQL.query(query, values, function (error, result) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong inserting data. Contact admin."
+                    const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
                     callback(databaseError, null)
                 }
                 else {
@@ -37,12 +37,33 @@ module.exports = function ({dbMySQL}) {
 
         },
 
+        isNameUnique: function (name, callback) {
+
+            const query = "SELECT * FROM Groups WHERE name = ?"
+            const values = [name]
+
+            dbMySQL.query(query, values, function (error, nameFound) {
+                if (error) {
+                    console.log(error)
+                    const databaseError = ["DatabaseError: Something went wrong. Contact admin."]
+                    callback(databaseError, null)
+                } else {
+                    var nameAvailable = false
+                    console.log("RÄKNAAAAAAAAAAAAAAAAAAAAAAAA", nameFound)
+                    if (nameFound.length == 0) {
+                        nameAvailable = true
+                    }
+                    callback(null, nameAvailable)
+                }
+            })
+        },
+
         getAllGroups: function (callback) {
             const query = "SELECT * FROM Groups"
             dbMySQL.query(query, function (error, groups) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong fetching groups. Contact admin."
+                    const databaseError = ["DatabaseError: Something went wrong fetching groups. Contact admin."]
                     callback(databaseError, null)
                 }
                 else {
@@ -58,7 +79,7 @@ module.exports = function ({dbMySQL}) {
             dbMySQL.query(query, values, function (error, activeGroupIds) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong fetching active groups."
+                    const databaseError = ["DatabaseError: Something went wrong fetching active groups."]
                     callback(databaseError, null)
                 }
                 else {
@@ -73,7 +94,7 @@ module.exports = function ({dbMySQL}) {
             dbMySQL.query(query, function (error, groupIds) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong fetching a group"
+                    const databaseError = ["DatabaseError: Something went wrong fetching a group"]
                     callback(databaseError, null)
                 }
                 else {
@@ -89,7 +110,7 @@ module.exports = function ({dbMySQL}) {
             dbMySQL.query(query, values, function (error, group) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong fetching the group."
+                    const databaseError = ["DatabaseError: Something went wrong fetching the group."]
                     callback(databaseError, null)
                 }
                 else {
@@ -110,7 +131,7 @@ module.exports = function ({dbMySQL}) {
 
                 if (error) {
                     console.log(error)
-                    databaseError = "dbMySQL error when deleting group"
+                    databaseError = ["DatabaseError: dbMySQL error when deleting group"]
                     callback(databaseError)
                 }
                 else {
@@ -139,7 +160,7 @@ module.exports = function ({dbMySQL}) {
             dbMySQL.query(query, values, function (error, updatedGroup) {
                 if (error) {
                     console.log(error)
-                    const databaseError = "Something went wrong when updating the group information"
+                    const databaseError = ["DatabaseError: Something went wrong when updating the group information"]
                     callback(databaseError)
                 }
                 else {

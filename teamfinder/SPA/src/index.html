@@ -21,7 +21,7 @@
 	<nav>
 		<ul>
 			<li><a href="/">Home</a></li>
-			<li><a href="/groups">Groups</a></li>
+			<li class="showIfLoggedIn"><a href="/groups">Active groups</a></li>
 			<li class="showIfLoggedIn"><a href="/create-group">Create group</a></li>
 			<li class="showIfLoggedOut"><a href="/login">Login</a></li>
 			<li class="showIfLoggedOut">
@@ -63,6 +63,9 @@
 			<ul>
 
 			</ul>
+			<p>
+
+			</p>
 		</div>
 
 		<div id="group-page">
@@ -77,15 +80,9 @@
 			<div>Skill: <span class="skillLevel"></span></div>
 			<div>Gender: <span class="allowedGender"></span></div>
 
-			<a class="update-button" href="/">Update</a>
-			<!-- Something went wrong if redirected to home. href is edited in navigation-handler -->
+			<a class="update-button showIfAuthor" href="/">Update</a>
 
-			<!-- <form action="" class="update-button showIfAuthor" id="update-button">
-				<input type="hidden" name="update" class="update-id-field">
-				<input type="submit" value="Update">
-			</form> -->
-
-			<form action="" class="delete-button">
+			<form action="" class="delete-button showIfAuthor">
 				<input type="hidden" name="delete" class="delete-id-field">
 				<input type="submit" value="Delete">
 			</form>
@@ -227,13 +224,13 @@
 			<p>Oups, something went wrong ^^'</p>
 		</div>
 
-		<div id="error-page">
-			<h1>Error</h1>
-			<p>Oups, something went wrong with the connection to the server ^^'</p>
+		<div id="unAuthorized-page">
+			<h1>warning</h1>
+			<p>you are not authorized</p>
 		</div>
 
 		<div id="error-div">
-			<h1>errors</h1>
+			<h5>errors</h5>
 			<ul id="ulWithErrors">
 
 			</ul>
