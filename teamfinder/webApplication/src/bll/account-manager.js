@@ -50,9 +50,7 @@ module.exports = function ({ accountRepository, validator }) {
 
         updateAccount: function (account, callback) {
 
-            const errors = []
-
-            errors = validator.validateAccountUpdate(account)
+            const errors = validator.validateAccountUpdate(account)
 
             if (0 < errors.length) {
 

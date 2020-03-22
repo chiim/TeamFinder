@@ -164,6 +164,7 @@ module.exports = function ({ accountManager, middleware }) {
             if (errors) {
                 const model = {
                     errors,
+                    account,
                     csrfToken: request.csrfToken()
                 }
                 response.render("account-edit.hbs", model)

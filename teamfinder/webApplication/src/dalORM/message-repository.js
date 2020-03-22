@@ -59,12 +59,14 @@ module.exports = function () {
             const dbMessage = dbPostgres.model('message')
 
             dbMessage.update({
-                text: message.text,
+                text: message.messageText,
             },{
                 where: {
                     messageId: message.messageId
-                }
-            }).then(function(){
+                },
+                returning: true,
+                raw: true
+            }).then(function(result){
                 callback(null)
             }).catch(function(error){
                 console.log(error)

@@ -39,7 +39,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                             }
                             else {
                                 memberGroupCount.push(nrOfMembers)
-                                console.log("memberGroupCount after push: ", memberGroupCount)
                             }
 
                             if (memberGroupCount.length == groups.length) {
