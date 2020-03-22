@@ -56,6 +56,7 @@ module.exports = function ({ messageManager, accountManager }) {
 
         const messageId = request.params.id
         const groupId = request.body.groupId
+        console.log("REEEEEEEEEEEEEE")
 
         response.redirect("/groups/" + groupId + "/?editMessage=" + messageId)
 
@@ -63,6 +64,8 @@ module.exports = function ({ messageManager, accountManager }) {
     })
 
     router.post('/update/:id', function (request, response) {
+
+        console.log("RIGHT!½")
 
         const messageId = request.params.id
         const messageText = request.body.text
@@ -75,10 +78,13 @@ module.exports = function ({ messageManager, accountManager }) {
 
         messageManager.updateMessageById(message, function (error) {
 
+            console.log("eyyyy boyyy")
             if (error) {
+                console.log("error???")
                 response.redirect("../groups/" + groupId + "/?updateMessageError=true")
             }
             else {
+                console.log("works!!!")
                 response.redirect("/groups/" + groupId)
             }
         })
