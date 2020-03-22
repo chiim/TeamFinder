@@ -69,6 +69,26 @@ module.exports = function ({ dbMySQL }) {
 
         },
 
+        getAccountByGoogleId: function (googleId, callback) {
+
+            const query = "SELECT * FROM Accounts WHERE googleId = ?"
+            const values = [googleId]
+            dbMySQL.query(query, values, function (error, account) {
+
+                if (error) {
+                    console.log(error)
+                    const databaseError = ["DatabaseError: Something went wrong retreiving data. Contact admin."]
+                    callback(databaseError, null)
+                }
+                else {
+                    callback(null, account[0])
+                }
+
+            })
+            
+
+        },
+
         updateAccount: function (account, callback) {
 
             const query = "UPDATE Accounts SET firstName = ?, lastName = ?, email = ?, age = ?, city = ?, gender = ? WHERE accountId = ?"

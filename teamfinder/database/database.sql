@@ -3,10 +3,11 @@ SET `time_zone` = '+02:00';
 
 CREATE TABLE `Accounts` (
     `accountId` INT NOT NULL AUTO_INCREMENT,
+    `googleId` VARCHAR(170) NULL,
     `firstName` VARCHAR(50) NOT NULL,
     `lastName` VARCHAR(50) NOT NULL,
     `email` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(80) NOT NULL,
+    `password` VARCHAR(80) NULL,
     `age` VARCHAR(3) NOT NULL,
     `city` VARCHAR(30) NOT NULL,
     `gender` VARCHAR(10) NOT NULL,

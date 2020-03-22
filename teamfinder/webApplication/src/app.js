@@ -51,7 +51,7 @@ container.register('validator', awilix.asFunction(validator))
 container.register('messageManager', awilix.asFunction(messageManager))
 container.register('messageRouter', awilix.asFunction(messageRouter))
 
-const mySql = false
+const mySql = true
 
 if (mySql) {
   container.register('groupRepository', awilix.asFunction(groupRepositoryMySQL))

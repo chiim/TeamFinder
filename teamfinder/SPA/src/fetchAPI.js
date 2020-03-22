@@ -305,40 +305,39 @@ async function deleteGroup(id) {
 }
 
 async function authenticateUser(email, password) {
+        try {
 
-    try {
+            const response = await fetch(
+                "http://localhost:8080/pl-api/accounts/tokens", {
+                //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
+                body: "grant_type=password&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password)
+            })
+            switch (response.status) {
+                case 200:
+                    const body = await response.json()
+                    login(body.access_token, body.id_token)
+                    console.log(body.access_token, body.id_token)
+                    changeToPage("/")
+                    break
+                case 400://bad validation(email, felmeddelande)
+                    const errors = await response.json()
+                    showErrors(errors)
+                    break
+                case 500:
+                    goToPage("/error")
 
-        const response = await fetch(
-            "http://localhost:8080/pl-api/accounts/tokens", {
-            //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
-            body: "grant_type=password&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password)
-        })
-        switch (response.status) {
-            case 200:
-                const body = await response.json()
-                login(body.access_token, body.id_token)
-                console.log(body.access_token, body.id_token)
-                changeToPage("/")
-                break
-            case 400://bad validation(email, felmeddelande)
-                const errors = await response.json()
-                showErrors(errors)
-                break
-            case 500:
-                goToPage("/error")
+            }
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
+        } catch (error) {
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+            console.log(error)
+            goToPage("/error")
         }
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
-
-    } catch (error) {
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
-        console.log(error)
-        goToPage("/error")
-    }
 }
 
 
@@ -489,25 +488,25 @@ async function updateGroup(group) {
         switch (response.status) {
 
             case 204://??
-        goToPage(response.headers.get("Location"))
-        break
+                goToPage(response.headers.get("Location"))
+                break
             case 404:
-        errors = await response.json()
-        console.log(errors)
-        showErrors(errors)
-        break
+                errors = await response.json()
+                console.log(errors)
+                showErrors(errors)
+                break
             case 401:
-        goToPage("/unauthorized")
-        break
+                goToPage("/unauthorized")
+                break
             case 500:
-        goToPage("/error")
-    }
+                goToPage("/error")
+        }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
 
     } catch (error) {
-    document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
-    console.log(error)
-    goToPage("/error")
-}
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+        console.log(error)
+        goToPage("/error")
+    }
 }

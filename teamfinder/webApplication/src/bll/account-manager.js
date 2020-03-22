@@ -27,7 +27,7 @@ module.exports = function ({ accountRepository, validator }) {
                         accountRepository.createAccount(null, account, callback)
                     }
                     else {
-                        const password = account.password.toString()
+                        const password = account.password
                         bcrypt.hash(password, saltRounds, function (error, hash) {
 
                             if (error) {
@@ -113,7 +113,7 @@ module.exports = function ({ accountRepository, validator }) {
 
 const compareAccount = function (account, password, callback) {
 
-    const hash = account.password.toString()
+    const hash = account.password
 
     bcrypt.compare(password, hash, function (err, result) {
 

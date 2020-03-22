@@ -53,7 +53,6 @@ module.exports = function ({ accountManager }) {
                 response.status(400).json({ error: "unsupported_grant_type" })
                 return
             }
-
             accountManager.loginAccount(email, password, function (errors, account) {
 
                 if (errors) {
