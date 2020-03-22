@@ -91,7 +91,7 @@ module.exports = function ({ accountManager, middleware }) {
             city,
             gender
         }
-        wwwaccountManager.createAccount(account, function (errors, newAccount) {
+        accountManager.createAccount(account, function (errors, newAccount) {
 
             if (errors) {
                 model = {
