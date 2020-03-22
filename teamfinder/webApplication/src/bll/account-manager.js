@@ -9,8 +9,8 @@ module.exports = function ({ accountRepository, validator }) {
             const errors = validator.validateAccount(account)
             const saltRounds = 10
 
-            accountRepository.isEmailIsUnique(account.email, function (error, emailAvailable) {
-                //IF ERROR?
+            accountRepository.isEmailUnique(account.email, function (error, emailAvailable) {
+                
                 if (error) {
                     callback(error, null)
                 }
@@ -50,34 +50,9 @@ module.exports = function ({ accountRepository, validator }) {
 
         updateAccount: function (account, callback) {
 
-            console.log("Account in manager: ", account)
-
-
             const errors = []
-            MAX_PASSWORD_LENGTH = 15
-            MIN_PASSWORD_LENGTH = 2
-            MIN_NAME_LENGTH = 1
-            MIN_EMAIL_LENGTH = 3
-            MIN_AGE_LENGTH = 1
-            MIN_CITY_LENGTH = 1
 
-            // Validate username.
-            if (account.firstName.length < MIN_NAME_LENGTH) {
-                errors.push("firstNameMissing")
-            } else if (account.lastName.length < MIN_NAME_LENGTH) {
-                errors.push("lastNameMissing")
-            } else if (account.email.length < MIN_EMAIL_LENGTH) {
-                errors.push("emailMissing")
-            } else if (!account.email.includes("@")) {
-                errors.push("enter a valid email")
-            } else if (account.age.length < MIN_AGE_LENGTH) {
-                errors.push("ageMissing")
-            } else if (account.city.length < MIN_CITY_LENGTH) {
-                errors.push("cityMissing")
-            } /*else if (!account.hasOwnProperty("gender")) {
-                errors.push("genderMissing")
-            }   THIS SHOULD BE ANY IF NOT FEMALE OR MALE ?
-            */
+            errors = validator.validateAccountUpdate(account)
 
             if (0 < errors.length) {
 

@@ -34,6 +34,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error, messages) {
 
                 if (error) {
+                    console.log(error)
                     const databaseError = ["DatabaseError: something went wrong getting messages from database"]
                     callback(databaseError, null)
                 }
@@ -54,6 +55,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error) {
 
                 if (error) {
+                    console.log(error)
                     const databaseError = ["DatabaseError: dbMySQL error when deleting message"]
                     callback(databaseError)
                 }
@@ -78,6 +80,7 @@ module.exports = function ({ dbMySQL }) {
             dbMySQL.query(query, values, function (error) {
 
                 if (error) {
+                    console.log(error)
                     const databaseError = ["DatabaseError: error when updating message"]
                     callback(databaseError)
                 }

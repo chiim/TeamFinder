@@ -61,7 +61,9 @@ module.exports = function () {
 
             const dbGroup = dbPostgres.model("group")
 
-            dbGroup.findAll( {raw: true} ).then(function (groups) {
+            dbGroup.findAll({
+                raw: true
+            }).then(function (groups) {
                 callback(null, groups)
             }).catch(function (error) {
                 console.log(error)
@@ -98,7 +100,6 @@ module.exports = function () {
                 attributes: ['groupId'],
                 raw: true
             }).then(function (groupIds) {
-                console.log("groupIds: ", groupIds)
                 callback(null, groupIds)
             }).catch(function (error) {
                 console.log(error)

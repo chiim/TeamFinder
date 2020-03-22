@@ -24,7 +24,7 @@ module.exports = function () {
                 })
         },
 
-        isEmailIsUnique: function (email, callback) {
+        isEmailUnique: function (email, callback) {
 
             const dbAccount = dbPostgres.model("account")
 
@@ -51,7 +51,10 @@ module.exports = function () {
         getAccountById: function (accountId, callback) {
             const dbAccount = dbPostgres.model("account")
 
-            dbAccount.findByPk(accountId, { raw: true }).then(function (account) {
+            dbAccount.findByPk(
+                accountId, { 
+                    raw: true 
+                }).then(function (account) {
                 callback(null, account)
             }).catch(function (error) {
                 console.log(error)
@@ -94,12 +97,12 @@ module.exports = function () {
                     callback(error, null)
                 }
                 else {
-                    ("Account: ", account)
+                    ("Account: ", account)//????????????????
                     callback(null, account)
                 }
             }).catch(function (error) {
                 console.log(error)
-                const databaseError = ["DatabaseError: error when updating account"]
+                const databaseError = ["DatabaseError: error when logging in to account"]
                 callback(databaseError, null)
             })
         },
@@ -127,7 +130,9 @@ module.exports = function () {
             }).then(function (account) {
                 callback(null, account)
             }).catch(function (error) {
-                callback(error, null)
+                console.log(error)
+                const databaseError = ["DatabaseError: error when logging in to account"]
+                callback(databaseError, null)
             })
 
         }
