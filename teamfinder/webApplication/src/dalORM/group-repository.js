@@ -145,8 +145,7 @@ module.exports = function () {
         updateGroup: function (group, callback) {
 
             const dbGroup = dbPostgres.model("group")          
-            console.log("groupId: ", group.groupId)
-            dbGroup.update({ // Den kommer hit men gör inte update?? GroupId stämmer, får in grupp data, kör callback(null) som den ska men updaterar inte rows.
+            dbGroup.update({
                 image: group.image,
                 sport: group.sport,
                 memberSlots: group.memberSlots,
@@ -162,7 +161,6 @@ module.exports = function () {
                 returning: true,
                 raw: true
             }).then(function(result){
-                console.log("result after updating: ", result)
                 callback(null)
             }).catch(function(error){
                 console.log(error)

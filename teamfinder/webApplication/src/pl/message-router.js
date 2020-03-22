@@ -78,13 +78,10 @@ module.exports = function ({ messageManager, accountManager }) {
 
         messageManager.updateMessageById(message, function (error) {
 
-            console.log("eyyyy boyyy")
             if (error) {
-                console.log("error???")
                 response.redirect("../groups/" + groupId + "/?updateMessageError=true")
             }
             else {
-                console.log("works!!!")
                 response.redirect("/groups/" + groupId)
             }
         })
