@@ -30,7 +30,6 @@ module.exports = function () {
                 },
                 raw: true,
                 model: "message"
-                //order: [messageId, 'DESC']
             }).then(function (messages) {
                 callback(null, messages)
             }).catch(function (error) {

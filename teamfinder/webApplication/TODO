@@ -36,6 +36,5 @@ Escape username and password in case they contained reserved characters in the x
 
 --------------- questions and improvements in website ----------------
 
-global variabel EMPTY = 0
 
 why do we need to get account to create a group? we already have a account id in groupCredentials groupManager:13

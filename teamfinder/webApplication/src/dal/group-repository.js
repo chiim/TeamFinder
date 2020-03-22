@@ -4,9 +4,6 @@ module.exports = function ({dbMySQL}) {
 
     return {
         createGroup: function (groupCredentials, callback) {
-            //const today = new Date()
-            //date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-
 
             const query = "INSERT INTO Groups (`name`, image, sport, nrOfMembers, memberSlots, city, maxAge, minAge, skillLevel, allowedGender, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -49,7 +46,6 @@ module.exports = function ({dbMySQL}) {
                     callback(databaseError, null)
                 } else {
                     var nameAvailable = false
-                    console.log("RÄKNAAAAAAAAAAAAAAAAAAAAAAAA", nameFound)
                     if (nameFound.length == 0) {
                         nameAvailable = true
                     }
@@ -142,7 +138,6 @@ module.exports = function ({dbMySQL}) {
 
         updateGroup: function (group, callback) {
 
-            // no where clause??
 
             const query = "UPDATE Groups SET image = ?, sport = ?, memberSlots = ?, city = ?, minAge = ?, maxAge = ?, skillLevel = ?, allowedGender = ? WHERE groupId = ?"
             const values = [

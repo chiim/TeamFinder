@@ -42,7 +42,6 @@ module.exports = function ({ dbMySQL }) {
                     callback(databaseError, null)
                 } else {
                     var emailAvailable = false
-                    console.log("RÄKNAAAAAAAAAAAAAAAAAAAAAAAA", emailFound)
                     if (emailFound.length == 0) {
                         emailAvailable = true
                     }
@@ -137,6 +136,28 @@ module.exports = function ({ dbMySQL }) {
                 }
                 else {
                     callback(null)
+                }
+            })
+        },
+
+        getAccountByGoogleId: function(googleId, callback){
+
+            const query = "SELECT * FROM Accounts WHERE googleId = ? LIMIT 1"
+            const values = [
+                googleId
+            ]
+            dbMySQL.query(query, values, function (error, account){
+
+                if(error){
+                    console.log(error)
+                    const databaseError = ["DatabaseError: error when logging in to account"]
+                    callback(databaseError, null)
+                }else if (account.length == 0) {
+                    const databaseError = ["DatabaseError: no result found"]
+                    callback(databaseError, null)
+                }
+                else {
+                    callback(null, account[0])
                 }
             })
         }

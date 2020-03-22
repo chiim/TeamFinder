@@ -86,8 +86,6 @@ module.exports = function ({ messageManager, accountManager }) {
 
     router.post('/delete/:id', function (request, response) {
 
-        //const accountId = request.body.accountId
-
         const groupId = request.body.groupId
         const messageId = request.params.id
 
