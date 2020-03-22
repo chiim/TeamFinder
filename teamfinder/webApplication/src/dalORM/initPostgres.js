@@ -65,8 +65,7 @@ module.exports = function (sequelize, Sequelize) {
         },
         onDelete: 'CASCADE'
     })
-    /*GroupMember.belongsTo(Account)
-    GroupMember.belongsTo(Group)*/
+
 
     return sequelize.sync().then(function () {
         var dataExists = false
@@ -78,7 +77,6 @@ module.exports = function (sequelize, Sequelize) {
             }
         }).catch(function (error) {
 
-            console.log("CATCH ERROR: ", error)
             return dataExists
         })
     }).then(function (dataExists) {
@@ -87,7 +85,6 @@ module.exports = function (sequelize, Sequelize) {
 
         if (!dataExists) {
 
-            console.log("THIS SHOULD ONLY APPEAR ONCEEEEEEEEEEEEEEEEEEEEEEEEEE when data is created")
             Account.bulkCreate([
                 {
                     googleId: null,
@@ -121,7 +118,6 @@ module.exports = function (sequelize, Sequelize) {
                 }
             ]
             ).then(function () {
-                console.log("CREATE GROUPSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                 Group.bulkCreate(
                     [
                         {
@@ -217,122 +213,3 @@ module.exports = function (sequelize, Sequelize) {
         return { sequelize, Account, Group, Message, GroupMember }
     })
 }
-
-/*Account.create({
-firstName: 'admin',
-lastName: 'admin',
-email: 'a@a',
-password: '$2b$10$d/Rmn96Ktxx0YJ2dQ2X/iOJDzFGv/EU90VwB/f6U4iZ1QmIYqyOFa',
-age: '28',
-city: 'Jkpg',
-gender: 'male'
-}).then(function () {
-})
-Account.create({
-firstName: 'Knugen',
-lastName: 'Axelsson',
-email: 'b@b',
-password: '$2b$10$4CgUwazdNHL0bZBmhaRUGunNf27fMZby7O3I6BioBhfyhk3SgClzO',
-age: '28',
-city: 'Jkpg',
-gender: 'male'
-})
-
-Account.create({
-firstName: 'Bulten',
-lastName: 'Axelsson',
-email: 'w@w',
-password: '$2b$10$qAxwACTHOEK.zZAli6SBvuyfmy4FcBO6NMUBKqz6/hdGNo3jhb4Qe',
-age: '5',
-city: 'Jkpg',
-gender: 'male'
-})*/
-                // GROUPS //
-
-
-/*Group.create({
-    name: 'fanclub',
-    image: 'Volleyball',
-    sport: 'Volleyball',
-    nrOfMembers: '0',
-    memberSlots: '10',
-    city: 'Jkpg',
-    minAge: '2',
-    maxAge: '100',
-    skillLevel: 'Beginner',
-    allowedGender: 'Any'
-})
-
-Group.create({
-    name: 'champs',
-    image: 'Volleyball',
-    sport: 'Volleyball',
-    nrOfMembers: '0',
-    memberSlots: '10',
-    city: 'Jkpg',
-    minAge: '2',
-    maxAge: '100',
-    skillLevel: 'Master',
-    allowedGender: 'Any'
-})
-
-Group.create({
-    name: 'trash',
-    image: 'Volleyball',
-    sport: 'Volleyball',
-    nrOfMembers: '0',
-    memberSlots: '10',
-    city: 'Jkpg',
-    minAge: '2',
-    maxAge: '100',
-    skillLevel: 'Beginner',
-    allowedGender: 'Any'
-})*/
-                // MESSAGES //
-
-/*Message.create({
-    text: 'First message wohooo',
-    authorName: 'Knugen',
-    groupId: '1',
-    accountId: '1'
-})
-console.log("First message is created @@@@@@@@@@@@@@@@@@@@@@")
-
-Message.create({
-    text: 'woof woof',
-    authorName: 'Bulten',
-    groupId: '1',
-    accountId: '2'
-})
-
-Message.create({
-    text: 'wtf gör du här Bulten?',
-    authorName: 'Knugen',
-    groupId: '1',
-    accountId: '1'
-})
-
-Message.create({
-    text: 'woofwoof',
-    authorName: 'Bulten',
-    groupId: '2',
-    accountId: '2'
-})*/
-
-                // GROUP MEMBERS //
-
-/*GroupMember.create({
-    accountId: '1',
-    groupId: '1'
-})
-
-GroupMember.create({
-    accountId: '1',
-    groupId: '3',
-})
-
-GroupMember.create({
-    accountId: '2',
-    groupId: '2'
-})*/
-

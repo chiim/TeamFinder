@@ -19,25 +19,11 @@ async function fetchAllGroups() {
         )
         switch (response.status) {
 
-
-            /*case 204:
-
-
-                const ul = document.querySelector("#groups-page ul")
-                ul.innerText = ""
-
-                const pStatus = document.querySelector("#groups-page p")
-                pStatus.innerText = "you are not part of any group."
-
-                console.log("WTFFFFFF")
-
-                break*/
             case 200:
 
 
                 const groups = await response.json()
 
-                console.log(groups)
                 const ul = document.querySelector("#groups-page ul")
                 ul.innerText = ""
 

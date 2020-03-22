@@ -33,7 +33,6 @@ module.exports = function ({ dbMySQL }) {
                     callback(databaseError, null)
                 }
                 else{
-                    console.log(numberOfMembers[0].nrOfAccounts)
                     const query = "UPDATE Groups SET nrOfMembers = ? WHERE groupId = ?"
                     const values = [numberOfMembers[0].nrOfAccounts, groupId]
                     
@@ -44,7 +43,6 @@ module.exports = function ({ dbMySQL }) {
                             callback(databaseError, null)
                         }
                         else{
-                            console.log(numberOfMembers[0].nrOfAccounts)
                             callback(null, numberOfMembers[0].nrOfAccounts)
                         }
                     })
