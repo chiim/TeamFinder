@@ -5,7 +5,7 @@ module.exports = function ({ accountManager }) {
 
     const router = express.Router()
 
-    router.post('/sign-up', function (request, response) {
+    router.post('/', function (request, response) {
 
         console.log("inside sign-up router")
         const googleId = request.body.googleId

@@ -178,7 +178,7 @@ function logout() {
 }
 
 function createdGroupInput() {
-    const groupName = document.querySelector("#create-group-page .name").value
+    const name = document.querySelector("#create-group-page .name").value
     const sport = document.querySelector("#create-group-page .sport").value
     const memberSlots = document.querySelector("#create-group-page .memberSlots").value
     const city = document.querySelector("#create-group-page .city").value
@@ -187,10 +187,10 @@ function createdGroupInput() {
     const skillLevel = document.querySelector("#create-group-page .skillLevel").value
     const allowedGender = document.querySelector("#create-group-page .allowedGender").value
 
-    console.log(groupName)
+    console.log(name)
 
     const group = {
-        groupName,
+        name,
         sport,
         memberSlots,
         city,
@@ -204,7 +204,7 @@ function createdGroupInput() {
 }
 
 function updatedGroupInput() {
-    const groupName = document.querySelector("#update-group-page .name").value
+    const name = document.querySelector("#update-group-page .name").value
     const sport = document.querySelector("#update-group-page .sport").value
     const memberSlots = document.querySelector("#update-group-page .memberSlots").value
     const city = document.querySelector("#update-group-page .city").value
@@ -215,7 +215,7 @@ function updatedGroupInput() {
     const groupId = document.querySelector("#update-group-page .update-id-field").value
 
     const group = {
-        groupName,
+        name,
         sport,
         memberSlots,
         city,

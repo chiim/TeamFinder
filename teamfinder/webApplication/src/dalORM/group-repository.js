@@ -9,7 +9,7 @@ module.exports = function () {
             const dbGroup = dbPostgres.model("group")
 
             dbGroup.create({
-                name: groupCredentials.groupName,
+                name: groupCredentials.name,
                 image: groupCredentials.image,
                 sport: groupCredentials.sport,
                 nrOfMembers: groupCredentials.nrOfMembers,

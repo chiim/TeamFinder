@@ -6,7 +6,6 @@ const parseJwt = function (token) {
     }
 }
 
-
 async function fetchAllGroups() {
 
     const payload = parseJwt(localStorage.idToken)
@@ -20,7 +19,6 @@ async function fetchAllGroups() {
         switch (response.status) {
 
             case 200:
-
 
                 const groups = await response.json()
 
@@ -108,8 +106,6 @@ async function fetchGroup(id) {
                 const skillLevelSpan = document.querySelector("#group-page .skillLevel")
                 const allowedGenderSpan = document.querySelector("#group-page .allowedGender")
                 const deleteIdField = document.querySelector("#group-page .delete-id-field")
-                //updateIdField = document.querySelector("#group-page .update-id-field") Den skickar med grupp id som query. Behöver vi det?
-
 
                 nameSpan.innerText = group.name
                 sportSpan.innerText = group.sport
@@ -122,21 +118,14 @@ async function fetchGroup(id) {
                 allowedGenderSpan.innerText = group.allowedGender
 
                 deleteIdField.value = group.groupId
-                //updateIdField.value = group.groupId
 
                 if (isAuthor == true) {
 
                     updateButton.setAttribute("href", "/group/" + group.groupId + "/update")
 
-                    //const updateButton = document.getElementById("update-button")
-                    // console.log("action before: ", updateButton.action)
-                    //updateButton.action = "/group/" + group.groupId + "/update"
-
-                    //console.log("action after: ", updateButton.action)
                     deleteButton.classList.add("showIfAuthor")
                     updateButton.classList.add("showIfAuthor")
                 }
-                //goToPage(response.headers.get("Location"))
                 break
             case 401:
                 goToPage("/unauthorized")
@@ -174,7 +163,6 @@ async function getGroupForUpdate(id) {
                 const body = await response.json()
 
                 const group = body.group
-                const isAuthor = body.isAuthor
 
                 const nameSpan = document.querySelector("#update-group-page .name")
                 const sportSpan = document.querySelector("#update-group-page .sport")
@@ -327,8 +315,6 @@ async function authenticateUser(email, password) {
     }
 }
 
-
-//TODO: Antar att denna ska va async?
 async function googleSignIn(authResult) {
     if (authResult['code']) {
         console.log("auth result: ", authResult)
@@ -400,8 +386,8 @@ async function signUp(account) {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/pl-api/accounts/sign-up", {
-            //"http://192.168.99.100:8080/pl-api/accounts/sign-up", {
+            "http://localhost:8080/pl-api/accounts/", {
+            //"http://192.168.99.100:8080/pl-api/accounts/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -456,6 +442,7 @@ async function updateGroup(group) {
                 goToPage(response.headers.get("Location"))
                 break
             case 404:
+            case 400:
                 errors = await response.json()
                 console.log(errors)
                 showErrors(errors)

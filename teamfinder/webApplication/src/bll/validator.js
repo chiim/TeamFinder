@@ -17,13 +17,13 @@ module.exports = function () {
             const maxAllowedAge = 150
             const empty = 0
 
-            if (groupCredentials.groupName.length < minGroupNameLength) {
+            if (groupCredentials.name.length < minGroupNameLength) {
                 validationErrors.push("Group name is too short")
             }
-            if (groupCredentials.groupName.length > maxGroupNameLength) {
+            if (groupCredentials.name.length > maxGroupNameLength) {
                 validationErrors.push("Group name is too long.")
             }
-            if (!groupCredentials.groupName.match(lettersOnly)) {
+            if (!groupCredentials.name.match(lettersOnly)) {
                 validationErrors.push("GroupName: Only characters a-z allowed.")
             }
 

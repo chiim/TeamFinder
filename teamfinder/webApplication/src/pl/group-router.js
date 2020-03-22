@@ -278,7 +278,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
 
     router.post('/create', function (request, response) {
-        const groupName = request.body.groupName
+        const name = request.body.name
         const image = request.body.image
         const sport = request.body.sport
         const nrOfMembers = 1
@@ -291,7 +291,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
         const accountId = request.session.accountId
         const groupCredentials = {
-            groupName,
+            name,
             image,
             sport,
             nrOfMembers,
@@ -660,7 +660,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         const groupId = request.params.id
         console.log(groupId)
 
-        const groupName = request.body.groupName
+        const name = request.body.name
         const image = request.body.image
         const sport = request.body.sport
         const memberSlots = request.body.memberSlots
@@ -672,7 +672,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
         const group = {
             groupId,
-            groupName,
+            name,
             image,
             sport,
             memberSlots,
@@ -689,7 +689,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 const model = {
                     errors,
                     csrfToken: request.csrfToken(),
-                    failedGroup
+                    group
                 }
                 response.render('group-edit.hbs', model)
             }

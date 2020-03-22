@@ -161,7 +161,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
     router.post('/', function (request, response) {
         console.log(request.body)
-        const groupName = request.body.groupName
+        const name = request.body.name
         const image = "Volleyball" // Hard coded because you shouldnt be able to choose image here.
         const sport = request.body.sport
         const nrOfMembers = 1
@@ -177,7 +177,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         //const accountId = getAccountId(accessToken)
         if (accountId) {
             const groupCredentials = {
-                groupName,
+                name,
                 image,
                 sport,
                 nrOfMembers,
@@ -318,7 +318,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             }
             else {
 
-                const groupName = request.body.groupName
+                const name = request.body.name
                 const image = request.body.image
                 const sport = request.body.sport
                 const memberSlots = request.body.memberSlots
@@ -330,7 +330,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
                 const updatedGroup = {
                     groupId,
-                    groupName,
+                    name,
                     image,
                     sport,
                     memberSlots,
@@ -346,7 +346,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                         response.status(500).json(errors)
                     }
                     else if (errors && errors.length > 0) {
-                        response.status(204).json(errors) // No content
+                        response.status(400).json(errors)
                     }
 
                     else {

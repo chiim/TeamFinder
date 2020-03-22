@@ -16,7 +16,7 @@ module.exports = function ({ groupRepository, validator, accountManager }) {
                     const validationErrors = validateAuthorErrors.concat(groupValidationErrors)
                     console.log(validationErrors)
 
-                    groupRepository.isNameUnique(groupCredentials.groupName, function (error, nameAvailable) {
+                    groupRepository.isNameUnique(groupCredentials.name, function (error, nameAvailable) {
 
                         if (error) {
                             callback(error, null)

@@ -5,10 +5,10 @@ module.exports = function ({dbMySQL}) {
     return {
         createGroup: function (groupCredentials, callback) {
 
-            const query = "INSERT INTO Groups (`name`, image, sport, nrOfMembers, memberSlots, city, maxAge, minAge, skillLevel, allowedGender, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            const query = "INSERT INTO Groups (`name`, image, sport, nrOfMembers, memberSlots, city, minAge, maxAge, skillLevel, allowedGender, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
             const values = [
-                groupCredentials.groupName,
+                groupCredentials.name,
                 groupCredentials.image,
                 groupCredentials.sport,
                 groupCredentials.nrOfMembers,
