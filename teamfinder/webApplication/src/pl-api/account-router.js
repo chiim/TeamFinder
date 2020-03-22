@@ -7,7 +7,6 @@ module.exports = function ({ accountManager }) {
 
     router.post('/', function (request, response) {
 
-        console.log("inside sign-up router")
         const googleId = request.body.googleId
         const firstName = request.body.firstName
         const lastName = request.body.lastName
@@ -26,7 +25,6 @@ module.exports = function ({ accountManager }) {
             city,
             gender
         }
-        console.log("accccccccccc", account)
         accountManager.createAccount(account, function (errors, id) {
             if (errors && errors.includes("databaseError")) {
                 response.status(500).json(errors)
@@ -60,7 +58,6 @@ module.exports = function ({ accountManager }) {
                 }
 
                 if (errors && errors.includes("DatabaseError")) {
-                    console.log("databaseError")
                     response.status(500).json(errors)
                 } else if (errors && 0 < errors.length) {
                     console.log(errors)

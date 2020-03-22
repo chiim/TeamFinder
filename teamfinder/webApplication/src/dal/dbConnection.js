@@ -10,5 +10,3 @@ const connection = mysql.createConnection({
 })
 	return connection
 }
-
-//module.exports = connection

@@ -22,7 +22,6 @@ async function fetchAllGroups() {
 
                 const groups = await response.json()
 
-                console.log(groups)
                 const ul = document.querySelector("#groups-page ul")
                 ul.innerText = ""
 

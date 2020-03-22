@@ -56,7 +56,6 @@ module.exports = function ({ messageManager, accountManager }) {
 
         const messageId = request.params.id
         const groupId = request.body.groupId
-        console.log("REEEEEEEEEEEEEE")
 
         response.redirect("/groups/" + groupId + "/?editMessage=" + messageId)
 
@@ -65,7 +64,6 @@ module.exports = function ({ messageManager, accountManager }) {
 
     router.post('/update/:id', function (request, response) {
 
-        console.log("RIGHT!½")
 
         const messageId = request.params.id
         const messageText = request.body.text

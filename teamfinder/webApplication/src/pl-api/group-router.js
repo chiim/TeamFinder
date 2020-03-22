@@ -20,7 +20,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         const accountId = request.query.accountId
         //const accessToken = request.body.accessToken // Hämta lokalt istället. Minns ej hur
         // Get id from params and verify. Id from params is read from id token
-        console.log("accountId: ", accountId)
         groupManager.getAllGroups(function (error, groups) {
             if (error) {
                 console.log(error)
@@ -50,7 +49,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                     response.status(500).json(databaseErrors)
                 }
                 else {
-                    console.log("show accountId: ", accountId)
                     if (accountId) {
                         groupManager.getActiveGroupIds(accountId, function (error, activeGroupIds) {
                             if (error) {
@@ -59,25 +57,21 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                             }
                             else {
                                 const groupIds = getGroupIdsFromGroups(groups)
-                                console.log("GroupIds: ", groupIds)
                                 const extractedActiveGroupIds = []
                                 for (var i = 0; i < activeGroupIds.length; i++) {
                                     extractedActiveGroupIds.push(activeGroupIds[i].groupId)
                                 }
 
                                 for (var i = groupIds.length - 1; i >= 0; i--) {
-                                    console.log("Current id in loop: ", groupIds[i])
                                     if (!extractedActiveGroupIds.includes(groupIds[i])) {
                                         groups.splice(i, 1) // pop specific element
                                     }
                                 }
 
-                                //if (groups.length == 0) {
-                                //    response.status(204).end()  // No content
-                                //}else{
+
                                 groups = addMemberCountToGroups(memberGroupCount, groups)
                                 response.status(200).json(groups)
-                                //}
+                             
                             }
                         })
                     }

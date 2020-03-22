@@ -5,7 +5,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
     const router = express.Router()
 
     router.get('/', function (request, response) {
-        response.redirect('/') // User isn't supposed to be here. Therefore they are redirected to home.
+        response.redirect('/')
     })
 
     function getGroupIds(groups) {
@@ -32,7 +32,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 try {
                     for (var i = 0; i < groups.length; i++) {
                         groupMemberManager.getNrOfMembersInGroup(groups[i].groupId, function (error, nrOfMembers) {
-                            console.log("log nrOfMembers: ", nrOfMembers)
                             if (error) {
                                 console.log(error)
                                 throw (error)
@@ -186,15 +185,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                 if (error) {
                                     console.log(error)
                                     throw (error)
-                                }
-                                else {
-
-                                    if (i == groupIds.length) {
-
-                                        // solve group updates to slow
-                                        //get groups should be done here...
-                                    }
-
                                 }
 
 
@@ -408,8 +398,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                         editMessage = messages[i]
                                     }
                                 }
-                                console.log("AuthorId: ", group.authorId)
-                                console.log("AccountId: ", accountId)
 
                                 if (group.authorId == accountId) {
                                     isAuthor = true
@@ -440,14 +428,13 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         })
     })
 
-    router.post('/:id', function (request, response) { // ADD MIDDLEWARE FOR VALIDATING ACCOUNT IN GROUP
+    router.post('/:id', function (request, response) {
         const id = request.params.id
         response.redirect('/groups/' + id + '/edit')
     })
 
     router.post('/:id/redirectToEdit', function (request, response) {
 
-        // User is validated in the id/edit GET-request below. If they somehow create this button, they will still be redirected back to the specific group.
         const id = request.params.id
         response.redirect('/groups/' + id + '/edit')
 
@@ -635,7 +622,6 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         })
     })
 
-    // Random member cant get here due to the get request validating that it's the author trying to access webpage
     router.post('/delete/:id', function (request, response) {
 
         const groupId = request.params.id
