@@ -70,7 +70,7 @@ module.exports = function ({ dbMySQL }) {
 
         getAccountByGoogleId: function (googleId, callback) {
 
-            const query = "SELECT * FROM Accounts WHERE googleId = ?"
+            const query = "SELECT * FROM Accounts WHERE googleId = ? LIMIT 1"
             const values = [googleId]
             dbMySQL.query(query, values, function (error, account) {
 
@@ -158,30 +158,6 @@ module.exports = function ({ dbMySQL }) {
                     callback(null)
                 }
             })
-        },
-
-        getAccountByGoogleId: function(googleId, callback){
-
-            const query = "SELECT * FROM Accounts WHERE googleId = ? LIMIT 1"
-            const values = [
-                googleId
-            ]
-            dbMySQL.query(query, values, function (error, account){
-
-                if(error){
-                    console.log(error)
-                    const databaseError = ["DatabaseError: error when logging in to account"]
-                    callback(databaseError, null)
-                }else if (account.length == 0) {
-                    const databaseError = ["DatabaseError: no result found"]
-                    callback(databaseError, null)
-                }
-                else {
-                    callback(null, account[0])
-                }
-            })
         }
-
-
     }
 }

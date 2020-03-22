@@ -77,8 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     })
 
-    document.querySelector("#sign-in-button").addEventListener("submit", function (event) {
+    document.querySelector("#google-sign-in-button").addEventListener("submit", function (event) {
         event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
         start()
         auth2.grantOfflineAccess().then(googleSignIn)
     })
