@@ -8,6 +8,7 @@ module.exports = function ({ accountManager }) {
     router.post('/sign-up', function (request, response) {
 
         console.log("inside sign-up router")
+        const googleId = request.body.googleId
         const firstName = request.body.firstName
         const lastName = request.body.lastName
         const email = request.body.email
@@ -16,6 +17,7 @@ module.exports = function ({ accountManager }) {
         const city = request.body.city
         const gender = request.body.gender
         account = {
+            googleId,
             firstName,
             lastName,
             email,
@@ -42,6 +44,7 @@ module.exports = function ({ accountManager }) {
             const serverSecret = "sdfkjdslkfjslkfd"
 
             const grantType = request.body.grant_type
+
             const email = request.body.email
             const password = request.body.password
 
@@ -53,7 +56,7 @@ module.exports = function ({ accountManager }) {
 
             accountManager.loginAccount(email, password, function (errors, account) {
 
-                if(errors){
+                if (errors) {
                     console.log(errors)
                 }
 
@@ -70,12 +73,12 @@ module.exports = function ({ accountManager }) {
                     const accessToken = jwt.sign(payload, serverSecret)
 
 
-                    
+
                     const idToken = jwt.sign(
                         { sub: account.accountId },
                         serverSecret
                     )
-                    
+
 
                     response.status(200).json({
                         access_token: accessToken,
@@ -86,6 +89,24 @@ module.exports = function ({ accountManager }) {
             })
 
 
+        }),
+
+        router.get('/:id', function(request, response){
+            const googleId = request.params.id
+
+            accountManager.getAccountByGoogleId(googleId, function(error, account){
+                if(error){
+                    console.log("error: ", error)
+                    response.status(500).json(error)
+                }
+                else if (account == null){
+                    response.status(204).end()
+                }
+                else{
+                    response.status(200).json(account)
+                }
+            })
+            
         })
 
     return router

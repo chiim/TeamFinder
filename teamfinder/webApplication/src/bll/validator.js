@@ -77,6 +77,7 @@ module.exports = function () {
 
         validateRequirements: function (account, group) {
             const validationErrors = []
+
             if (group.nrOfMembers >= group.memberSlots) {
                 validationErrors.push("This group is full.")
             }
@@ -113,7 +114,7 @@ module.exports = function () {
             MIN_PASSWORD_LENGTH = 2
             MIN_NAME_LENGTH = 1
             MIN_EMAIL_LENGTH = 3
-            MAX_EMAIL_LENGTH = 20
+            MAX_EMAIL_LENGTH = 50
             MIN_AGE_LENGTH = 1
             MAX_AGE_LENGTH = 2
             MIN_CITY_LENGTH = 1
@@ -132,9 +133,9 @@ module.exports = function () {
             if (!account.email.includes("@")) {
                 errors.push("enter a valid email")
             } 
-            if (account.password.length < MIN_PASSWORD_LENGTH) {
+            if (account.password && !account.googleId && account.password.length < MIN_PASSWORD_LENGTH) {
                 errors.push("Password Too Short")
-            } else if (MAX_PASSWORD_LENGTH < account.password.length) {
+            } else if (account.password && !account.googleId && MAX_PASSWORD_LENGTH < account.password.length) {
                 errors.push("Password Too Long")
             }
             if (account.age.length < MIN_AGE_LENGTH) {

@@ -4,12 +4,11 @@ const express = require('express')
 module.exports = function ({ groupManager, groupMemberManager, accountManager, messageManager }) {
 
     const router = express.Router()
-
-    function getAccountId(accessToken) {
+    function getAccountId(token) {
         const serverSecret = "sdfkjdslkfjslkfd"
-
-        if (accessToken) {
-            const payload = jwt.verify(accessToken, serverSecret)
+        console.log("token length: ", token.length)
+        if (token) {
+            const payload = jwt.verify(token, serverSecret)
             return payload.accountId
         }
         else {
@@ -18,14 +17,15 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     }
 
     router.get('/', function (request, response) {
-        const accountId = request.query.accountId // Retrieved from idToken. If null: Not a user
-
+        const accountId = request.query.accountId
+        //const accessToken = request.body.accessToken // Hämta lokalt istället. Minns ej hur
+        // Get id from params and verify. Id from params is read from id token
         console.log("accountId: ", accountId)
         groupManager.getAllGroups(function (error, groups) {
             if (error) {
                 console.log(error)
                 response.status(500).json(error) // Internal server error
-            }            
+            }
             else {
                 var databaseErrors = []
                 var memberGroupCount = []
@@ -71,16 +71,13 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                         groups.splice(i, 1) // pop specific element
                                     }
                                 }
-                                
+
                                 //if (groups.length == 0) {
                                 //    response.status(204).end()  // No content
                                 //}else{
-                                    groups = addMemberCountToGroups(memberGroupCount, groups)
-                                    response.status(200).json(groups)
+                                groups = addMemberCountToGroups(memberGroupCount, groups)
+                                response.status(200).json(groups)
                                 //}
-                                
-                                
-
                             }
                         })
                     }
@@ -120,8 +117,10 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
 
 
     router.get("/:id", function (request, response) {
-        console.log("Inside get id")
+
         const accessToken = request.headers.authorization.split(" ")[1]
+        console.log("AccessToken: ", accessToken)
+
         const accountId = getAccountId(accessToken)
         const groupId = request.params.id
         var isAuthor = false
@@ -173,8 +172,9 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
         const skillLevel = request.body.skillLevel
         const allowedGender = request.body.allowedGender
 
-        const accessToken = request.headers.authorization.split(" ")[1]
-        const accountId = getAccountId(accessToken)
+        const accountId = 1
+        //const accessToken = request.body.accessToken
+        //const accountId = getAccountId(accessToken)
         if (accountId) {
             const groupCredentials = {
                 groupName,
@@ -189,6 +189,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 allowedGender,
                 accountId
             }
+            console.log(groupCredentials)
             groupManager.createGroup(groupCredentials, function (errors, groupId) {
                 if (errors && errors.includes("DatabaseError")) {
                     response.status(500).json(errors)
@@ -208,10 +209,12 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                                     response.status(500).json(error)
                                 }
                                 else {
-
+                                    console.log("account: ", account)
+                                    console.log("group: ", group)
                                     groupMemberManager.createGroupMemberLink(account, group, function (error) {
                                         if (error) {
                                             console.log("errors: ", error)
+                                            console.log("Är jag här?")
                                             response.status(500).json(error)
                                         }
                                         else {
@@ -282,37 +285,25 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
     router.delete('/:id', function (request, response) {
 
         const groupId = request.params.id
-        const accessToken = request.headers.authorization.split(" ")[1]
-        const accountId = getAccountId(accessToken)
 
         // Lägga till token för verifiering?? Sker ju inte i ett middleware nu
 
-        groupManager.getGroupById(groupId, function (error, group) {
+        groupManager.deleteGroupById(groupId, function (error) {
+
             if (error) {
                 response.status(500).json(error)
             }
-            else if (group.authorId != accountId) {
-                response.status(401).end()
-            }
             else {
-                groupManager.deleteGroupById(groupId, function (error) {
-
-                    if (error) {
-                        response.status(500).json(error)
-                    }
-                    else {
-                        response.status(204).end()
-                    }
-                })
+                response.status(204).end()
             }
         })
+
     })
 
     router.put('/:id', function (request, response) {
         const groupId = request.params.id
-        console.log("Inside update group")
+
         const accessToken = request.headers.authorization.split(" ")[1]
-        console.log("accessToken: ", accessToken)
         const accountId = getAccountId(accessToken)
 
         groupManager.getGroupById(groupId, function (error, group) { // Används för att verifiera att kontot är från grupp skaparen
@@ -328,7 +319,7 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
             else {
 
                 const groupName = request.body.groupName
-                const image = "Volleyball" // Hardcoded in SPA
+                const image = request.body.image
                 const sport = request.body.sport
                 const memberSlots = request.body.memberSlots
                 const city = request.body.city
@@ -352,7 +343,6 @@ module.exports = function ({ groupManager, groupMemberManager, accountManager, m
                 console.log("Group: ", updatedGroup)
                 groupManager.updateGroup(updatedGroup, function (errors) {
                     if (errors && errors.includes("DatabaseError")) {
-                        console.log("Error: ", errors)
                         response.status(500).json(errors)
                     }
                     else if (errors && errors.length > 0) {

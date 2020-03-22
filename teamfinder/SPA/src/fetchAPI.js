@@ -12,43 +12,39 @@ async function fetchAllGroups() {
     const payload = parseJwt(localStorage.idToken)
     const accountId = payload.sub
 
-
     try {
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/"
-            "http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
+            "http://localhost:8080/pl-api/groups/?accountId=" + accountId
+            //"http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
         )
-
         switch (response.status) {
 
-/*
-            case 204:  
 
-                
+            /*case 204:
+
+
                 const ul = document.querySelector("#groups-page ul")
                 ul.innerText = ""
-                
+
                 const pStatus = document.querySelector("#groups-page p")
                 pStatus.innerText = "you are not part of any group."
-                
-               console.log("WTFFFFFF")
-               
-               break               
-                */
+
+                console.log("WTFFFFFF")
+
+                break*/
             case 200:
 
-            
-                console.log("REEEEEEEEE")
+
                 const groups = await response.json()
 
                 console.log(groups)
                 const ul = document.querySelector("#groups-page ul")
                 ul.innerText = ""
-                
+
                 const pStatus = document.querySelector("#groups-page p")
                 pStatus.innerText = ""
-                
-                if(groups == 0){
+
+                if (groups == 0) {
                     pStatus.innerText = "you are not part of any group."
                 }
                 for (const group of groups) {
@@ -66,10 +62,8 @@ async function fetchAllGroups() {
                     ul.append(li)
 
                 }
+                break
 
-                
-                
-                break                
             case 400:
                 errors = await response.json()
                 console.log(errors)
@@ -85,7 +79,6 @@ async function fetchAllGroups() {
         console.log(error)
         goToPage("/error")
     }
-
 }
 
 async function fetchGroup(id) {
@@ -93,8 +86,8 @@ async function fetchGroup(id) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + id
-            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+            "http://localhost:8080/pl-api/groups/" + id, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
 
             headers: {
                 "Content-Type": "application/json",
@@ -111,6 +104,12 @@ async function fetchGroup(id) {
 
                 const group = body.group
                 const isAuthor = body.isAuthor
+
+                const deleteButton = document.querySelector("#group-page .delete-button")
+                const updateButton = document.querySelector("#group-page .update-button")
+
+                deleteButton.classList.remove("showIfAuthor")
+                updateButton.classList.remove("showIfAuthor")
 
                 const nameSpan = document.querySelector("#group-page .name")
                 const sportSpan = document.querySelector("#group-page .sport")
@@ -138,22 +137,18 @@ async function fetchGroup(id) {
                 deleteIdField.value = group.groupId
                 //updateIdField.value = group.groupId
 
-                //if(isAuthor)
+                if (isAuthor) {
 
-                const deleteButton = document.querySelector("#group-page .delete-button")
-                const updateButton = document.querySelector("#group-page .update-button")
+                    updateButton.setAttribute("href", "/group/" + group.groupId + "/update")
 
-                updateButton.setAttribute("href", "/group/" + group.groupId + "/update")
+                    //const updateButton = document.getElementById("update-button")
+                    // console.log("action before: ", updateButton.action)
+                    //updateButton.action = "/group/" + group.groupId + "/update"
 
-                //const updateButton = document.getElementById("update-button")
-                // console.log("action before: ", updateButton.action)
-                //updateButton.action = "/group/" + group.groupId + "/update"
-
-                //console.log("action after: ", updateButton.action)
-                deleteButton.classList.remove("showIfAuthor")
-                deleteButton.classList.add("isAuthor")
-                updateButton.classList.remove("showIfAuthor")
-                updateButton.classList.add("isAuthor")
+                    //console.log("action after: ", updateButton.action)
+                    deleteButton.classList.add("showIfAuthor")
+                    updateButton.classList.add("showIfAuthor")
+                }
                 //goToPage(response.headers.get("Location"))
                 break
             case 401:
@@ -162,8 +157,8 @@ async function fetchGroup(id) {
             case 500:
                 goToPage("/error")
         }
-
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+
 
     } catch (error) {
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
@@ -177,8 +172,8 @@ async function getGroupForUpdate(id) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + id
-            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+            "http://localhost:8080/pl-api/groups/" + id, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.accessToken
@@ -240,8 +235,8 @@ async function createGroup(group) {
 
     try {
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups", {
-            "http://192.168.99.100:8080/pl-api/groups/", {
+            "http://localhost:8080/pl-api/groups", {
+            //"http://192.168.99.100:8080/pl-api/groups/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -278,8 +273,8 @@ async function deleteGroup(id) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + id, {
-            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+            "http://localhost:8080/pl-api/groups/" + id, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -314,13 +309,13 @@ async function authenticateUser(email, password) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/accounts/tokens", {
-            "http://192.168.99.100:8080/pl-api/accounts/tokens", {
+            "http://localhost:8080/pl-api/accounts/tokens", {
+            //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
-            body: "grant_type=password&email=" + email + "&password=" + password
+            body: "grant_type=password&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password)
         })
         switch (response.status) {
             case 200:
@@ -346,13 +341,103 @@ async function authenticateUser(email, password) {
     }
 }
 
+
+//TODO: Antar att denna ska va async?
+function googleSignIn(authResult) {
+    if (authResult['code']) {
+        console.log("auth result: ", authResult)
+        console.log("Authorization code: ", authResult['code'])
+        fetch(
+            "https://oauth2.googleapis.com/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/json"
+            },
+            body: "code=" + encodeURIComponent(authResult['code']) + "&client_id=978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com&client_secret=WO5YL8x_DRKWhmH440__jD3Y&redirect_uri=http://localhost:3000&grant_type=authorization_code"
+        }).then(function (response) {
+            return response.json()
+        }).then(function (googleBody) {
+            const accessToken = googleBody.access_token
+            console.log("Google tokens: ", googleBody)
+
+            const idToken = parseJwt(googleBody.id_token)
+            console.log("idToken id: ", idToken)
+
+            // TODO: 
+            // Try to fetch() a user with idToken.sub (google userId)
+            // If user doesn't exist: Create an account for them
+            // If they do exist, proceed to login.
+
+            fetch(
+                // Check if google account is registered
+                "http://localhost:8080/pl-api/accounts/" + idToken.sub
+            ).then(function (response) {
+                if (response) {
+                    console.log("idToken sub: ", idToken.sub)
+                    console.log("response when logging in: ", response)
+                    if (response.status == 204) {
+                        // No account with the google ID.
+                        return null
+                    }
+                    else {
+                        return response.json()
+                    }
+                }
+            }).then(function (googleId) {
+                console.log("googleId when logging in: ", googleId)
+                if (googleId != null) {
+                    login(accessToken, idToken)
+                }
+                // First time logging in with google. Time to register account
+                else {
+                    // User is give an accessToken, but the ongoingSignup variable force the user to
+                    // finish the google signUp first.
+
+                    localStorage.ongoingSignup = true
+                    login(accessToken, idToken)
+                    goToPage('/google-sign-up')
+                }
+            })
+
+
+            //TODO: Gör så ett Google konto registreras i databasen. 
+            //Får vi det o funka har vi 5 i projektet <3
+
+
+            //signUpUsingGoogle(idToken.sub)
+        })
+
+        // Hide the sign-in button now that the user is authorized, for example:
+
+        // Send the code to the server
+        /*fetch(
+            //"http://localhost:8080/pl-api/accounts/tokens", {
+            "http://192.168.99.100:8080/pl-api/accounts/tokens", {
+            method: 'POST',
+            // Always include an `X-Requested-With` header in every AJAX request,
+            // to protect against CSRF attacks.
+            headers: {
+                //'X-Requested-With': 'XMLHttpRequest',
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "grant_type=password&authCode=" + encodeURIComponent(authResult['code'])
+ 
+        })*/
+    }
+    else {
+        console.log("Google auth went wrong. See fetchAPI signInCallback function")
+        // There was an error.
+    }
+}
+
 async function signUp(account) {
 
 
     try {
         const response = await fetch(
-            //"http://localhost:8080/pl-api/accounts/sign-up", {
-            "http://192.168.99.100:8080/pl-api/accounts/sign-up", {
+            "http://localhost:8080/pl-api/accounts/sign-up", {
+            //"http://192.168.99.100:8080/pl-api/accounts/sign-up", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -392,8 +477,8 @@ async function updateGroup(group) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + groupId, {
-            "http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
+            "http://localhost:8080/pl-api/groups/" + group.groupId, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -404,25 +489,25 @@ async function updateGroup(group) {
         switch (response.status) {
 
             case 204://??
-                goToPage(response.headers.get("Location"))
-                break
+        goToPage(response.headers.get("Location"))
+        break
             case 404:
-                errors = await response.json()
-                console.log(errors)
-                showErrors(errors)
-                break
+        errors = await response.json()
+        console.log(errors)
+        showErrors(errors)
+        break
             case 401:
-                goToPage("/unauthorized")
-                break
+        goToPage("/unauthorized")
+        break
             case 500:
-                goToPage("/error")
-        }
+        goToPage("/error")
+    }
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
 
     } catch (error) {
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
-        console.log(error)
-        goToPage("/error")
-    }
+    document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
+    console.log(error)
+    goToPage("/error")
+}
 }

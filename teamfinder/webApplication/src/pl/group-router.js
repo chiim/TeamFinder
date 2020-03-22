@@ -313,9 +313,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                 response.render("group-create.hbs", model)
             }
             else {
-
-                console.log("LÄNKA DÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ", accountId, groupId)
-                groupMemberManager.createGroupMemberLink(accountId, groupId, function (errors) {
+                accountManager.getAccountById(accountId, function (errors, account) {
                     if (errors) {
                         const model = {
                             errors,
@@ -324,9 +322,32 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                         response.render('group-create.hbs', model)
                     }
                     else {
-                        response.redirect("/groups/" + groupId)
+                        groupManager.getGroupById(groupId, function (errors, group) {
+                            if (errors) {
+                                const model = {
+                                    errors,
+                                    csrfToken: request.csrfToken()
+                                }
+                                response.render('group-create.hbs', model)
+                            }
+                            else {
+                                groupMemberManager.createGroupMemberLink(account, group, function (errors) {
+                                    if (errors) {
+                                        const model = {
+                                            errors,
+                                            csrfToken: request.csrfToken()
+                                        }
+                                        response.render('group-create.hbs', model)
+                                    }
+                                    else {
+                                        response.redirect("/groups/" + groupId)
+                                    }
+                                })
+                            }
+                        })
                     }
                 })
+
             }
         })
     })
@@ -390,7 +411,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
                                 }
                                 console.log("AuthorId: ", group.authorId)
                                 console.log("AccountId: ", accountId)
-                                
+
                                 if (group.authorId == accountId) {
                                     isAuthor = true
                                 }
@@ -439,29 +460,29 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         response.redirect('/groups/' + id + '/manageMembers')
     })
 
-    router.post('/:id/leave', function(request, response){
+    router.post('/:id/leave', function (request, response) {
 
         const groupId = request.params.id
         const accountId = request.session.accountId
 
-        groupManager.getGroupById(groupId, function(error, group){
-            if(error){
+        groupManager.getGroupById(groupId, function (error, group) {
+            if (error) {
                 const model = {
                     error,
                     csrfToken: request.csrfToken()
                 }
                 response.render('group-specific.hbs', model)
             }
-            else{
-                groupMemberManager.removeGroupMemberLink(accountId, group, function(error){
-                    if(error){
+            else {
+                groupMemberManager.removeGroupMemberLink(accountId, group, function (error) {
+                    if (error) {
                         const model = {
                             error,
                             csrfToken: request.csrfToken()
                         }
                         response.render('group-specific.hbs', model)
                     }
-                    else{
+                    else {
                         response.redirect('/groups/active')
                     }
                 })
@@ -601,6 +622,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
             }
             else {
                 if (accountId == group.authorId) {
+
                     const model = {
                         group,
                         csrfToken: request.csrfToken()

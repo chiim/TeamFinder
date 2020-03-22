@@ -4,14 +4,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Petto</title>
+	<title>Teamfinder</title>
 	<link rel="stylesheet" href="/styles.css">
 	<script src="/navigation-handler.js"></script>
 	<script src="/fetchAPI.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
 </head>
 
 <body>
-
 
 	<header>
 		Teamfinder
@@ -23,6 +24,11 @@
 			<li class="showIfLoggedIn"><a href="/groups">Active groups</a></li>
 			<li class="showIfLoggedIn"><a href="/create-group">Create group</a></li>
 			<li class="showIfLoggedOut"><a href="/login">Login</a></li>
+			<li class="showIfLoggedOut">
+				<form action="" id="sign-in-button">
+					<button type="submit" id="signinButton">Sign in with Google</button>
+				</form>
+			</li>
 			<li class="showIfLoggedIn"><a href="/logout">Logout</a></li>
 			<li class="showIfLoggedOut"><a href="/sign-up">Sign-up</a></li>
 		</ul>
@@ -52,7 +58,7 @@
 		</div>
 
 
-		<div id="groups-page">
+		<div id="groups-page" class="showIfLoggedIn">
 			<h1>Groups</h1>
 			<ul>
 
@@ -75,12 +81,6 @@
 			<div>Gender: <span class="allowedGender"></span></div>
 
 			<a class="update-button showIfAuthor" href="/">Update</a>
-			<!-- Something went wrong if redirected to home. href is edited in navigation-handler -->
-
-			<!-- <form action="" class="update-button showIfAuthor" id="update-button">
-				<input type="hidden" name="update" class="update-id-field">
-				<input type="submit" value="Update">
-			</form> -->
 
 			<form action="" class="delete-button showIfAuthor">
 				<input type="hidden" name="delete" class="delete-id-field">
@@ -93,7 +93,7 @@
 			<h1>Create Group</h1>
 			<form action="">
 				<div>Name: <input type="text" class="name"></div>
-				<div>Sport:
+				<div>
 					<label for="selectSport">*Select Sport</label>
 					<select class="sport" name="sport">
 						<option>Select a sport</option> <!-- Validate that this is not selected when submitting. -->
@@ -104,7 +104,7 @@
 				<div>City: <input type="text" class="city"></div>
 				<div>Max Age: <input type="text" class="maxAge"></div>
 				<div>Min Age: <input type="text" class="minAge"></div>
-				<div>Skill:
+				<div>
 					<label for="selectSport">*Skill level</label>
 					<select class="skillLevel" name="skillLevel">
 						<option>Select a skill level</option>
@@ -116,8 +116,8 @@
 						<option>Expert</option>
 						<option>Master</option>
 					</select></div>
-				<div>Genders:
-					<label for="selectGender">Gender restriction</label>
+				<div>
+					<label for="selectGender">Genders allowed:</label>
 					<select class="allowedGender" name="allowedGender">
 						<option>Any</option>
 						<option>Male</option>
@@ -153,14 +153,16 @@
 						<option>Pro</option>
 						<option>Expert</option>
 						<option>Master</option>
-					</select></div>
+					</select>
+				</div>
 				<div>
 					<label for="selectGender">Gender restriction</label>
 					<select class="allowedGender" name="allowedGender">
 						<option>Any</option>
 						<option>Male</option>
 						<option>Female</option>
-					</select></div>
+					</select>
+				</div>
 				<input type="hidden" name="update" class="update-id-field">
 				<input type="submit" value="Update">
 			</form>
@@ -176,11 +178,28 @@
 				<div>Age: <input type="text" class="age"></div>
 				<div>City: <input type="text" class="city"></div>
 				<div>
-					<label for="selectSport">Gender</label>
+					<label for="selectGender">Gender</label>
 					<select class="gender">
-						<option>Female</option>
 						<option>Male</option>
-					</select></div>
+						<option>Female</option>
+					</select>
+				</div>
+				<input type="submit" value="Create">
+			</form>
+		</div>
+
+		<div id="google-sign-up-page">
+			<h1>Please fill in the form to finish setting up your Google account</h1>
+			<form action="">
+				<div>Age: <input type="text" class="age"></div>
+				<div>City: <input type="text" class="city"></div>
+				<div>
+					<label for="selectGender">Gender</label>
+					<select class="gender">
+						<option>Male</option>
+						<option>Female</option>
+					</select>
+				</div>
 				<input type="submit" value="Create">
 			</form>
 		</div>
