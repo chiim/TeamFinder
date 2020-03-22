@@ -14,8 +14,8 @@ async function fetchAllGroups() {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/pl-api/groups/?accountId=" + accountId
-            //"http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
+            //"http://localhost:8080/pl-api/groups/?accountId=" + accountId
+            "http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
         )
         switch (response.status) {
 
@@ -86,8 +86,8 @@ async function fetchGroup(id) {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/pl-api/groups/" + id, {
-            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
+            //"http://localhost:8080/pl-api/groups/" + id, {
+            "http://192.168.99.100:8080/pl-api/groups/" + id, {
 
             headers: {
                 "Content-Type": "application/json",
@@ -137,7 +137,7 @@ async function fetchGroup(id) {
                 deleteIdField.value = group.groupId
                 //updateIdField.value = group.groupId
 
-                if (isAuthor) {
+                if (isAuthor == true) {
 
                     updateButton.setAttribute("href", "/group/" + group.groupId + "/update")
 
@@ -172,8 +172,8 @@ async function getGroupForUpdate(id) {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/pl-api/groups/" + id, {
-            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
+            //"http://localhost:8080/pl-api/groups/" + id, {
+            "http://192.168.99.100:8080/pl-api/groups/" + id, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.accessToken
@@ -235,8 +235,8 @@ async function createGroup(group) {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/pl-api/groups", {
-            //"http://192.168.99.100:8080/pl-api/groups/", {
+            //"http://localhost:8080/pl-api/groups", {
+            "http://192.168.99.100:8080/pl-api/groups/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -273,8 +273,8 @@ async function deleteGroup(id) {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/pl-api/groups/" + id, {
-            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
+            //"http://localhost:8080/pl-api/groups/" + id, {
+            "http://192.168.99.100:8080/pl-api/groups/" + id, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -309,8 +309,8 @@ async function authenticateUser(email, password) {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/pl-api/accounts/tokens", {
-            //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
+            //"http://localhost:8080/pl-api/accounts/tokens", {
+            "http://192.168.99.100:8080/pl-api/accounts/tokens", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -436,8 +436,8 @@ async function signUp(account) {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/pl-api/accounts/sign-up", {
-            //"http://192.168.99.100:8080/pl-api/accounts/sign-up", {
+            //"http://localhost:8080/pl-api/accounts/sign-up", {
+            "http://192.168.99.100:8080/pl-api/accounts/sign-up", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -477,8 +477,8 @@ async function updateGroup(group) {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/pl-api/groups/" + group.groupId, {
-            //"http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
+            //"http://localhost:8080/pl-api/groups/" + group.groupId, {
+            "http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

@@ -30,7 +30,7 @@ module.exports = function ({ dbMySQL }) {
 
         },
 
-        isEmailIsUnique: function (email, callback) {
+        isEmailUnique: function (email, callback) {
 
             const query = "SELECT * FROM Accounts WHERE email = ?"
             const values = [email]

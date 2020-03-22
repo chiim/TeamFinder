@@ -110,7 +110,7 @@ module.exports = function () {
         validateAccount: function (account) {
 
             const errors = []
-            MAX_PASSWORD_LENGTH = 15
+            MAX_PASSWORD_LENGTH = 20
             MIN_PASSWORD_LENGTH = 2
             MIN_NAME_LENGTH = 1
             MIN_EMAIL_LENGTH = 3
@@ -121,9 +121,9 @@ module.exports = function () {
             MAX_CITY_LENGTH = 20
 
             if (account.firstName.length < MIN_NAME_LENGTH) {
-                errors.push("firstNameMissing")
+                errors.push("firstName Missing")
             } else if (account.lastName.length < MIN_NAME_LENGTH) {
-                errors.push("lastNameMissing")
+                errors.push("lastName Missing")
             }
             if (account.email.length < MIN_EMAIL_LENGTH) {
                 errors.push("emailMissing")
@@ -147,36 +147,49 @@ module.exports = function () {
                 errors.push("City Missing")
             }else if ( MAX_CITY_LENGTH < account.city.length){
                 errors.push("City Too Long")
-            } /*else if (!account.hasOwnProperty("gender")) {
-                errors.push("genderMissing")
-            }   THIS SHOULD BE ANY IF NOT FEMALE OR MALE ?
-            */
+            } 
 
             return errors
 
         },
 
-        updateAccount: function (account) {
+        validateAccountUpdate: function (account) {
 
             const errors = []
 
-            MAX_PASSWORD_LENGTH = 10
-            MIN_PASSWORD_LENGTH = 2
+            MIN_NAME_LENGTH = 1
+            MIN_EMAIL_LENGTH = 3
+            MAX_EMAIL_LENGTH = 50
+            MIN_AGE_LENGTH = 1
+            MAX_AGE_LENGTH = 2
+            MIN_CITY_LENGTH = 1
+            MAX_CITY_LENGTH = 20
 
             // Validate username.
-            if (!account.hasOwnProperty("firstName")) {
-                errors.push("firstNameMissing")
-            } else if (!account.hasOwnProperty("lastName")) {
-                errors.push("lastNameMissing")
-            } else if (!account.hasOwnProperty("email")) {
-                errors.push("emailMissing")
-            } else if (!account.hasOwnProperty("age")) {
-                errors.push("ageMissing")
-            } else if (!account.hasOwnProperty("city")) {
-                errors.push("cityMissing")
-            } else if (!account.hasOwnProperty("gender")) {
-                errors.push("genderMissing")
+            if (account.firstName.length < MIN_NAME_LENGTH) {
+                errors.push("firstName Missing")
+            } else if (account.lastName.length < MIN_NAME_LENGTH) {
+                errors.push("lastName Missing")
             }
+            if (account.email.length < MIN_EMAIL_LENGTH) {
+                errors.push("emailMissing")
+            }else if ( MAX_EMAIL_LENGTH < account.email.length) {
+                errors.push("email too long")
+            }
+            if (!account.email.includes("@")) {
+                errors.push("enter a valid email")
+            }
+            if (account.age.length < MIN_AGE_LENGTH) {
+                errors.push("Age Missing")
+            } else if ( MAX_AGE_LENGTH < account.age.length){
+                errors.push("Age Too Long")
+            } 
+            if (account.city.length < MIN_CITY_LENGTH) {
+                errors.push("City Missing")
+            }else if ( MAX_CITY_LENGTH < account.city.length){
+                errors.push("City Too Long")
+            }
+
 
             return errors
 

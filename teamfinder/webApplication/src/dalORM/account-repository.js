@@ -24,7 +24,7 @@ module.exports = function () {
                 })
         },
 
-        isEmailIsUnique: function (email, callback) {
+        isEmailUnique: function (email, callback) {
 
             const dbAccount = dbPostgres.model("account")
 
