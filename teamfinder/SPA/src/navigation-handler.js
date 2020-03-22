@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#sign-in-button").addEventListener("submit", function (event) {
         event.preventDefault()
         start()
-        auth2.grantOfflineAccess().then(signInCallback)
+        auth2.grantOfflineAccess().then(googleSignIn)
     })
 })
 

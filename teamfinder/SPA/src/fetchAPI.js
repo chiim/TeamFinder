@@ -12,10 +12,10 @@ function fetchAllGroups() {
         console.log("google payload: ", payload)
         // Logged in with google account
         var fetchLink = ""
-        if(payload.email){
+        if (payload.email) {
             fetchLink = "http://localhost:8080/pl-api/groups"
         }
-        else{
+        else {
             const accountId = payload.sub
             fetchLink = "http://localhost:8080/pl-api/groups?accountId=" + accountId
         }
@@ -275,26 +275,87 @@ async function authenticateUser(email, password) {
     }
 }
 
-function signInCallback(authResult) {
+
+//TODO: Antar att denna ska va async?
+function googleSignIn(authResult) {
     if (authResult['code']) {
         console.log("auth result: ", authResult)
         console.log("Authorization code: ", authResult['code'])
         fetch(
             "https://oauth2.googleapis.com/token", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Accept": "application/json"
-                }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
-                body: "code="+encodeURIComponent(authResult['code'])+"&client_id=978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com&client_secret=WO5YL8x_DRKWhmH440__jD3Y&redirect_uri=http://localhost:3000&grant_type=authorization_code"
-        }).then(function(response){
-            console.log("Got back response from google auth: ", response)
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/json"
+            },
+            body: "code=" + encodeURIComponent(authResult['code']) + "&client_id=978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com&client_secret=WO5YL8x_DRKWhmH440__jD3Y&redirect_uri=http://localhost:3000&grant_type=authorization_code"
+        }).then(function (response) {
             return response.json()
-        }).then(function(googleBody){
-            const idToken = googleBody.id_token
+        }).then(function (googleBody) {
             const accessToken = googleBody.access_token
             console.log("Google tokens: ", googleBody)
-            login(accessToken, idToken)
+
+            const idToken = parseJwt(googleBody.id_token)
+            console.log("idToken id: ", idToken)
+            
+            // TODO: 
+            // Try to fetch() a user with idToken.sub (google userId)
+            // If user doesn't exist: Create an account for them
+            // If they do exist, proceed to login.
+
+            fetch(
+                // Check if google account is registered
+                "http://localhost:8080/pl-api/accounts/" + idToken.sub
+                ).then(function(response){
+                    if(response){
+                        console.log("idToken sub: ", idToken.sub)
+                        console.log("response when logging in: ", response)
+                        if(response.status == 204){
+                            // No account with the google ID.
+                            return null 
+                        }
+                        else{
+                            return response.json()
+                        }
+                    }
+                }).then(function(googleId){
+                    console.log("googleId when logging in: ", googleId)
+                    if(googleId != null){
+                        login(accessToken, idToken)
+                    }
+                    // First time logging in with google. Time to register account
+                    else{
+                        const firstName = idToken.given_name
+                        const lastName = idToken.family_name
+                        const email = idToken.email
+            
+                        // Leave empty and let login look for googleId instead?
+                        const password = "fhhfjoewno" 
+                        const city = idToken.locale // Det e landets initialer, dvs "sv"
+                        const gender = "Any" // Lets call this a google feature.
+                        const googleId = idToken.sub
+                        console.log("GOOGLE ID: ", googleId)
+                        const age = 25 // DENNA FÅR INTE VARA HÅRDKODAD
+                        const account = {
+                            googleId,
+                            firstName,
+                            lastName,
+                            email,
+                            password,
+                            city,
+                            gender,
+                            age
+                        }
+                        console.log("creating google account: ", account)
+                        signUp(account)
+                        login(accessToken, idToken)
+                    }
+                })            
+            //TODO: Gör så ett Google konto registreras i databasen. 
+            //Får vi det o funka har vi 5 i projektet <3
+            
+            
+            //signUpUsingGoogle(idToken.sub)
         })
 
         // Hide the sign-in button now that the user is authorized, for example:

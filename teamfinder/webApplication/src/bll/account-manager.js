@@ -86,6 +86,10 @@ module.exports = function ({ accountRepository, validator }) {
 
         deleteAccount: function (accountId, callback) {
             accountRepository.deleteAccount(accountId, callback)
+        },
+
+        getAccountByGoogleId: function(googleId, callback){
+            accountRepository.getAccountByGoogleId(googleId, callback)
         }
     }
 }

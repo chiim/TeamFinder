@@ -7,6 +7,7 @@ module.exports = function () {
         createAccount: function (hash, account, callback) {
             const dbAccount = dbPostgres.model("account")
             dbAccount.create({
+                googleId: account.googleId,
                 firstName: account.firstName,
                 lastName: account.lastName,
                 email: account.email,
@@ -110,6 +111,20 @@ module.exports = function () {
                 const databaseError = "DatabaseError: error when deleting account"
                 callback(databaseError)
             })
+        },
+
+        getAccountByGoogleId: function(googleId, callback){
+            const dbAccount = dbPostgres.model("account")
+
+            dbAccount.findOne({
+                where: { googleId: googleId },
+                raw: true
+            }).then(function (account) {
+                callback(null, account)
+            }).catch(function (error) {
+                callback(error, null)
+            })
+
         }
     }
 }

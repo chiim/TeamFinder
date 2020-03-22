@@ -2,6 +2,7 @@
 module.exports = function (sequelize, Sequelize) {
     const Account = sequelize.define('account', {
         accountId: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+        googleId: {type: Sequelize.TEXT, unique: true, allowNull: true},
         firstName: { type: Sequelize.TEXT, allowNull: false },
         lastName: { type: Sequelize.TEXT, allowNull: false },
         email: { type: Sequelize.TEXT, unique: true, allowNull: false },
@@ -89,6 +90,7 @@ module.exports = function (sequelize, Sequelize) {
             console.log("THIS SHOULD ONLY APPEAR ONCEEEEEEEEEEEEEEEEEEEEEEEEEE when data is created")
             Account.bulkCreate([
                 {
+                    googleId: null,
                     firstName: 'admin',
                     lastName: 'admin',
                     email: 'a@a',
@@ -98,6 +100,7 @@ module.exports = function (sequelize, Sequelize) {
                     gender: 'male'
                 },
                 {
+                    googleId: null,
                     firstName: 'Knugen',
                     lastName: 'Axelsson',
                     email: 'b@b',
@@ -107,6 +110,7 @@ module.exports = function (sequelize, Sequelize) {
                     gender: 'male'
                 },
                 {
+                    googleId: null,
                     firstName: 'Bulten',
                     lastName: 'Axelsson',
                     email: 'w@w',
