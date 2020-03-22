@@ -6,7 +6,7 @@ module.exports = function (sequelize, Sequelize) {
         firstName: { type: Sequelize.TEXT, allowNull: false },
         lastName: { type: Sequelize.TEXT, allowNull: false },
         email: { type: Sequelize.TEXT, unique: true, allowNull: false },
-        password: { type: Sequelize.TEXT, allowNull: false },
+        password: { type: Sequelize.TEXT, allowNull: true },
         age: { type: Sequelize.TEXT, allowNull: false },
         city: { type: Sequelize.TEXT, allowNull: false },
         gender: { type: Sequelize.TEXT, allowNull: false }

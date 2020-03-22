@@ -14,8 +14,8 @@ async function fetchAllGroups() {
 
     try {
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/?accountId=" + accountId
-            "http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
+            "http://localhost:8080/pl-api/groups/?accountId=" + accountId
+            //"http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
         )
         switch (response.status) {
 
@@ -72,6 +72,7 @@ async function fetchAllGroups() {
             case 500:
                 goToPage("/error")
         }
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
 
     } catch (error) {
         document.getElementById("loadingIndicator").classList.add("loadingIndicatorHide")
@@ -85,8 +86,8 @@ async function fetchGroup(id) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + id
-            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+            "http://localhost:8080/pl-api/groups/" + id, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
 
             headers: {
                 "Content-Type": "application/json",
@@ -171,8 +172,8 @@ async function getGroupForUpdate(id) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + id
-            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+            "http://localhost:8080/pl-api/groups/" + id, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.accessToken
@@ -272,8 +273,8 @@ async function deleteGroup(id) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + id, {
-            "http://192.168.99.100:8080/pl-api/groups/" + id, {
+            "http://localhost:8080/pl-api/groups/" + id, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + id, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -392,10 +393,9 @@ function googleSignIn(authResult) {
                 else {
                     // User is give an accessToken, but the ongoingSignup variable force the user to
                     // finish the google signUp first.
-                    localStorage.idToken = JSON.stringify(idToken)
-                    localStorage.accessToken = accessToken
+
                     localStorage.ongoingSignup = true
-                    login(localStorage.accessToken, localStorage.idToken)
+                    login(accessToken, idToken)
                     goToPage('/google-sign-up')
                 }
             })
@@ -412,8 +412,8 @@ function googleSignIn(authResult) {
 
         // Send the code to the server
         /*fetch(
-            "http://localhost:8080/pl-api/accounts/tokens", {
-            //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
+            //"http://localhost:8080/pl-api/accounts/tokens", {
+            "http://192.168.99.100:8080/pl-api/accounts/tokens", {
             method: 'POST',
             // Always include an `X-Requested-With` header in every AJAX request,
             // to protect against CSRF attacks.
@@ -477,8 +477,8 @@ async function updateGroup(group) {
     try {
 
         const response = await fetch(
-            //"http://localhost:8080/pl-api/groups/" + group.groupId, {
-            "http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
+            "http://localhost:8080/pl-api/groups/" + group.groupId, {
+            //"http://192.168.99.100:8080/pl-api/groups/" + group.groupId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

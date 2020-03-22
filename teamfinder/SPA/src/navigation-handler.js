@@ -5,90 +5,84 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log(location.pathname)
     hideDivs()//is it okey to hide errors here????
-
-    if (localStorage.ongoingSignup) {
-        goToPage('/google-sign-up')
+    changeToPage(location.pathname)
+    if (localStorage.accessToken) {
+        login(localStorage.accessToken, localStorage.idToken)
+    } else {
+        logout()
     }
-    else {
-        changeToPage(location.pathname)
-        if (localStorage.accessToken) {
-            login(localStorage.accessToken, localStorage.idToken)
-        } else {
-            logout()
+
+    document.body.addEventListener("click", function (event) {
+        if (event.target.tagName == "A") {
+            event.preventDefault()
+            const url = event.target.getAttribute("href")
+            goToPage(url)
         }
+    })
 
-        document.body.addEventListener("click", function (event) {
-            if (event.target.tagName == "A") {
-                event.preventDefault()
-                const url = event.target.getAttribute("href")
-                goToPage(url)
-            }
+    // TODO: Avoid using this long lines of code.
+    document.querySelector("#create-group-page form").addEventListener("submit", function (event) {
+        event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+        const group = createdGroupInput()
+        console.log(group)
+        createGroup(group)
+    })
+
+    document.querySelector("#update-group-page form").addEventListener("submit", function (event) {
+        event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+        const group = updatedGroupInput()
+        console.log(group)
+        updateGroup(group)
+
+    })
+
+    document.querySelector("#group-page .delete-button").addEventListener("submit", function (event) {
+        event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+
+        const id = document.querySelector("#group-page .delete-id-field").value
+
+        deleteGroup(id)
+    })
+
+    document.querySelector("#login-page form").addEventListener("submit", function (event) {
+        event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+
+        const email = document.querySelector("#login-page .email").value
+        const password = document.querySelector("#login-page .password").value
+
+        authenticateUser(email, password)
+    })
+
+    document.querySelector("#sign-up-page form").addEventListener("submit", function (event) {
+        event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+
+        const account = signupInput()
+
+        signUp(account)
+    })
+
+    document.querySelector("#google-sign-up-page form").addEventListener("submit", function (event) {
+        event.preventDefault()
+        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+        const account = googleSignupInput(localStorage.idToken)
+        signUp(account).then(function () {
+            localStorage.ongoingSignup = false
+            login(localStorage.accessToken, localStorage.idToken)
+            goToPage('/')
         })
+    })
 
-        // TODO: Avoid using this long lines of code.
-        document.querySelector("#create-group-page form").addEventListener("submit", function (event) {
-            event.preventDefault()
-            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-            const group = createdGroupInput()
-            console.log(group)
-            createGroup(group)
-        })
+    document.querySelector("#sign-in-button").addEventListener("submit", function (event) {
+        event.preventDefault()
+        start()
+        auth2.grantOfflineAccess().then(googleSignIn)
+    })
 
-        document.querySelector("#update-group-page form").addEventListener("submit", function (event) {
-            event.preventDefault()
-            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-            const group = updatedGroupInput()
-            console.log(group)
-            updateGroup(group)
-
-        })
-
-        document.querySelector("#group-page .delete-button").addEventListener("submit", function (event) {
-            event.preventDefault()
-            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-
-            const id = document.querySelector("#group-page .delete-id-field").value
-
-            deleteGroup(id)
-        })
-
-        document.querySelector("#login-page form").addEventListener("submit", function (event) {
-            event.preventDefault()
-            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-
-            const email = document.querySelector("#login-page .email").value
-            const password = document.querySelector("#login-page .password").value
-
-            authenticateUser(email, password)
-        })
-
-        document.querySelector("#sign-up-page form").addEventListener("submit", function (event) {
-            event.preventDefault()
-            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-
-            const account = signupInput()
-
-            signUp(account)
-        })
-
-        document.querySelector("#google-sign-up-page form").addEventListener("submit", function (event) {
-            event.preventDefault()
-            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-            console.log("idToken in google signup: ", localStorage.idToken)
-            const account = googleSignupInput(localStorage.idToken)
-            console.log("account? ", account)
-            signUp(account).then(function () {
-                localStorage.ongoingSignup = false
-                login(localStorage.accessToken, localStorage.idToken)
-            })
-        })
-
-        document.querySelector("#sign-in-button").addEventListener("submit", function (event) {
-            event.preventDefault()
-            start()
-            auth2.grantOfflineAccess().then(googleSignIn)
-        })
-    }
 })
 
 
@@ -99,60 +93,69 @@ window.addEventListener("popstate", function (event) {
 })
 
 function goToPage(url) {
-
     changeToPage(url)
     history.pushState({}, "", url)
-
 }
 
 function changeToPage(url) {
 
     hideDivs()
-
     const currentPageDiv = document.getElementsByClassName("current-page")[0]
     if (currentPageDiv) {
         currentPageDiv.classList.remove("current-page")
     }
+    console.log("STOP: ", localStorage.ongoingSignup)
+    if (localStorage.ongoingSignup != "false") {
+        if (url == "/logout") {
+            logout()
+            document.getElementById("home-page").classList.add("current-page")
+        }
+        else {
+            console.log("HALLÅÅÅÅÅ?????")
+            document.getElementById("google-sign-up-page").classList.add("current-page")
+        }
+    }
+    else {
+        console.log("I dont give a fuuuuck")
+        // TODO: Optimally this information can be put in an array instead of having a long list of if-else if statements.
+        // TODO: Factor out common code in all branches.
+        if (url == "/") {
+            console.log("Hallåå??")
+            document.getElementById("home-page").classList.add("current-page")
+        } else if (url == "/groups") {
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            document.getElementById("groups-page").classList.add("current-page")
+            fetchAllGroups()
+        } else if (url == "/sign-up") {
+            document.getElementById("sign-up-page").classList.add("current-page")
+        } else if (url == "/google-sign-up") {
+            document.getElementById("google-sign-up-page").classList.add("current-page")
+        } else if (url == "/login") {
+            document.getElementById("login-page").classList.add("current-page")
+        } else if (new RegExp("^/group/[0-9]+/update$").test(url)) {
 
-    // TODO: Optimally this information can be put in an array instead of having a long list of if-else if statements.
-    // TODO: Factor out common code in all branches.
-    if (url == "/") {
-        console.log("Hallåå??")
-        document.getElementById("home-page").classList.add("current-page")
-    } else if (url == "/groups") {
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-        document.getElementById("groups-page").classList.add("current-page")
-        fetchAllGroups()
-    } else if (url == "/sign-up") {
-        document.getElementById("sign-up-page").classList.add("current-page")
-    } else if (url == "/google-sign-up") {
-        document.getElementById("google-sign-up-page").classList.add("current-page")
-        localStorage.ongoingSignup = true
-    } else if (url == "/login") {
-        document.getElementById("login-page").classList.add("current-page")
-    } else if (new RegExp("^/group/[0-9]+/update$").test(url)) {
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            document.getElementById("update-group-page").classList.add("current-page")
+            const id = url.split("/")[2]
+            getGroupForUpdate(id)
+        } else if (new RegExp("^/group/[0-9]+$").test(url)) {
 
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-        document.getElementById("update-group-page").classList.add("current-page")
-        const id = url.split("/")[2]
-        getGroupForUpdate(id)
-    } else if (new RegExp("^/group/[0-9]+$").test(url)) {
-
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-        document.getElementById("group-page").classList.add("current-page")
-        const id = url.split("/")[2]
-        fetchGroup(id)
-    } else if (url == "/create-group") {
-        document.getElementById("create-group-page").classList.add("current-page")
-    } else if (url == "/logout") {
-        logout()
-        document.getElementById("home-page").classList.add("current-page")
-    } else if (url == "/unauthorized") {
-        document.getElementById("error-unAuthorized-page").classList.add("current-page")
-    } else if (url == "/error") {
-        document.getElementById("error-page").classList.add("current-page")
-    } else {
-        document.getElementById("error-page").classList.add("current-page")
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            document.getElementById("group-page").classList.add("current-page")
+            const id = url.split("/")[2]
+            fetchGroup(id)
+        } else if (url == "/create-group") {
+            document.getElementById("create-group-page").classList.add("current-page")
+        } else if (url == "/logout") {
+            logout()
+            document.getElementById("home-page").classList.add("current-page")
+        } else if (url == "/unauthorized") {
+            document.getElementById("error-unAuthorized-page").classList.add("current-page")
+        } else if (url == "/error") {
+            document.getElementById("error-page").classList.add("current-page")
+        } else {
+            document.getElementById("error-page").classList.add("current-page")
+        }
     }
 }
 
@@ -247,7 +250,7 @@ function signupInput() {
 }
 
 function googleSignupInput(jsonIdToken) {
-
+    console.log("jsonIdToken: ", jsonIdToken)
     const idToken = JSON.parse(jsonIdToken)
 
     console.log("idToken in google Signup: ", idToken)
@@ -273,6 +276,7 @@ function googleSignupInput(jsonIdToken) {
         gender,
         age
     }
+    console.log("Account sent back: ", account)
     return account
 }
 

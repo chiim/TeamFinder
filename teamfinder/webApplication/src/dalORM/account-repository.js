@@ -6,42 +6,42 @@ module.exports = function () {
 
         createAccount: function (hash, account, callback) {
             const dbAccount = dbPostgres.model("account")
-            dbAccount.create({
-                googleId: account.googleId,
-                firstName: account.firstName,
-                lastName: account.lastName,
-                email: account.email,
-                password: hash,
-                age: account.age,
-                city: account.city,
-                gender: account.gender
-            }).then(function (createdAccount) {
-                callback(null, createdAccount.dataValues.accountId)
-            }).catch(function (error) {
-                console.log(error)
-                const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
-                callback(databaseError, null)
-            })
+                dbAccount.create({
+                    googleId: account.googleId,
+                    firstName: account.firstName,
+                    lastName: account.lastName,
+                    email: account.email,
+                    password: hash,
+                    age: account.age,
+                    city: account.city,
+                    gender: account.gender
+                }).then(function (createdAccount) {
+                    callback(null, createdAccount.dataValues.accountId)
+                }).catch(function (error) {
+                    console.log(error)
+                    const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
+                    callback(databaseError, null)
+                })
         },
 
-        isEmailIsUnique: function(email, callback){
+        isEmailIsUnique: function (email, callback) {
 
             const dbAccount = dbPostgres.model("account")
 
             dbAccount.count({
-                where : {
-                    email :email
+                where: {
+                    email: email
                 }
-            }).then(function(count){
+            }).then(function (count) {
                 var emailAvailable
-                if(count == 0){
+                if (count == 0) {
                     emailAvailable = true
                     callback(null, emailAvailable)
-                }else{
+                } else {
                     emailAvailable = false
                     callback(null, emailAvailable)
-                }                
-            }).catch(function(error){
+                }
+            }).catch(function (error) {
                 console.log(error)
                 const databaseError = ["DatabaseError: Something went wrong inserting data. Contact admin."]
                 callback(databaseError, null)
@@ -51,7 +51,7 @@ module.exports = function () {
         getAccountById: function (accountId, callback) {
             const dbAccount = dbPostgres.model("account")
 
-            dbAccount.findByPk(accountId, {raw: true}).then(function (account) {
+            dbAccount.findByPk(accountId, { raw: true }).then(function (account) {
                 callback(null, account)
             }).catch(function (error) {
                 console.log(error)
@@ -70,8 +70,8 @@ module.exports = function () {
                 city: account.city,
                 gender: account.gender
             }, {
-                where: { 
-                    accountId: account.accountId 
+                where: {
+                    accountId: account.accountId
                 }
             }).then(function () {
                 callback(null)
@@ -88,7 +88,7 @@ module.exports = function () {
                 where: { email: email },
                 raw: true
             }).then(function (account) {
-                
+
                 if (account == null) {
                     error = ["no result found"]
                     callback(error, null)
@@ -118,7 +118,7 @@ module.exports = function () {
             })
         },
 
-        getAccountByGoogleId: function(googleId, callback){
+        getAccountByGoogleId: function (googleId, callback) {
             const dbAccount = dbPostgres.model("account")
 
             dbAccount.findOne({

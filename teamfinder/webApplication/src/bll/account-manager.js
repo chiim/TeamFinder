@@ -8,7 +8,6 @@ module.exports = function ({ accountRepository, validator }) {
 
             const errors = validator.validateAccount(account)
             const saltRounds = 10
-            const password = account.password.toString()
 
             accountRepository.isEmailIsUnique(account.email, function (error, emailAvailable) {
                 //IF ERROR?
@@ -24,16 +23,22 @@ module.exports = function ({ accountRepository, validator }) {
                         callback(errors, null)
                         return
                     }
-                    bcrypt.hash(password, saltRounds, function (error, hash) {
+                    if (account.googleId) {
+                        accountRepository.createAccount(null, account, callback)
+                    }
+                    else {
+                        const password = account.password.toString()
+                        bcrypt.hash(password, saltRounds, function (error, hash) {
 
-                        if (error) {
-                            console.log(error)
-                            const hashError = ["error when creating account"]
-                            callback(hashError, null)
-                        } else {
-                            accountRepository.createAccount(hash, account, callback)
-                        }
-                    })
+                            if (error) {
+                                console.log(error)
+                                const hashError = ["error when creating account"]
+                                callback(hashError, null)
+                            } else {
+                                accountRepository.createAccount(hash, account, callback)
+                            }
+                        })
+                    }
                 }
 
             })
@@ -100,7 +105,7 @@ module.exports = function ({ accountRepository, validator }) {
             accountRepository.deleteAccount(accountId, callback)
         },
 
-        getAccountByGoogleId: function(googleId, callback){
+        getAccountByGoogleId: function (googleId, callback) {
             accountRepository.getAccountByGoogleId(googleId, callback)
         }
     }
