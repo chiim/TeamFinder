@@ -325,32 +325,17 @@ function googleSignIn(authResult) {
                     }
                     // First time logging in with google. Time to register account
                     else{
-                        const firstName = idToken.given_name
-                        const lastName = idToken.family_name
-                        const email = idToken.email
-            
-                        // Leave empty and let login look for googleId instead?
-                        const password = "fhhfjoewno" 
-                        const city = idToken.locale // Det e landets initialer, dvs "sv"
-                        const gender = "Any" // Lets call this a google feature.
-                        const googleId = idToken.sub
-                        console.log("GOOGLE ID: ", googleId)
-                        const age = 25 // DENNA FÅR INTE VARA HÅRDKODAD
-                        const account = {
-                            googleId,
-                            firstName,
-                            lastName,
-                            email,
-                            password,
-                            city,
-                            gender,
-                            age
-                        }
-                        console.log("creating google account: ", account)
-                        signUp(account)
-                        login(accessToken, idToken)
+                        // User is give an accessToken, but the ongoingSignup variable force the user to
+                        // finish the google signUp first.
+                        localStorage.idToken = JSON.stringify(idToken)
+                        localStorage.accessToken = accessToken
+                        localStorage.ongoingSignup = true
+                        login(localStorage.accessToken, localStorage.idToken)
+                        goToPage('/google-sign-up')
                     }
                 })            
+
+
             //TODO: Gör så ett Google konto registreras i databasen. 
             //Får vi det o funka har vi 5 i projektet <3
             

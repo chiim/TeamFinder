@@ -4,73 +4,91 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     console.log(location.pathname)
-
     hideDivs()//is it okey to hide errors here????
-    changeToPage(location.pathname)
-    if (localStorage.accessToken) {
-        login(localStorage.accessToken, localStorage.idToken)
-    } else {
-        logout()
+
+    if (localStorage.ongoingSignup) {
+        goToPage('/google-sign-up')
     }
-
-    document.body.addEventListener("click", function (event) {
-        if (event.target.tagName == "A") {
-            event.preventDefault()
-            const url = event.target.getAttribute("href")
-            goToPage(url)
+    else {
+        changeToPage(location.pathname)
+        if (localStorage.accessToken) {
+            login(localStorage.accessToken, localStorage.idToken)
+        } else {
+            logout()
         }
-    })
 
-    // TODO: Avoid using this long lines of code.
-    document.querySelector("#create-group-page form").addEventListener("submit", function (event) {
-        event.preventDefault()
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-        const group = createdGroupInput()
-        console.log(group)
-        createGroup(group)
-    })
+        document.body.addEventListener("click", function (event) {
+            if (event.target.tagName == "A") {
+                event.preventDefault()
+                const url = event.target.getAttribute("href")
+                goToPage(url)
+            }
+        })
 
-    document.querySelector("#update-group-page form").addEventListener("submit", function (event) {
-        event.preventDefault()
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
-        const group = updatedGroupInput()
-        console.log(group)
-        updateGroup(group)
+        // TODO: Avoid using this long lines of code.
+        document.querySelector("#create-group-page form").addEventListener("submit", function (event) {
+            event.preventDefault()
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            const group = createdGroupInput()
+            console.log(group)
+            createGroup(group)
+        })
 
-    })
+        document.querySelector("#update-group-page form").addEventListener("submit", function (event) {
+            event.preventDefault()
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            const group = updatedGroupInput()
+            console.log(group)
+            updateGroup(group)
 
-    document.querySelector("#group-page .delete-button").addEventListener("submit", function (event) {
-        event.preventDefault()
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+        })
 
-        const id = document.querySelector("#group-page .delete-id-field").value
+        document.querySelector("#group-page .delete-button").addEventListener("submit", function (event) {
+            event.preventDefault()
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
 
-        deleteGroup(id)
-    })
+            const id = document.querySelector("#group-page .delete-id-field").value
 
-    document.querySelector("#login-page form").addEventListener("submit", function (event) {
-        event.preventDefault()
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            deleteGroup(id)
+        })
 
-        const email = document.querySelector("#login-page .email").value
-        const password = document.querySelector("#login-page .password").value
+        document.querySelector("#login-page form").addEventListener("submit", function (event) {
+            event.preventDefault()
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
 
-        authenticateUser(email, password)
-    })
+            const email = document.querySelector("#login-page .email").value
+            const password = document.querySelector("#login-page .password").value
 
-    document.querySelector("#sign-up-page form").addEventListener("submit", function (event) {
-        event.preventDefault()
-        document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            authenticateUser(email, password)
+        })
 
-        const account = signupInput()
+        document.querySelector("#sign-up-page form").addEventListener("submit", function (event) {
+            event.preventDefault()
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
 
-        signUp(account)
-    })
-    document.querySelector("#sign-in-button").addEventListener("submit", function (event) {
-        event.preventDefault()
-        start()
-        auth2.grantOfflineAccess().then(googleSignIn)
-    })
+            const account = signupInput()
+
+            signUp(account)
+        })
+
+        document.querySelector("#google-sign-up-page form").addEventListener("submit", function (event) {
+            event.preventDefault()
+            document.getElementById("loadingIndicator").classList.add("loadingIndicatorShow")
+            console.log("idToken in google signup: ", localStorage.idToken)
+            const account = googleSignupInput(localStorage.idToken)
+            console.log("account? ", account)
+            signUp(account).then(function () {
+                localStorage.ongoingSignup = false
+                login(localStorage.accessToken, localStorage.idToken)
+            })
+        })
+
+        document.querySelector("#sign-in-button").addEventListener("submit", function (event) {
+            event.preventDefault()
+            start()
+            auth2.grantOfflineAccess().then(googleSignIn)
+        })
+    }
 })
 
 
@@ -107,6 +125,9 @@ function changeToPage(url) {
         fetchAllGroups()
     } else if (url == "/sign-up") {
         document.getElementById("sign-up-page").classList.add("current-page")
+    } else if (url == "/google-sign-up") {
+        document.getElementById("google-sign-up-page").classList.add("current-page")
+        localStorage.ongoingSignup = true
     } else if (url == "/login") {
         document.getElementById("login-page").classList.add("current-page")
     } else if (new RegExp("^/group/[0-9]+/update$").test(url)) {
@@ -138,7 +159,8 @@ function changeToPage(url) {
 
 function login(accessToken, idToken) {
     localStorage.accessToken = accessToken
-    localStorage.idToken = idToken
+    //localStorage.setItem('idToken', JSON.stringify(idToken))
+    localStorage.idToken = JSON.stringify(idToken)
     console.log("inLogin: ", idToken)
     document.body.classList.remove("isLoggedOut")
     document.body.classList.add("isLoggedIn")
@@ -147,6 +169,7 @@ function login(accessToken, idToken) {
 function logout() {
     localStorage.accessToken = ""
     localStorage.idToken = ""
+    localStorage.ongoingSignup = false
     document.body.classList.remove("isLoggedIn")
     document.body.classList.add("isLoggedOut")
 }
@@ -224,12 +247,42 @@ function signupInput() {
     return account
 }
 
-function showErrors(errors){
+function googleSignupInput(jsonIdToken) {
+
+    const idToken = JSON.parse(jsonIdToken)
+
+    console.log("idToken in google Signup: ", idToken)
+
+
+
+    const firstName = idToken.given_name
+    const lastName = idToken.family_name
+    const email = idToken.email
+    const googleId = idToken.sub
+    const age = document.querySelector("#google-sign-up-page .age").value
+    const city = document.querySelector("#google-sign-up-page .city").value
+    const gender = document.querySelector("#google-sign-up-page .gender").value
+    const password = null // Not needed. Instead verified with googleId
+
+    const account = {
+        googleId,
+        firstName,
+        lastName,
+        email,
+        password,
+        city,
+        gender,
+        age
+    }
+    return account
+}
+
+function showErrors(errors) {
 
     const ulWithErrors = document.getElementById("ulWithErrors")
     ulWithErrors.innerHTML = "";
 
-    for(i = 0; i < errors.length; i++ ){
+    for (i = 0; i < errors.length; i++) {
 
         const liError = document.createElement("li")
         ulWithErrors.appendChild(liError)
@@ -239,7 +292,7 @@ function showErrors(errors){
     document.getElementById("error-div").classList.add("current-page")
 }
 
-function hideDivs(){
+function hideDivs() {
     document.getElementById("error-div").classList.remove("current-page")
     document.getElementById("loadingIndicator").classList.remove("loadingIndicatorHide")
     document.getElementById("loadingIndicator").classList.remove("loadingIndicatorShow")
@@ -247,12 +300,12 @@ function hideDivs(){
 }
 
 function start() {
-    gapi.load('auth2', function() {
-      auth2 = gapi.auth2.init({
-        client_id: '978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com',
-        scope: "openid"
-        // Scopes to request in addition to 'profile' and 'email'
-        //scope: 'additional_scope'
-      })
+    gapi.load('auth2', function () {
+        auth2 = gapi.auth2.init({
+            client_id: '978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com',
+            scope: "openid"
+            // Scopes to request in addition to 'profile' and 'email'
+            //scope: 'additional_scope'
+        })
     })
-  }
+}

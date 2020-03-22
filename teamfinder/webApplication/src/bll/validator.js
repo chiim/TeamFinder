@@ -122,9 +122,9 @@ module.exports = function () {
                 errors.push("emailMissing")
             } else if (!account.hasOwnProperty("password")) {
                 errors.push("passwordMissing")
-            } else if (account.password.length < MIN_PASSWORD_LENGTH) {
+            } else if (account.password && !account.googleId && account.password.length < MIN_PASSWORD_LENGTH) {
                 errors.push("passwordTooShort")
-            } else if (MAX_PASSWORD_LENGTH < account.password.length) {
+            } else if (account.password && !account.googleId && MAX_PASSWORD_LENGTH < account.password.length) {
                 errors.push("passwordTooLong")
             } else if (!account.hasOwnProperty("age")) {
                 errors.push("ageMissing")
