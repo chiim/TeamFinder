@@ -657,7 +657,8 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
     })
 
     router.post('/:id/edit', function (request, response) {
-        const id = request.params.id
+        const groupId = request.params.id
+        console.log(groupId)
 
         const groupName = request.body.groupName
         const image = request.body.image
@@ -670,7 +671,7 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
         const gender = request.body.allowedGender
 
         const group = {
-            id,
+            groupId,
             groupName,
             image,
             sport,
@@ -684,18 +685,18 @@ module.exports = function ({ groupManager, groupMemberManager, messageManager, a
 
         groupManager.updateGroup(group, function (errors) {
             if (errors) {
+
                 const model = {
                     errors,
                     csrfToken: request.csrfToken(),
-                    id
+                    failedGroup
                 }
                 response.render('group-edit.hbs', model)
             }
             else {
-                response.redirect('/groups/' + id + '/?updated=true')
+                response.redirect('/groups/' + groupId + '/?updated=true')
             }
         })
     })
     return router
 }
-//module.exports = router
