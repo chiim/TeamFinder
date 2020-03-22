@@ -4,10 +4,9 @@ const express = require('express')
 module.exports = function ({ groupManager, groupMemberManager, accountManager, messageManager }) {
 
     const router = express.Router()
-
     function getAccountId(token) {
         const serverSecret = "sdfkjdslkfjslkfd"
-
+        console.log("token length: ", token.length)
         if (token) {
             const payload = jwt.verify(token, serverSecret)
             return payload.accountId

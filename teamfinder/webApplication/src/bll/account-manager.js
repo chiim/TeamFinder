@@ -24,10 +24,6 @@ module.exports = function ({ accountRepository, validator }) {
             })
         },
 
-        linkGoogleAccount: function(authCode, callback){
-            accountRepository.linkGoogleAccount(authCode, callback)
-        },
-
         getAccountById: function (accountId, callback) {
             accountRepository.getAccountById(accountId, callback)
         },

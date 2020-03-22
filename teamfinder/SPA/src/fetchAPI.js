@@ -9,11 +9,18 @@ const parseJwt = function (token) {
 function fetchAllGroups() {
     const payload = parseJwt(localStorage.idToken)
     if (payload) {
-
-        const accountId = payload.sub
-
+        console.log("google payload: ", payload)
+        // Logged in with google account
+        var fetchLink = ""
+        if(payload.email){
+            fetchLink = "http://localhost:8080/pl-api/groups"
+        }
+        else{
+            const accountId = payload.sub
+            fetchLink = "http://localhost:8080/pl-api/groups?accountId=" + accountId
+        }
         fetch(
-            "http://localhost:8080/pl-api/groups?accountId=" + accountId
+            fetchLink
             //"http://192.168.99.100:8080/pl-api/groups/?accountId=" + accountId
         ).then(function (response) {
             console.log("inside fetchallgroupsssssssssssssssss")
@@ -270,11 +277,30 @@ async function authenticateUser(email, password) {
 
 function signInCallback(authResult) {
     if (authResult['code']) {
+        console.log("auth result: ", authResult)
+        console.log("Authorization code: ", authResult['code'])
+        fetch(
+            "https://oauth2.googleapis.com/token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Accept": "application/json"
+                }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
+                body: "code="+encodeURIComponent(authResult['code'])+"&client_id=978799927734-pjt940r3kndgp0ad8m1rvbn2vjvb19tk.apps.googleusercontent.com&client_secret=WO5YL8x_DRKWhmH440__jD3Y&redirect_uri=http://localhost:3000&grant_type=authorization_code"
+        }).then(function(response){
+            console.log("Got back response from google auth: ", response)
+            return response.json()
+        }).then(function(googleBody){
+            const idToken = googleBody.id_token
+            const accessToken = googleBody.access_token
+            console.log("Google tokens: ", googleBody)
+            login(accessToken, idToken)
+        })
 
         // Hide the sign-in button now that the user is authorized, for example:
 
         // Send the code to the server
-        fetch(
+        /*fetch(
             "http://localhost:8080/pl-api/accounts/tokens", {
             //"http://192.168.99.100:8080/pl-api/accounts/tokens", {
             method: 'POST',
@@ -286,7 +312,7 @@ function signInCallback(authResult) {
             },
             body: "grant_type=password&authCode=" + encodeURIComponent(authResult['code'])
 
-        })
+        })*/
     }
     else {
         console.log("Google auth went wrong. See fetchAPI signInCallback function")
